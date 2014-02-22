@@ -1,6 +1,6 @@
-package se.ugli.durian.j.core.nodeimpl;
+package se.ugli.durian.j.dom.mutable;
 
-import se.ugli.durian.j.core.PrefixMapping;
+import se.ugli.durian.j.dom.node.PrefixMapping;
 
 public class PrefixMappingImpl implements PrefixMapping {
 
@@ -8,18 +8,18 @@ public class PrefixMappingImpl implements PrefixMapping {
     private final String uri;
 
     public PrefixMappingImpl(final String prefix, final String uri) {
-	this.prefix = prefix;
-	this.uri = uri;
+        this.prefix = prefix;
+        this.uri = uri;
     }
 
     @Override
     public String getPrefix() {
-	return prefix;
+        return prefix;
     }
 
     @Override
     public String getUri() {
-	return uri;
+        return uri;
     }
 
 }

@@ -1,0 +1,42 @@
+package se.ugli.durian.j.dom.mutable;
+
+import java.util.Collection;
+import java.util.Collections;
+
+import se.ugli.durian.j.dom.node.Content;
+import se.ugli.durian.j.dom.node.Element;
+import se.ugli.durian.j.dom.node.Text;
+
+public class TextImpl implements Text {
+
+    private final static Collection<Content> EMPTY_CONTENT = Collections.emptyList();
+
+    private final String value;
+    private final Element parent;
+
+    public TextImpl(final Element parent, final String value) {
+        this.parent = parent;
+        this.value = value;
+    }
+
+    @Override
+    public Collection<Content> getContent() {
+        return EMPTY_CONTENT;
+    }
+
+    @Override
+    public String getValue() {
+        return value;
+    }
+
+    @Override
+    public Element getParent() {
+        return parent;
+    }
+
+    @Override
+    public String getPath() {
+        return parent.getPath() + "/text()";
+    }
+
+}

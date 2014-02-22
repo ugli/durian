@@ -1,4 +1,4 @@
-package se.ugli.durian.j.core.parser;
+package se.ugli.durian.j.dom.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,8 +9,8 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.SAXException;
 
-import se.ugli.durian.j.core.Document;
-import se.ugli.durian.j.core.NodeFactory;
+import se.ugli.durian.j.dom.node.Document;
+import se.ugli.durian.j.dom.node.NodeFactory;
 
 public class Parser {
 

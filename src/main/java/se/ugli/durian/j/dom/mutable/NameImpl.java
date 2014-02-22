@@ -1,6 +1,6 @@
-package se.ugli.durian.j.core.nodeimpl;
+package se.ugli.durian.j.dom.mutable;
 
-import se.ugli.durian.j.core.Name;
+import se.ugli.durian.j.dom.node.Name;
 
 public class NameImpl implements Name {
 
@@ -9,24 +9,24 @@ public class NameImpl implements Name {
     private final String qName;
 
     public NameImpl(final String uri, final String localName, final String qName) {
-	this.uri = uri;
-	this.localName = localName;
-	this.qName = qName;
+        this.uri = uri;
+        this.localName = localName;
+        this.qName = qName;
     }
 
     @Override
     public String getUri() {
-	return uri;
+        return uri;
     }
 
     @Override
     public String getLocalName() {
-	return localName;
+        return localName;
     }
 
     @Override
     public String getQName() {
-	return qName;
+        return qName;
     }
 
 }

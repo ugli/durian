@@ -1,21 +1,24 @@
-package se.ugli.durian.j.core.parser;
+package se.ugli.durian.j.dom.parser;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.xml.sax.Attributes;
 
-import se.ugli.durian.j.core.Attribute;
-import se.ugli.durian.j.core.Name;
-import se.ugli.durian.j.core.NodeFactory;
+import se.ugli.durian.j.dom.node.Attribute;
+import se.ugli.durian.j.dom.node.Element;
+import se.ugli.durian.j.dom.node.Name;
+import se.ugli.durian.j.dom.node.NodeFactory;
 
 class AttributesFactory {
 
     private final NodeFactory nodeFactory;
     private final Attributes attributes;
+    private final Element parent;
 
-    AttributesFactory(final NodeFactory nodeFactory, final Attributes attributes) {
+    AttributesFactory(final NodeFactory nodeFactory, final Element parent, final Attributes attributes) {
         this.nodeFactory = nodeFactory;
+        this.parent = parent;
         this.attributes = attributes;
     }
 
@@ -28,7 +31,7 @@ class AttributesFactory {
     }
 
     Attribute createAttribute(final int index) {
-        return nodeFactory.createAttribute(createName(index), getValue(index));
+        return nodeFactory.createAttribute(parent, createName(index), getValue(index));
     }
 
     String getValue(final int index) {

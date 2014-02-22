@@ -1,19 +1,18 @@
-package se.ugli.durian.j.core.parser;
+package se.ugli.durian.j.dom.parser;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Stack;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import se.ugli.durian.j.core.Attribute;
-import se.ugli.durian.j.core.Document;
-import se.ugli.durian.j.core.Element;
-import se.ugli.durian.j.core.Name;
-import se.ugli.durian.j.core.NodeFactory;
-import se.ugli.durian.j.core.PrefixMapping;
+import se.ugli.durian.j.dom.node.Attribute;
+import se.ugli.durian.j.dom.node.Document;
+import se.ugli.durian.j.dom.node.Element;
+import se.ugli.durian.j.dom.node.Name;
+import se.ugli.durian.j.dom.node.NodeFactory;
+import se.ugli.durian.j.dom.node.PrefixMapping;
 
 class SaxHandler extends DefaultHandler {
 
@@ -31,11 +30,13 @@ class SaxHandler extends DefaultHandler {
             final Attributes saxAttributes) {
         final Name name = nodeFactory.createName(uri, localName, qName);
         final Element parent = stack.isEmpty() ? null : stack.peek();
-        final List<Attribute> attributes = new AttributesFactory(nodeFactory, saxAttributes).create();
-        final Element element = nodeFactory.createElement(name, document, parent, attributes);
+        final Element element = nodeFactory.createElement(document, parent, name);
+        for (final Attribute attribute : new AttributesFactory(nodeFactory, element, saxAttributes).create()) {
+            element.add(attribute);
+        }
         stack.push(element);
         if (parent != null) {
-            parent.append(element);
+            parent.add(element);
         }
         else {
             document.setRoot(element);
@@ -52,7 +53,8 @@ class SaxHandler extends DefaultHandler {
         final String str = new String(Arrays.copyOfRange(ch, start, start + length));
         final String trimedStr = str.trim();
         if (trimedStr.length() > 0) {
-            stack.peek().append(nodeFactory.createText(trimedStr));
+            final Element element = stack.peek();
+            element.add(nodeFactory.createText(element, trimedStr));
         }
     }
 
