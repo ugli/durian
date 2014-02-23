@@ -1,7 +1,6 @@
 package se.ugli.durian.j.dom.mutable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Document;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Name;
-import se.ugli.durian.j.dom.node.Node;
 import se.ugli.durian.j.dom.node.Text;
 
 public class ElementImpl implements Element {
@@ -20,8 +18,6 @@ public class ElementImpl implements Element {
     private final Element parent;
     private final List<Attribute> attributes = new ArrayList<Attribute>();
     private final List<Content> content = new ArrayList<Content>();
-    private final List<Element> elements = new ArrayList<Element>();
-    private final List<Text> texts = new ArrayList<Text>();
 
     public ElementImpl(final Document document, final Element parent, final Name name) {
         this.document = document;
@@ -30,88 +26,49 @@ public class ElementImpl implements Element {
     }
 
     @Override
-    public Iterable<Content> getContent() {
+    public boolean isSupportsText() {
+        return true;
+    }
+
+    @Override
+    public List<Content> getContent() {
         return content;
     }
 
     @Override
-    public Name getName() {
-        return name;
-    }
-
-    @Override
-    public Document getDocument() {
-        return document;
-    }
-
-    @Override
-    public Element getParent() {
-        return parent;
-    }
-
-    @Override
-    public Iterable<Attribute> getAttributes() {
-        return Collections.unmodifiableCollection(attributes);
-    }
-
-    @Override
     public boolean isSimpleTextNode() {
-        return texts.size() == 1 && content.size() == 1;
+        return getTextList().size() == 1 && content.size() == 1;
     }
 
     @Override
-    public boolean isRoot() {
-        return parent == null;
+    public Iterator<Element> getElements() {
+        final List<Element> list = new ArrayList<Element>();
+        for (final Content content : this.content) {
+            if (content instanceof Element) {
+                list.add((Element) content);
+            }
+        }
+        return list.iterator();
     }
 
     @Override
-    public void add(final Node node) {
-        if (node instanceof Attribute) {
-            attributes.add((Attribute) node);
-        }
-        else if (node instanceof Element) {
-            elements.add((Element) node);
-            content.add((Content) node);
-        }
-        else if (node instanceof Text) {
-            texts.add((Text) node);
-            content.add((Content) node);
-        }
-        else {
-            throw new IllegalStateException(node.getClass().getName());
-        }
+    public Iterator<Text> getTexts() {
+        return getTextList().iterator();
     }
 
-    @Override
-    public void remove(final Node node) {
-        if (node instanceof Attribute) {
-            attributes.remove(node);
+    private List<Text> getTextList() {
+        final List<Text> list = new ArrayList<Text>();
+        for (final Content content : this.content) {
+            if (content instanceof Text) {
+                list.add((Text) content);
+            }
         }
-        else if (node instanceof Element) {
-            elements.remove(node);
-            content.remove(node);
-        }
-        else if (node instanceof Text) {
-            texts.remove(node);
-            content.remove(node);
-        }
-        else {
-            throw new IllegalStateException(node.getClass().getName());
-        }
-    }
-
-    @Override
-    public Iterable<Element> getElements() {
-        return Collections.unmodifiableCollection(elements);
-    }
-
-    @Override
-    public Iterable<Text> getTexts() {
-        return Collections.unmodifiableCollection(texts);
+        return list;
     }
 
     @Override
     public String getText() {
+        final List<Text> texts = getTextList();
         if (texts.isEmpty()) {
             return null;
         }
@@ -129,12 +86,37 @@ public class ElementImpl implements Element {
     }
 
     @Override
+    public Element getParent() {
+        return parent;
+    }
+
+    @Override
     public String getPath() {
         final String elementPath = "/" + name.getLocalName();
         if (isRoot()) {
             return elementPath;
         }
         return parent.getPath() + elementPath;
+    }
+
+    @Override
+    public Name getName() {
+        return name;
+    }
+
+    @Override
+    public Document getDocument() {
+        return document;
+    }
+
+    @Override
+    public List<Attribute> getAttributes() {
+        return attributes;
+    }
+
+    @Override
+    public boolean isRoot() {
+        return parent == null;
     }
 
 }

@@ -1,7 +1,7 @@
 package se.ugli.durian.j.dom.mutable;
 
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
@@ -9,7 +9,7 @@ import se.ugli.durian.j.dom.node.Text;
 
 public class TextImpl implements Text {
 
-    private final static Collection<Content> EMPTY_CONTENT = Collections.emptyList();
+    private final static List<Content> EMPTY_CONTENT = Collections.emptyList();
 
     private final String value;
     private final Element parent;
@@ -20,7 +20,7 @@ public class TextImpl implements Text {
     }
 
     @Override
-    public Collection<Content> getContent() {
+    public List<Content> getContent() {
         return EMPTY_CONTENT;
     }
 

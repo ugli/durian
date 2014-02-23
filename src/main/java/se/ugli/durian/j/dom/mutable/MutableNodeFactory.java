@@ -8,7 +8,7 @@ import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.PrefixMapping;
 import se.ugli.durian.j.dom.node.Text;
 
-public class DefaultNodeFactory implements NodeFactory {
+public class MutableNodeFactory implements NodeFactory {
 
     @Override
     public PrefixMapping createPrefixMapping(final String prefix, final String uri) {

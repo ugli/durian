@@ -1,5 +1,6 @@
 package se.ugli.durian.j.dom.mutable;
 
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -23,8 +24,8 @@ public class DocumentImpl implements Document {
     }
 
     @Override
-    public Iterable<PrefixMapping> getPrefixMappings() {
-        return uriMap.values();
+    public Iterator<PrefixMapping> getPrefixMappings() {
+        return uriMap.values().iterator();
     }
 
     @Override

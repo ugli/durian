@@ -1,5 +1,6 @@
 package se.ugli.durian.j.dom.node;
 
+import java.util.Iterator;
 
 public interface Document {
 
@@ -7,7 +8,7 @@ public interface Document {
 
     void setRoot(Element root);
 
-    Iterable<PrefixMapping> getPrefixMappings();
+    Iterator<PrefixMapping> getPrefixMappings();
 
     void add(final PrefixMapping prefixMapping);
 

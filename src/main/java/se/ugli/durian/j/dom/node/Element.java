@@ -1,5 +1,7 @@
 package se.ugli.durian.j.dom.node;
 
+import java.util.Iterator;
+import java.util.List;
 
 public interface Element extends Content {
 
@@ -7,14 +9,11 @@ public interface Element extends Content {
 
     Document getDocument();
 
-    @Override
-    Element getParent();
+    List<Attribute> getAttributes();
 
-    Iterable<Attribute> getAttributes();
+    Iterator<Element> getElements();
 
-    Iterable<Element> getElements();
-
-    Iterable<Text> getTexts();
+    Iterator<Text> getTexts();
 
     String getText();
 
@@ -22,8 +21,6 @@ public interface Element extends Content {
 
     boolean isRoot();
 
-    void add(Node node);
-
-    void remove(Node node);
+    boolean isSupportsText();
 
 }

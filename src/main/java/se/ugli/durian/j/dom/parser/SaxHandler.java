@@ -13,6 +13,7 @@ import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Name;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.PrefixMapping;
+import se.ugli.durian.j.dom.node.Text;
 
 class SaxHandler extends DefaultHandler {
 
@@ -32,17 +33,18 @@ class SaxHandler extends DefaultHandler {
         final Element parent = stack.isEmpty() ? null : stack.peek();
         final Element element = nodeFactory.createElement(document, parent, name);
         for (final Attribute attribute : new AttributesFactory(nodeFactory, element, saxAttributes).create()) {
-            element.add(attribute);
+            element.getAttributes().add(attribute);
         }
         stack.push(element);
         if (parent != null) {
-            parent.add(element);
+            parent.getContent().add(element);
         }
         else {
             document.setRoot(element);
         }
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void endElement(final String uri, final String localName, final String qName) {
         stack.pop();
@@ -50,11 +52,17 @@ class SaxHandler extends DefaultHandler {
 
     @Override
     public void characters(final char ch[], final int start, final int length) {
-        final String str = new String(Arrays.copyOfRange(ch, start, start + length));
-        final String trimedStr = str.trim();
-        if (trimedStr.length() > 0) {
-            final Element element = stack.peek();
-            element.add(nodeFactory.createText(element, trimedStr));
+        final Element element = stack.peek();
+        if (element.isSupportsText()) {
+            final String str = new String(Arrays.copyOfRange(ch, start, start + length));
+            final String trimedStr = str.trim();
+            if (trimedStr.length() > 0) {
+                final Text text = nodeFactory.createText(element, trimedStr);
+                element.getContent().add(text);
+            }
+        }
+        else {
+            // TODO log warn
         }
     }
 

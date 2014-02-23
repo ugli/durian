@@ -1,8 +1,9 @@
 package se.ugli.durian.j.dom.node;
 
+import java.util.List;
 
 public interface Content extends Node {
 
-    Iterable<Content> getContent();
+    List<Content> getContent();
 
 }

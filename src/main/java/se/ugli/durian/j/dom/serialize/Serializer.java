@@ -1,5 +1,7 @@
 package se.ugli.durian.j.dom.serialize;
 
+import java.util.Iterator;
+
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Document;
@@ -24,7 +26,7 @@ public class Serializer {
         stringBuffer.append(element.getName().getQName());
         appendPrefixMapping(element, stringBuffer);
         appendAttributes(element, stringBuffer);
-        if (!element.getContent().iterator().hasNext()) {
+        if (element.getContent().isEmpty()) {
             stringBuffer.append("/>");
         }
         else {
@@ -51,7 +53,8 @@ public class Serializer {
 
     private static void appendPrefixMapping(final Element element, final StringBuilder stringBuffer) {
         if (element.getParent() == null && element.getDocument() != null) {
-            for (final PrefixMapping prefixMapping : element.getDocument().getPrefixMappings()) {
+            for (final Iterator<PrefixMapping> i = element.getDocument().getPrefixMappings(); i.hasNext();) {
+                final PrefixMapping prefixMapping = i.next();
                 stringBuffer.append(" xmlns");
                 if (prefixMapping.getPrefix() != null) {
                     stringBuffer.append(":");

@@ -10,9 +10,9 @@ public class JavaTest {
     public static void main(final String[] args) throws Exception {
         final InputStream stream = JavaTest.class.getResourceAsStream("/PurchaseOrder.sch");
 
-        final Parser saxParser = Parser.apply(new DefaultNodeFactory());
+        final Parser saxParser = Parser.apply(new MutableNodeFactory());
         final Document document = saxParser.parse(stream);
         System.out.println(Serializer.serialize(document));
-        System.out.println(document.getRoot().getElements().iterator().next().getTexts().iterator().next().getPath());
+        System.out.println(document.getRoot().getContent().get(0).getPath());
     }
 }
