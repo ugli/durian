@@ -52,17 +52,12 @@ class SaxHandler extends DefaultHandler {
 
     @Override
     public void characters(final char ch[], final int start, final int length) {
-        final Element element = stack.peek();
-        if (element.isSupportsText()) {
-            final String str = new String(Arrays.copyOfRange(ch, start, start + length));
-            final String trimedStr = str.trim();
-            if (trimedStr.length() > 0) {
-                final Text text = nodeFactory.createText(element, trimedStr);
-                element.getContent().add(text);
-            }
-        }
-        else {
-            // TODO log warn
+        final String str = new String(Arrays.copyOfRange(ch, start, start + length));
+        final String trimedStr = str.trim();
+        if (trimedStr.length() > 0) {
+            final Element element = stack.peek();
+            final Text text = nodeFactory.createText(element, trimedStr);
+            element.getContent().add(text);
         }
     }
 

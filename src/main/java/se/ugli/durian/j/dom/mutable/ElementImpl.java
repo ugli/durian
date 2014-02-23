@@ -13,11 +13,11 @@ import se.ugli.durian.j.dom.node.Text;
 
 public class ElementImpl implements Element {
 
-    private final Name name;
-    private final Document document;
-    private final Element parent;
     private final List<Attribute> attributes = new ArrayList<Attribute>();
     private final List<Content> content = new ArrayList<Content>();
+    private final Document document;
+    private final Name name;
+    private final Element parent;
 
     public ElementImpl(final Document document, final Element parent, final Name name) {
         this.document = document;
@@ -26,8 +26,8 @@ public class ElementImpl implements Element {
     }
 
     @Override
-    public boolean isSupportsText() {
-        return true;
+    public List<Attribute> getAttributes() {
+        return attributes;
     }
 
     @Override
@@ -36,8 +36,8 @@ public class ElementImpl implements Element {
     }
 
     @Override
-    public boolean isSimpleTextNode() {
-        return getTextList().size() == 1 && content.size() == 1;
+    public Document getDocument() {
+        return document;
     }
 
     @Override
@@ -52,18 +52,22 @@ public class ElementImpl implements Element {
     }
 
     @Override
-    public Iterator<Text> getTexts() {
-        return getTextList().iterator();
+    public Name getName() {
+        return name;
     }
 
-    private List<Text> getTextList() {
-        final List<Text> list = new ArrayList<Text>();
-        for (final Content content : this.content) {
-            if (content instanceof Text) {
-                list.add((Text) content);
-            }
+    @Override
+    public Element getParent() {
+        return parent;
+    }
+
+    @Override
+    public String getPath() {
+        final String elementPath = "/" + name.getLocalName();
+        if (isRoot()) {
+            return elementPath;
         }
-        return list;
+        return parent.getPath() + elementPath;
     }
 
     @Override
@@ -86,37 +90,28 @@ public class ElementImpl implements Element {
     }
 
     @Override
-    public Element getParent() {
-        return parent;
-    }
-
-    @Override
-    public String getPath() {
-        final String elementPath = "/" + name.getLocalName();
-        if (isRoot()) {
-            return elementPath;
-        }
-        return parent.getPath() + elementPath;
-    }
-
-    @Override
-    public Name getName() {
-        return name;
-    }
-
-    @Override
-    public Document getDocument() {
-        return document;
-    }
-
-    @Override
-    public List<Attribute> getAttributes() {
-        return attributes;
+    public Iterator<Text> getTexts() {
+        return getTextList().iterator();
     }
 
     @Override
     public boolean isRoot() {
         return parent == null;
+    }
+
+    @Override
+    public boolean isSimpleTextNode() {
+        return getTextList().size() == 1 && content.size() == 1;
+    }
+
+    private List<Text> getTextList() {
+        final List<Text> list = new ArrayList<Text>();
+        for (final Content content : this.content) {
+            if (content instanceof Text) {
+                list.add((Text) content);
+            }
+        }
+        return list;
     }
 
 }

@@ -21,6 +21,4 @@ public interface Element extends Content {
 
     boolean isRoot();
 
-    boolean isSupportsText();
-
 }
