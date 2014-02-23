@@ -11,7 +11,7 @@ import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Name;
 import se.ugli.durian.j.dom.node.Text;
 
-public class ElementImpl implements Element {
+public class MutableElement implements Element {
 
     private final List<Attribute> attributes = new ArrayList<Attribute>();
     private final List<Content> content = new ArrayList<Content>();
@@ -19,7 +19,7 @@ public class ElementImpl implements Element {
     private final Name name;
     private final Element parent;
 
-    public ElementImpl(final Document document, final Element parent, final Name name) {
+    public MutableElement(final Document document, final Element parent, final Name name) {
         this.document = document;
         this.parent = parent;
         this.name = name;
@@ -72,15 +72,8 @@ public class ElementImpl implements Element {
 
     @Override
     public String getText() {
-        final List<Text> texts = getTextList();
-        if (texts.isEmpty()) {
-            return null;
-        }
-        if (isSimpleTextNode()) {
-            return texts.get(0).getValue();
-        }
         final StringBuilder textBuilder = new StringBuilder();
-        for (final Iterator<Text> i = texts.iterator(); i.hasNext();) {
+        for (final Iterator<Text> i = getTexts(); i.hasNext();) {
             textBuilder.append(i.next().getValue());
             if (i.hasNext()) {
                 textBuilder.append("\n");

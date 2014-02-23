@@ -7,14 +7,14 @@ import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Text;
 
-public class TextImpl implements Text {
+public class MutableText implements Text {
 
     private final static List<Content> EMPTY_CONTENT = Collections.emptyList();
 
     private final String value;
     private final Element parent;
 
-    public TextImpl(final Element parent, final String value) {
+    public MutableText(final Element parent, final String value) {
         this.parent = parent;
         this.value = value;
     }

@@ -2,12 +2,12 @@ package se.ugli.durian.j.dom.mutable;
 
 import se.ugli.durian.j.dom.node.PrefixMapping;
 
-public class PrefixMappingImpl implements PrefixMapping {
+public class MutablePrefixMapping implements PrefixMapping {
 
     private final String prefix;
     private final String uri;
 
-    public PrefixMappingImpl(final String prefix, final String uri) {
+    public MutablePrefixMapping(final String prefix, final String uri) {
         this.prefix = prefix;
         this.uri = uri;
     }

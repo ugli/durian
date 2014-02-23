@@ -2,13 +2,13 @@ package se.ugli.durian.j.dom.mutable;
 
 import se.ugli.durian.j.dom.node.Name;
 
-public class NameImpl implements Name {
+public class MutableName implements Name {
 
     private final String uri;
     private final String localName;
     private final String qName;
 
-    public NameImpl(final String uri, final String localName, final String qName) {
+    public MutableName(final String uri, final String localName, final String qName) {
         this.uri = uri;
         this.localName = localName;
         this.qName = qName;

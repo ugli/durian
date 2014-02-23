@@ -4,13 +4,13 @@ import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Name;
 
-public class AttributeImpl implements Attribute {
+public class MutableAttribute implements Attribute {
 
     private final Name name;
     private final String value;
     private final Element parent;
 
-    public AttributeImpl(final Element parent, final Name name, final String value) {
+    public MutableAttribute(final Element parent, final Name name, final String value) {
         this.parent = parent;
         this.name = name;
         this.value = value;

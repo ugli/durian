@@ -8,7 +8,7 @@ import se.ugli.durian.j.dom.node.Document;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.PrefixMapping;
 
-public class DocumentImpl implements Document {
+public class MutableDocument implements Document {
 
     private Element root;
     private final Map<String, PrefixMapping> uriMap = new LinkedHashMap<String, PrefixMapping>();

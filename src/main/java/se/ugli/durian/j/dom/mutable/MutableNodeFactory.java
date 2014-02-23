@@ -12,32 +12,32 @@ public class MutableNodeFactory implements NodeFactory {
 
     @Override
     public PrefixMapping createPrefixMapping(final String prefix, final String uri) {
-        return new PrefixMappingImpl(prefix, uri);
+        return new MutablePrefixMapping(prefix, uri);
     }
 
     @Override
     public Name createName(final String uri, final String localName, final String qName) {
-        return new NameImpl(uri, localName, qName);
+        return new MutableName(uri, localName, qName);
     }
 
     @Override
     public Document createDocument() {
-        return new DocumentImpl();
+        return new MutableDocument();
     }
 
     @Override
     public Element createElement(final Document document, final Element parent, final Name name) {
-        return new ElementImpl(document, parent, name);
+        return new MutableElement(document, parent, name);
     }
 
     @Override
     public Attribute createAttribute(final Element parent, final Name name, final String value) {
-        return new AttributeImpl(parent, name, value);
+        return new MutableAttribute(parent, name, value);
     }
 
     @Override
     public Text createText(final Element element, final String value) {
-        return new TextImpl(element, value);
+        return new MutableText(element, value);
     }
 
 }
