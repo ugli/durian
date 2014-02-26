@@ -10,7 +10,6 @@ import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Document;
 import se.ugli.durian.j.dom.node.Element;
-import se.ugli.durian.j.dom.node.Name;
 import se.ugli.durian.j.dom.node.Text;
 
 public class MutableElement implements Element {
@@ -20,13 +19,15 @@ public class MutableElement implements Element {
     private final List<Element> elements = new ObservableList<Element>();
     private final List<Text> texts = new ObservableList<Text>();
     private final Document document;
-    private final Name name;
     private final Element parent;
+    private final String name;
+    private final String uri;
 
-    public MutableElement(final Document document, final Element parent, final Name name) {
+    public MutableElement(final String name, final String uri, final Document document, final Element parent) {
+        this.name = name;
+        this.uri = uri;
         this.document = document;
         this.parent = parent;
-        this.name = name;
         ListSynchronizer.applyLiveUpdates(elements, content);
         ListSynchronizer.applyLiveUpdates(texts, content);
     }
@@ -52,18 +53,13 @@ public class MutableElement implements Element {
     }
 
     @Override
-    public Name getName() {
-        return name;
-    }
-
-    @Override
     public Element getParent() {
         return parent;
     }
 
     @Override
     public String getPath() {
-        final String elementPath = "/" + name.getLocalName();
+        final String elementPath = "/" + name;
         if (isRoot()) {
             return elementPath;
         }
@@ -99,10 +95,27 @@ public class MutableElement implements Element {
 
     @Override
     public String getQName() {
-        final String prefix = document.getPrefix(name.getUri());
+        final String prefix = getPrefix();
         if (prefix != null) {
-            return prefix + ":" + name.getLocalName();
+            return prefix + ":" + name;
         }
-        return name.getLocalName();
+        return name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getUri() {
+        return uri;
+    }
+
+    private String getPrefix() {
+        if (document != null) {
+            return document.getPrefix(uri);
+        }
+        return null;
     }
 }

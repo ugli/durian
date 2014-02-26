@@ -4,7 +4,9 @@ import java.util.List;
 
 public interface Element extends Content {
 
-    Name getName();
+    String getName();
+
+    String getUri();
 
     String getQName();
 

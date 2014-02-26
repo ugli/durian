@@ -7,7 +7,6 @@ import org.xml.sax.Attributes;
 
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
-import se.ugli.durian.j.dom.node.Name;
 import se.ugli.durian.j.dom.node.NodeFactory;
 
 class AttributesFactory {
@@ -30,16 +29,11 @@ class AttributesFactory {
         return result;
     }
 
-    Attribute createAttribute(final int index) {
-        return nodeFactory.createAttribute(parent, createName(index), getValue(index));
-    }
-
-    String getValue(final int index) {
-        return attributes.getValue(index);
-    }
-
-    Name createName(final int index) {
-        return nodeFactory.createName(attributes.getURI(index), attributes.getLocalName(index));
+    private Attribute createAttribute(final int index) {
+        final String name = attributes.getLocalName(index);
+        final String uri = attributes.getURI(index);
+        final String value = attributes.getValue(index);
+        return nodeFactory.createAttribute(name, uri, parent, value);
     }
 
 }

@@ -4,13 +4,11 @@ public interface NodeFactory {
 
     PrefixMapping createPrefixMapping(String prefix, String uri);
 
-    Name createName(String uri, String localName);
-
     Document createDocument();
 
-    Element createElement(Document document, Element parent, Name name);
+    Element createElement(String name, String uri, Document document, Element parent);
 
-    Attribute createAttribute(Element parent, Name name, String value);
+    Attribute createAttribute(String name, String uri, Element parent, String value);
 
     Text createText(Element parent, String value);
 

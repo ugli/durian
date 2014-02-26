@@ -10,7 +10,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Document;
 import se.ugli.durian.j.dom.node.Element;
-import se.ugli.durian.j.dom.node.Name;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.PrefixMapping;
 import se.ugli.durian.j.dom.node.Text;
@@ -30,9 +29,8 @@ class SaxHandler extends DefaultHandler {
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes saxAttributes) {
-        final Name name = nodeFactory.createName(uri, localName);
         final Element parent = stack.isEmpty() ? null : stack.peek();
-        final Element element = nodeFactory.createElement(document, parent, name);
+        final Element element = nodeFactory.createElement(localName, uri, document, parent);
         for (final Attribute attribute : new AttributesFactory(nodeFactory, element, saxAttributes).create()) {
             element.getAttributes().add(attribute);
         }

@@ -70,7 +70,8 @@ public class Serializer {
     private static void appendAttributes(final Element element, final StringBuilder stringBuffer) {
         for (final Attribute attribute : element.getAttributes()) {
             stringBuffer.append(" ");
-            stringBuffer.append(attribute.getName().getLocalName());
+            // TODO handle qname !?
+            stringBuffer.append(attribute.getName());
             stringBuffer.append("=\"");
             stringBuffer.append(attribute.getValue());
             stringBuffer.append("\"");
