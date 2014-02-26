@@ -8,8 +8,6 @@ public interface Element extends Content {
 
     String getUri();
 
-    String getQName();
-
     Document getDocument();
 
     List<Attribute> getAttributes();
@@ -17,8 +15,6 @@ public interface Element extends Content {
     List<Element> getElements();
 
     List<Text> getTexts();
-
-    String getText();
 
     boolean isSimpleTextNode();
 

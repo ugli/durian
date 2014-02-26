@@ -28,22 +28,6 @@ public class MutableAttribute implements Attribute {
     }
 
     @Override
-    public String getQName() {
-        final String prefix = getPrefix();
-        if (prefix != null) {
-            return prefix + ":" + name;
-        }
-        return name;
-    }
-
-    private String getPrefix() {
-        if (parent != null && parent.getDocument() != null) {
-            return parent.getDocument().getPrefix(uri);
-        }
-        return null;
-    }
-
-    @Override
     public String getValue() {
         return value;
     }

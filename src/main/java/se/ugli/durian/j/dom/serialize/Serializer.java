@@ -20,7 +20,8 @@ public class Serializer {
     private static void serialize(final Element element, final StringBuilder stringBuffer, final int tab) {
         stringBuffer.append("\n");
         appendWithTab("<", stringBuffer, tab);
-        stringBuffer.append(element.getQName());
+        final String qName = getQName(element);
+        stringBuffer.append(qName);
         appendPrefixMapping(element, stringBuffer);
         appendAttributes(element, stringBuffer);
         if (element.getContent().isEmpty()) {
@@ -36,9 +37,24 @@ public class Serializer {
                 stringBuffer.append("\n");
                 appendWithTab("</", stringBuffer, tab);
             }
-            stringBuffer.append(element.getQName());
+            stringBuffer.append(qName);
             stringBuffer.append(">");
         }
+    }
+
+    private static String getQName(final Element element) {
+        final String prefix = getPrefix(element);
+        if (prefix != null) {
+            return prefix + ":" + element.getName();
+        }
+        return element.getName();
+    }
+
+    private static String getPrefix(final Element element) {
+        if (element.getDocument() != null) {
+            return element.getDocument().getPrefix(element.getUri());
+        }
+        return null;
     }
 
     private static void appendWithTab(final String str, final StringBuilder stringBuffer, final int tab) {
@@ -51,7 +67,7 @@ public class Serializer {
     private static void appendPrefixMapping(final Element element, final StringBuilder stringBuffer) {
         if (element.getParent() == null && element.getDocument() != null) {
             final Document document = element.getDocument();
-            for (String uri : document.getUriSet()) {
+            for (final String uri : document.getUriSet()) {
                 final String prefix = document.getPrefix(uri);
                 stringBuffer.append(" xmlns");
                 if (prefix != null) {

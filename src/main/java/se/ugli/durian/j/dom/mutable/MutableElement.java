@@ -1,7 +1,6 @@
 package se.ugli.durian.j.dom.mutable;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import se.ugli.durian.j.dom.collections.ListSynchronizer;
@@ -67,18 +66,6 @@ public class MutableElement implements Element {
     }
 
     @Override
-    public String getText() {
-        final StringBuilder textBuilder = new StringBuilder();
-        for (final Iterator<Text> i = texts.iterator(); i.hasNext();) {
-            textBuilder.append(i.next().getValue());
-            if (i.hasNext()) {
-                textBuilder.append("\n");
-            }
-        }
-        return textBuilder.toString();
-    }
-
-    @Override
     public List<Text> getTexts() {
         return texts;
     }
@@ -94,15 +81,6 @@ public class MutableElement implements Element {
     }
 
     @Override
-    public String getQName() {
-        final String prefix = getPrefix();
-        if (prefix != null) {
-            return prefix + ":" + name;
-        }
-        return name;
-    }
-
-    @Override
     public String getName() {
         return name;
     }
@@ -112,10 +90,4 @@ public class MutableElement implements Element {
         return uri;
     }
 
-    private String getPrefix() {
-        if (document != null) {
-            return document.getPrefix(uri);
-        }
-        return null;
-    }
 }

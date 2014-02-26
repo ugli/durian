@@ -6,8 +6,6 @@ public interface Attribute extends Node {
 
     String getUri();
 
-    String getQName();
-
     String getValue();
 
 }
