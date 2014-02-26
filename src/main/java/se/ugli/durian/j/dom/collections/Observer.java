@@ -5,7 +5,7 @@ class Observer {
     private final ObservableList<?> list1;
     private final ObservableList<?> list2;
 
-    public Observer(final ObservableList<?> list1, final ObservableList<?> list2) {
+    Observer(final ObservableList<?> list1, final ObservableList<?> list2) {
         this.list1 = list1;
         this.list2 = list2;
     }
