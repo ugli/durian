@@ -6,12 +6,10 @@ public class MutableName implements Name {
 
     private final String uri;
     private final String localName;
-    private final String qName;
 
-    public MutableName(final String uri, final String localName, final String qName) {
+    public MutableName(final String uri, final String localName) {
         this.uri = uri;
         this.localName = localName;
-        this.qName = qName;
     }
 
     @Override
@@ -22,11 +20,6 @@ public class MutableName implements Name {
     @Override
     public String getLocalName() {
         return localName;
-    }
-
-    @Override
-    public String getQName() {
-        return qName;
     }
 
 }

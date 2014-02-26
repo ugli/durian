@@ -5,5 +5,4 @@ public interface Name {
 
     String getLocalName();
 
-    String getQName();
 }

@@ -16,8 +16,8 @@ public class MutableNodeFactory implements NodeFactory {
     }
 
     @Override
-    public Name createName(final String uri, final String localName, final String qName) {
-        return new MutableName(uri, localName, qName);
+    public Name createName(final String uri, final String localName) {
+        return new MutableName(uri, localName);
     }
 
     @Override

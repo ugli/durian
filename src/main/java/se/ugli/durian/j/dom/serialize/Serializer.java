@@ -23,7 +23,7 @@ public class Serializer {
     private static void serialize(final Element element, final StringBuilder stringBuffer, final int tab) {
         stringBuffer.append("\n");
         appendWithTab("<", stringBuffer, tab);
-        stringBuffer.append(element.getName().getQName());
+        stringBuffer.append(element.getQName());
         appendPrefixMapping(element, stringBuffer);
         appendAttributes(element, stringBuffer);
         if (element.getContent().isEmpty()) {
@@ -39,7 +39,7 @@ public class Serializer {
                 stringBuffer.append("\n");
                 appendWithTab("</", stringBuffer, tab);
             }
-            stringBuffer.append(element.getName().getQName());
+            stringBuffer.append(element.getQName());
             stringBuffer.append(">");
         }
     }

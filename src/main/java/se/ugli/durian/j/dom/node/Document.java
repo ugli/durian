@@ -13,4 +13,6 @@ public interface Document {
     void add(final PrefixMapping prefixMapping);
 
     void remove(final PrefixMapping prefixMapping);
+
+    String getPrefix(String uri);
 }

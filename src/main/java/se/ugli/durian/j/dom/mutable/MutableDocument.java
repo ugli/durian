@@ -38,4 +38,12 @@ public class MutableDocument implements Document {
         uriMap.remove(prefixMapping.getUri());
     }
 
+    @Override
+    public String getPrefix(final String uri) {
+        if (uriMap.containsKey(uri)) {
+            return uriMap.get(uri).getPrefix();
+        }
+        return null;
+    }
+
 }

@@ -4,7 +4,7 @@ public interface NodeFactory {
 
     PrefixMapping createPrefixMapping(String prefix, String uri);
 
-    Name createName(String uri, String localName, String qName);
+    Name createName(String uri, String localName);
 
     Document createDocument();
 

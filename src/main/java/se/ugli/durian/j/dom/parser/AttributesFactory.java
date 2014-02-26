@@ -39,8 +39,7 @@ class AttributesFactory {
     }
 
     Name createName(final int index) {
-        return nodeFactory.createName(attributes.getURI(index), attributes.getLocalName(index),
-                attributes.getQName(index));
+        return nodeFactory.createName(attributes.getURI(index), attributes.getLocalName(index));
     }
 
 }
