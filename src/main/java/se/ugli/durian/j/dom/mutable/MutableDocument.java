@@ -1,17 +1,16 @@
 package se.ugli.durian.j.dom.mutable;
 
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import se.ugli.durian.j.dom.node.Document;
 import se.ugli.durian.j.dom.node.Element;
-import se.ugli.durian.j.dom.node.PrefixMapping;
 
 public class MutableDocument implements Document {
 
     private Element root;
-    private final Map<String, PrefixMapping> uriMap = new LinkedHashMap<String, PrefixMapping>();
+    private final Map<String, String> uriMap = new LinkedHashMap<String, String>();
 
     @Override
     public Element getRoot() {
@@ -24,26 +23,23 @@ public class MutableDocument implements Document {
     }
 
     @Override
-    public Iterator<PrefixMapping> getPrefixMappings() {
-        return uriMap.values().iterator();
-    }
-
-    @Override
-    public void add(final PrefixMapping prefixMapping) {
-        uriMap.put(prefixMapping.getUri(), prefixMapping);
-    }
-
-    @Override
-    public void remove(final PrefixMapping prefixMapping) {
-        uriMap.remove(prefixMapping.getUri());
-    }
-
-    @Override
     public String getPrefix(final String uri) {
-        if (uriMap.containsKey(uri)) {
-            return uriMap.get(uri).getPrefix();
-        }
-        return null;
+        return uriMap.get(uri);
+    }
+
+    @Override
+    public void addPrefixMapping(final String uri, final String prefix) {
+        uriMap.put(uri, prefix);
+    }
+
+    @Override
+    public void removeUri(final String uri) {
+        uriMap.remove(uri);
+    }
+
+    @Override
+    public Set<String> getUriSet() {
+        return uriMap.keySet();
     }
 
 }

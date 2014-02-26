@@ -11,7 +11,6 @@ import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Document;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
-import se.ugli.durian.j.dom.node.PrefixMapping;
 import se.ugli.durian.j.dom.node.Text;
 
 class SaxHandler extends DefaultHandler {
@@ -25,12 +24,11 @@ class SaxHandler extends DefaultHandler {
         document = nodeFactory.createDocument();
     }
 
-    @SuppressWarnings("unused")
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes saxAttributes) {
         final Element parent = stack.isEmpty() ? null : stack.peek();
-        final Element element = nodeFactory.createElement(localName, uri, document, parent);
+        final Element element = nodeFactory.createElement(localName, uri, qName, document, parent);
         for (final Attribute attribute : new AttributesFactory(nodeFactory, element, saxAttributes).create()) {
             element.getAttributes().add(attribute);
         }
@@ -63,8 +61,7 @@ class SaxHandler extends DefaultHandler {
     @Override
     public void startPrefixMapping(final String prefix, final String uri) {
         final String prefixToCreate = prefix != null && !prefix.trim().isEmpty() ? prefix : null;
-        final PrefixMapping prefixMapping = nodeFactory.createPrefixMapping(prefixToCreate, uri);
-        document.add(prefixMapping);
+        document.addPrefixMapping(uri, prefixToCreate);
     }
 
     @Override

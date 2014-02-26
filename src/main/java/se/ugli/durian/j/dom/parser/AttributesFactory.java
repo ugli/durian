@@ -33,7 +33,8 @@ class AttributesFactory {
         final String name = attributes.getLocalName(index);
         final String uri = attributes.getURI(index);
         final String value = attributes.getValue(index);
-        return nodeFactory.createAttribute(name, uri, parent, value);
+        final String qName = attributes.getQName(index);
+        return nodeFactory.createAttribute(name, uri, qName, parent, value);
     }
 
 }
