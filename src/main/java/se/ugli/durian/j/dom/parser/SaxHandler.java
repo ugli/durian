@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Stack;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -18,9 +20,11 @@ class SaxHandler extends DefaultHandler {
     final Document document;
     private final Stack<Element> stack = new Stack<Element>();
     private final NodeFactory nodeFactory;
+    private final ErrorHandler errorHandler;
 
-    public SaxHandler(final NodeFactory nodeFactory) {
+    SaxHandler(final NodeFactory nodeFactory, final ErrorHandler errorHandler) {
         this.nodeFactory = nodeFactory;
+        this.errorHandler = errorHandler;
         document = nodeFactory.createDocument();
     }
 
@@ -65,18 +69,18 @@ class SaxHandler extends DefaultHandler {
     }
 
     @Override
-    public void fatalError(final SAXParseException e) throws SAXParseException {
-        throw e;
+    public void fatalError(final SAXParseException e) throws SAXException {
+        errorHandler.fatalError(e);
     }
 
     @Override
-    public void error(final SAXParseException e) throws SAXParseException {
-        throw e;
+    public void error(final SAXParseException e) throws SAXException {
+        errorHandler.error(e);
     }
 
     @Override
-    public void warning(final SAXParseException e) throws SAXParseException {
-        throw e;
+    public void warning(final SAXParseException e) throws SAXException {
+        errorHandler.warning(e);
     }
 
 }
