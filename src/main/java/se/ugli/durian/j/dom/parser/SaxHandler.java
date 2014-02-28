@@ -32,7 +32,7 @@ class SaxHandler extends DefaultHandler {
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes saxAttributes) {
         final Element parent = stack.isEmpty() ? null : stack.peek();
-        final Element element = nodeFactory.createElement(localName, uri, qName, document, parent);
+        final Element element = nodeFactory.createElement(localName, uri, document, parent);
         for (final Attribute attribute : new AttributesFactory(nodeFactory, element, saxAttributes).create()) {
             element.getAttributes().add(attribute);
         }
@@ -45,7 +45,6 @@ class SaxHandler extends DefaultHandler {
         }
     }
 
-    @SuppressWarnings("unused")
     @Override
     public void endElement(final String uri, final String localName, final String qName) {
         stack.pop();

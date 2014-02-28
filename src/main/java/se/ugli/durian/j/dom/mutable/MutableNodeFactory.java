@@ -13,17 +13,18 @@ public class MutableNodeFactory implements NodeFactory {
         return new MutableDocument();
     }
 
-    @SuppressWarnings("unused")
     @Override
-    public Element createElement(final String name, final String uri, final String qName, final Document document,
-            final Element parent) {
-        return new MutableElement(name, uri, document, parent);
+    public Element createElement(final String name, final String uri, final Document document, final Element parent) {
+        if (parent == null) {
+            return new MutableElement(name, uri, document);
+        }
+        else {
+            return new MutableElement(name, uri);
+        }
     }
 
-    @SuppressWarnings("unused")
     @Override
-    public Attribute createAttribute(final String name, final String uri, final String qName, final Element parent,
-            final String value) {
+    public Attribute createAttribute(final String name, final String uri, final Element parent, final String value) {
         return new MutableAttribute(name, uri, parent, value);
     }
 

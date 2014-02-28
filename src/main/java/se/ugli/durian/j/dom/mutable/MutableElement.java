@@ -1,10 +1,11 @@
 package se.ugli.durian.j.dom.mutable;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
-import se.ugli.durian.j.dom.collections.ListSynchronizer;
-import se.ugli.durian.j.dom.collections.ObservableList;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Document;
@@ -13,26 +14,29 @@ import se.ugli.durian.j.dom.node.Text;
 
 public class MutableElement implements Element {
 
-    private final List<Attribute> attributes = new ArrayList<Attribute>();
+    private final Set<Attribute> attributes = new LinkedHashSet<Attribute>();
     private final List<Content> content = new ObservableList<Content>();
     private final List<Element> elements = new ObservableList<Element>();
     private final List<Text> texts = new ObservableList<Text>();
-    private final Document document;
-    private final Element parent;
+    private Document document;
+    private Element parent;
     private final String name;
     private final String uri;
 
-    public MutableElement(final String name, final String uri, final Document document, final Element parent) {
+    public MutableElement(final String name, final String uri, final Document document) {
         this.name = name;
         this.uri = uri;
         this.document = document;
-        this.parent = parent;
-        ListSynchronizer.applyLiveUpdates(elements, content);
-        ListSynchronizer.applyLiveUpdates(texts, content);
+        ListSynchronizer.applyLiveUpdates(elements, content, this);
+        ListSynchronizer.applyLiveUpdates(texts, content, this);
+    }
+
+    public MutableElement(final String name, final String uri) {
+        this(name, uri, null);
     }
 
     @Override
-    public List<Attribute> getAttributes() {
+    public Set<Attribute> getAttributes() {
         return attributes;
     }
 
@@ -88,6 +92,69 @@ public class MutableElement implements Element {
     @Override
     public String getUri() {
         return uri;
+    }
+
+    @Override
+    public String getAttributeValue(String attributeName) {
+        Attribute attribute = getAttribute(attributeName);
+        if (attribute != null) {
+            return attribute.getValue();
+        }
+        return null;
+    }
+
+    @Override
+    public Attribute getAttribute(String attributeName) {
+        for (Attribute attribute : attributes) {
+            if (attribute.getName().equals(attributeName)) {
+                return attribute;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void setAttributeValue(String attributeName, String value) {
+        Attribute attribute = getAttribute(attributeName);
+        if (attribute != null) {
+            attribute.setValue(value);
+        }
+    }
+
+    @Override
+    public List<Element> getElements(String elementName) {
+        List<Element> result = new ArrayList<Element>();
+        for (Element element : elements) {
+            if (element.getName().equals(elementName)) {
+                result.add(element);
+            }
+        }
+        return Collections.unmodifiableList(result);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends Element> List<T> getTypedElements(String elementName) {
+        return (List<T>) getElements(elementName);
+    }
+
+    @Override
+    public Element getElement(String elementName) {
+        for (Element element : elements) {
+            if (element.getName().equals(elementName)) {
+                return element;
+            }
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends Element> T getTypedElement(String elementName) {
+        return (T) getElement(elementName);
+    }
+
+    public void elementAdded(MutableElement element) {
+        element.parent = this;
+        element.document = document;
     }
 
 }

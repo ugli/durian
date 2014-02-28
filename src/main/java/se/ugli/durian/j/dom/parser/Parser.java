@@ -125,7 +125,7 @@ public class Parser {
         }
     }
 
-    public Document parse(@SuppressWarnings("unused") final Source source) {
+    public Document parse(final Source source) {
         // TODO
         throw new UnsupportedOperationException("TBD");
     }

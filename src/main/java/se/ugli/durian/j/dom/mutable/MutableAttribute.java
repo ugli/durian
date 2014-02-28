@@ -5,7 +5,7 @@ import se.ugli.durian.j.dom.node.Element;
 
 public class MutableAttribute implements Attribute {
 
-    private final String value;
+    private String value;
     private final Element parent;
     private final String name;
     private final String uri;
@@ -40,6 +40,42 @@ public class MutableAttribute implements Attribute {
     @Override
     public String getPath() {
         return parent.getPath() + "/@" + name;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        MutableAttribute other = (MutableAttribute) obj;
+        if (name == null) {
+            if (other.name != null) {
+                return false;
+            }
+        }
+        else if (!name.equals(other.name)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void setValue(String value) {
+        this.value = value;
     }
 
 }

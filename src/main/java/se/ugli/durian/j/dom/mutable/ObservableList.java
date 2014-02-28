@@ -1,4 +1,4 @@
-package se.ugli.durian.j.dom.collections;
+package se.ugli.durian.j.dom.mutable;
 
 import java.util.ArrayList;
 import java.util.Collection;

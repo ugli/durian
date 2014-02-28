@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import se.ugli.durian.j.dom.mutable.ListSynchronizer;
+import se.ugli.durian.j.dom.mutable.ObservableList;
+
 public class ObservableListTest {
 
     @Test
@@ -13,7 +16,7 @@ public class ObservableListTest {
         final List<Integer> intList = new ObservableList<Integer>();
         final List<Number> numberList = new ObservableList<Number>();
 
-        ListSynchronizer.applyLiveUpdates(intList, numberList);
+        ListSynchronizer.applyLiveUpdates(intList, numberList, null);
 
         intList.add(3);
         intList.add(4);
