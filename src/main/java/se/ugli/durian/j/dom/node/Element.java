@@ -35,4 +35,6 @@ public interface Element extends Content {
     // use getAttributes.add
     void setAttributeValue(String attributeName, String value);
 
+    Element clone();
+
 }

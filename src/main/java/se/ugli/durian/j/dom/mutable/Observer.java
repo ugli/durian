@@ -1,5 +1,7 @@
 package se.ugli.durian.j.dom.mutable;
 
+import java.util.Collection;
+
 class Observer {
 
     private final ObservableList<?> list1;
@@ -35,4 +37,15 @@ class Observer {
         return getOtherList(list).getBackendList().remove(obj);
     }
 
+    void addAll(final ObservableList<?> list, final Collection<?> c) {
+        for (Object obj : c) {
+            add(list, obj);
+        }
+    }
+
+    void clear(final ObservableList<?> list) {
+        for (Object obj : list) {
+            remove(list, obj);
+        }
+    }
 }

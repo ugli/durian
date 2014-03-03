@@ -76,8 +76,8 @@ public class ObservableList<E> implements List<E> {
 
     @Override
     public boolean addAll(final Collection<? extends E> c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
+        observer.addAll(this, c);
+        return backendList.addAll(c);
     }
 
     @Override
@@ -100,8 +100,8 @@ public class ObservableList<E> implements List<E> {
 
     @Override
     public void clear() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
+        observer.clear(this);
+        backendList.clear();
     }
 
     @Override

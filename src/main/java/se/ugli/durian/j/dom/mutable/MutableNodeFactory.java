@@ -16,10 +16,10 @@ public class MutableNodeFactory implements NodeFactory {
     @Override
     public Element createElement(final String name, final String uri, final Document document, final Element parent) {
         if (parent == null) {
-            return new MutableElement(name, uri, document);
+            return new MutableElement(name, uri, document, this);
         }
         else {
-            return new MutableElement(name, uri);
+            return new MutableElement(name, uri, this);
         }
     }
 

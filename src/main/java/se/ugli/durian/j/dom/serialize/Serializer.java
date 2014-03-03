@@ -17,6 +17,13 @@ public class Serializer {
         return stringBuffer.toString();
     }
 
+    public static String serialize(Element element) {
+        final StringBuilder stringBuffer = new StringBuilder();
+        stringBuffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        serialize(element, stringBuffer, 0);
+        return stringBuffer.toString();
+    }
+
     private static void serialize(final Element element, final StringBuilder stringBuffer, final int tab) {
         stringBuffer.append("\n");
         appendWithTab("<", stringBuffer, tab);

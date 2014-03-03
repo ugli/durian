@@ -1,4 +1,4 @@
-package se.ugli.durian.j.dom.collections;
+package se.ugli.durian.j.dom.mutable;
 
 import static org.junit.Assert.assertEquals;
 

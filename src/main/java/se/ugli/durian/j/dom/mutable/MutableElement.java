@@ -10,6 +10,7 @@ import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Document;
 import se.ugli.durian.j.dom.node.Element;
+import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
 public class MutableElement implements Element {
@@ -22,17 +23,19 @@ public class MutableElement implements Element {
     private Element parent;
     private final String name;
     private final String uri;
+    private final NodeFactory nodeFactory;
 
-    public MutableElement(final String name, final String uri, final Document document) {
+    public MutableElement(final String name, final String uri, final Document document, NodeFactory nodeFactory) {
         this.name = name;
         this.uri = uri;
         this.document = document;
+        this.nodeFactory = nodeFactory;
         ListSynchronizer.applyLiveUpdates(elements, content, this);
         ListSynchronizer.applyLiveUpdates(texts, content, this);
     }
 
-    public MutableElement(final String name, final String uri) {
-        this(name, uri, null);
+    public MutableElement(final String name, final String uri, NodeFactory nodeFactory) {
+        this(name, uri, null, nodeFactory);
     }
 
     @Override
@@ -119,6 +122,9 @@ public class MutableElement implements Element {
         if (attribute != null) {
             attribute.setValue(value);
         }
+        else {
+            attributes.add(nodeFactory.createAttribute(attributeName, uri, this, value));
+        }
     }
 
     @Override
@@ -152,9 +158,44 @@ public class MutableElement implements Element {
         return (T) getElement(elementName);
     }
 
+    public void setElement(Element element) {
+        if (element != null) {
+            Element element2 = getElement(element.getName());
+            if (element2 != null) {
+                getElements().remove(element2);
+            }
+            getElements().add(element);
+        }
+    }
+
     public void elementAdded(MutableElement element) {
         element.parent = this;
         element.document = document;
+    }
+
+    public Element clone(String elementName) {
+        Element element = nodeFactory.createElement(elementName, uri, null, null);
+        for (Attribute attribute : attributes) {
+            element.getAttributes()
+                    .add(nodeFactory.createAttribute(attribute.getName(), attribute.getUri(), element,
+                            attribute.getValue()));
+        }
+        for (Content content : this.content) {
+            if (content instanceof Text) {
+                Text text = (Text) content;
+                element.getTexts().add(nodeFactory.createText(element, text.getValue()));
+            }
+            else if (content instanceof Element) {
+                Element child = (Element) content;
+                element.getElements().add(child.clone());
+            }
+        }
+        return element;
+    }
+
+    @Override
+    public Element clone() {
+        return clone(name);
     }
 
 }
