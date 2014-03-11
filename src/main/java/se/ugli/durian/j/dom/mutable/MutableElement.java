@@ -25,7 +25,7 @@ public class MutableElement implements Element {
     private final String uri;
     private final NodeFactory nodeFactory;
 
-    public MutableElement(final String name, final String uri, final Document document, NodeFactory nodeFactory) {
+    public MutableElement(final String name, final String uri, final Document document, final NodeFactory nodeFactory) {
         this.name = name;
         this.uri = uri;
         this.document = document;
@@ -34,7 +34,7 @@ public class MutableElement implements Element {
         ListSynchronizer.applyLiveUpdates(texts, content, this);
     }
 
-    public MutableElement(final String name, final String uri, NodeFactory nodeFactory) {
+    public MutableElement(final String name, final String uri, final NodeFactory nodeFactory) {
         this(name, uri, null, nodeFactory);
     }
 
@@ -66,7 +66,7 @@ public class MutableElement implements Element {
     @Override
     public String getPath() {
         final String elementPath = "/" + name;
-        if (isRoot()) {
+        if (parent == null) {
             return elementPath;
         }
         return parent.getPath() + elementPath;
@@ -75,11 +75,6 @@ public class MutableElement implements Element {
     @Override
     public List<Text> getTexts() {
         return texts;
-    }
-
-    @Override
-    public boolean isRoot() {
-        return parent == null;
     }
 
     @Override
@@ -98,8 +93,8 @@ public class MutableElement implements Element {
     }
 
     @Override
-    public String getAttributeValue(String attributeName) {
-        Attribute attribute = getAttribute(attributeName);
+    public String getAttributeValue(final String attributeName) {
+        final Attribute attribute = getAttribute(attributeName);
         if (attribute != null) {
             return attribute.getValue();
         }
@@ -107,8 +102,8 @@ public class MutableElement implements Element {
     }
 
     @Override
-    public Attribute getAttribute(String attributeName) {
-        for (Attribute attribute : attributes) {
+    public Attribute getAttribute(final String attributeName) {
+        for (final Attribute attribute : attributes) {
             if (attribute.getName().equals(attributeName)) {
                 return attribute;
             }
@@ -117,8 +112,8 @@ public class MutableElement implements Element {
     }
 
     @Override
-    public void setAttributeValue(String attributeName, String value) {
-        Attribute attribute = getAttribute(attributeName);
+    public void setAttributeValue(final String attributeName, final String value) {
+        final Attribute attribute = getAttribute(attributeName);
         if (attribute != null) {
             attribute.setValue(value);
         }
@@ -128,9 +123,9 @@ public class MutableElement implements Element {
     }
 
     @Override
-    public List<Element> getElements(String elementName) {
-        List<Element> result = new ArrayList<Element>();
-        for (Element element : elements) {
+    public List<Element> getElements(final String elementName) {
+        final List<Element> result = new ArrayList<Element>();
+        for (final Element element : elements) {
             if (element.getName().equals(elementName)) {
                 result.add(element);
             }
@@ -139,13 +134,13 @@ public class MutableElement implements Element {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends Element> List<T> getTypedElements(String elementName) {
+    public <T extends Element> List<T> getTypedElements(final String elementName) {
         return (List<T>) getElements(elementName);
     }
 
     @Override
-    public Element getElement(String elementName) {
-        for (Element element : elements) {
+    public Element getElement(final String elementName) {
+        for (final Element element : elements) {
             if (element.getName().equals(elementName)) {
                 return element;
             }
@@ -154,13 +149,13 @@ public class MutableElement implements Element {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends Element> T getTypedElement(String elementName) {
+    public <T extends Element> T getTypedElement(final String elementName) {
         return (T) getElement(elementName);
     }
 
-    public void setElement(Element element) {
+    public void setElement(final Element element) {
         if (element != null) {
-            Element element2 = getElement(element.getName());
+            final Element element2 = getElement(element.getName());
             if (element2 != null) {
                 getElements().remove(element2);
             }
@@ -168,25 +163,25 @@ public class MutableElement implements Element {
         }
     }
 
-    public void elementAdded(MutableElement element) {
+    public void elementAdded(final MutableElement element) {
         element.parent = this;
         element.document = document;
     }
 
-    public Element clone(String elementName) {
-        Element element = nodeFactory.createElement(elementName, uri, null, null);
-        for (Attribute attribute : attributes) {
+    public Element clone(final String elementName) {
+        final Element element = nodeFactory.createElement(elementName, uri, null, null);
+        for (final Attribute attribute : attributes) {
             element.getAttributes()
                     .add(nodeFactory.createAttribute(attribute.getName(), attribute.getUri(), element,
                             attribute.getValue()));
         }
-        for (Content content : this.content) {
+        for (final Content content : this.content) {
             if (content instanceof Text) {
-                Text text = (Text) content;
+                final Text text = (Text) content;
                 element.getTexts().add(nodeFactory.createText(element, text.getValue()));
             }
             else if (content instanceof Element) {
-                Element child = (Element) content;
+                final Element child = (Element) content;
                 element.getElements().add(child.clone());
             }
         }
@@ -196,6 +191,16 @@ public class MutableElement implements Element {
     @Override
     public Element clone() {
         return clone(name);
+    }
+
+    @Override
+    public void setDocument(final Document document) {
+        this.document = document;
+    }
+
+    @Override
+    public void setParent(final Element parent) {
+        this.parent = parent;
     }
 
 }

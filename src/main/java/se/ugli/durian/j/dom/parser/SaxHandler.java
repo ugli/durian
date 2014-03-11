@@ -63,8 +63,21 @@ class SaxHandler extends DefaultHandler {
 
     @Override
     public void startPrefixMapping(final String prefix, final String uri) {
-        final String prefixToCreate = prefix != null && !prefix.trim().isEmpty() ? prefix : null;
-        document.addPrefixMapping(uri, prefixToCreate);
+        final String trimedPrefix = trimedOrNull(prefix);
+        final String trimedUri = trimedOrNull(uri);
+        if (trimedUri != null) {
+            document.addPrefixMapping(trimedUri, trimedPrefix);
+        }
+    }
+
+    private String trimedOrNull(final String str) {
+        if (str != null) {
+            final String result = str.trim();
+            if (!result.isEmpty()) {
+                return result;
+            }
+        }
+        return null;
     }
 
     @Override

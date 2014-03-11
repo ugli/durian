@@ -25,8 +25,6 @@ public interface Element extends Content {
 
     boolean isSimpleTextNode();
 
-    boolean isRoot();
-
     Attribute getAttribute(String attributeName);
 
     String getAttributeValue(String attributeName);
@@ -36,5 +34,9 @@ public interface Element extends Content {
     void setAttributeValue(String attributeName, String value);
 
     Element clone();
+
+    void setDocument(Document document);
+
+    void setParent(Element element);
 
 }

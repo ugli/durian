@@ -8,28 +8,33 @@ import se.ugli.durian.j.dom.node.Text;
 
 public class Serializer {
 
+    private static final String TAB = "  ";
+
     public static String serialize(final Document document) {
         final StringBuilder stringBuffer = new StringBuilder();
         stringBuffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         if (document.getRoot() != null) {
-            serialize(document.getRoot(), stringBuffer, 0);
+            serialize(document.getRoot(), stringBuffer, 0, true);
         }
         return stringBuffer.toString();
     }
 
-    public static String serialize(Element element) {
+    public static String serialize(final Element element) {
         final StringBuilder stringBuffer = new StringBuilder();
         stringBuffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        serialize(element, stringBuffer, 0);
+        serialize(element, stringBuffer, 1, true);
         return stringBuffer.toString();
     }
 
-    private static void serialize(final Element element, final StringBuilder stringBuffer, final int tab) {
+    private static void serialize(final Element element, final StringBuilder stringBuffer, final int tab,
+            final boolean root) {
         stringBuffer.append("\n");
         appendWithTab("<", stringBuffer, tab);
-        final String qName = getQName(element);
+        final String qName = getQName(element, root);
         stringBuffer.append(qName);
-        appendPrefixMapping(element, stringBuffer);
+        if (root) {
+            appendPrefixMapping(element, stringBuffer);
+        }
         appendAttributes(element, stringBuffer);
         if (element.getContent().isEmpty()) {
             stringBuffer.append("/>");
@@ -49,10 +54,12 @@ public class Serializer {
         }
     }
 
-    private static String getQName(final Element element) {
-        final String prefix = getPrefix(element);
-        if (prefix != null) {
-            return prefix + ":" + element.getName();
+    private static String getQName(final Element element, final boolean root) {
+        if (root) {
+            final String prefix = getPrefix(element);
+            if (prefix != null) {
+                return prefix + ":" + element.getName();
+            }
         }
         return element.getName();
     }
@@ -66,13 +73,13 @@ public class Serializer {
 
     private static void appendWithTab(final String str, final StringBuilder stringBuffer, final int tab) {
         for (int step = 0; step < tab - 1; step++) {
-            stringBuffer.append("  ");
+            stringBuffer.append(TAB);
         }
         stringBuffer.append(str);
     }
 
     private static void appendPrefixMapping(final Element element, final StringBuilder stringBuffer) {
-        if (element.getParent() == null && element.getDocument() != null) {
+        if (element.getDocument() != null) {
             final Document document = element.getDocument();
             for (final String uri : document.getUriSet()) {
                 final String prefix = document.getPrefix(uri);
@@ -102,7 +109,7 @@ public class Serializer {
     private static void appendContent(final Element element, final StringBuilder stringBuffer, final int tab) {
         for (final Content content : element.getContent()) {
             if (content instanceof Element) {
-                serialize((Element) content, stringBuffer, tab + 1);
+                serialize((Element) content, stringBuffer, tab + 1, false);
             }
             else if (content instanceof Text) {
                 stringBuffer.append(((Text) content).getValue());

@@ -20,6 +20,7 @@ public class MutableDocument implements Document {
     @Override
     public void setRoot(final Element root) {
         this.root = root;
+        root.setDocument(this);
     }
 
     @Override
@@ -29,7 +30,12 @@ public class MutableDocument implements Document {
 
     @Override
     public void addPrefixMapping(final String uri, final String prefix) {
-        uriMap.put(uri, prefix);
+        if (prefix == null || prefix.trim().isEmpty()) {
+            uriMap.put(uri, null);
+        }
+        else {
+            uriMap.put(uri, prefix);
+        }
     }
 
     @Override
