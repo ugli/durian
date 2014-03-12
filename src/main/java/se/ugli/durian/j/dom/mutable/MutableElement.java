@@ -64,15 +64,6 @@ public class MutableElement implements Element {
     }
 
     @Override
-    public String getPath() {
-        final String elementPath = "/" + name;
-        if (parent == null) {
-            return elementPath;
-        }
-        return parent.getPath() + elementPath;
-    }
-
-    @Override
     public List<Text> getTexts() {
         return texts;
     }
@@ -201,6 +192,31 @@ public class MutableElement implements Element {
     @Override
     public void setParent(final Element parent) {
         this.parent = parent;
+    }
+
+    @Override
+    public String getPath() {
+        final String elementPath = "/" + name;
+        if (parent == null) {
+            return elementPath;
+        }
+        return parent.getPath() + elementPath;
+    }
+
+    @Override
+    public String getPath(final String childPath) {
+        if (childPath.startsWith("/")) {
+            return getPath() + childPath;
+        }
+        return getPath() + "/" + childPath;
+    }
+
+    @Override
+    public String getRelativePath(final String childPath) {
+        if (childPath.startsWith("/")) {
+            return name + childPath;
+        }
+        return name + "/" + childPath;
     }
 
 }

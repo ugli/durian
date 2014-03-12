@@ -51,7 +51,7 @@ public class MutableAttribute implements Attribute {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -61,7 +61,7 @@ public class MutableAttribute implements Attribute {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        MutableAttribute other = (MutableAttribute) obj;
+        final MutableAttribute other = (MutableAttribute) obj;
         if (name == null) {
             if (other.name != null) {
                 return false;
@@ -74,7 +74,7 @@ public class MutableAttribute implements Attribute {
     }
 
     @Override
-    public void setValue(String value) {
+    public void setValue(final String value) {
         this.value = value;
     }
 

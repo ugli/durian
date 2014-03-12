@@ -39,4 +39,8 @@ public interface Element extends Content {
 
     void setParent(Element element);
 
+    String getPath(String childPath);
+
+    String getRelativePath(String childPath);
+
 }
