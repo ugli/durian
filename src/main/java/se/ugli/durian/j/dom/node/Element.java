@@ -5,38 +5,32 @@ import java.util.Set;
 
 public interface Element extends Content {
 
-    String getName();
-
-    String getUri();
-
-    Set<Attribute> getAttributes();
-
-    List<Element> getElements();
-
-    List<Element> getElements(String elementName);
-
-    Element getElement(String elementName);
-
-    List<Text> getTexts();
-
-    boolean isSimpleTextNode();
+    Element clone();
 
     Attribute getAttribute(String attributeName);
 
+    Set<Attribute> getAttributes();
+
     String getAttributeValue(String attributeName);
 
-    @Deprecated
-    // use getAttributes.add
-    void setAttributeValue(String attributeName, String value);
+    Element getElement(String elementName);
 
-    Element clone();
+    List<? extends Element> getElements();
 
-    void setParent(Element element);
+    List<? extends Element> getElements(String elementName);
+
+    String getName();
 
     String getPath(String childPath);
 
     String getRelativePath(String childPath);
 
+    List<Text> getTexts();
+
+    String getUri();
+
     Set<String> getUriSet();
+
+    boolean isSimpleTextNode();
 
 }

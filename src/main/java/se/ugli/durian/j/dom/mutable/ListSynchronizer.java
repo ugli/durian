@@ -7,7 +7,7 @@ public final class ListSynchronizer {
     private ListSynchronizer() {
     }
 
-    public static void applyLiveUpdates(final List<?> list1, final List<?> list2, MutableElement parent) {
+    public static void applyLiveUpdates(final List<?> list1, final List<?> list2, ElementImpl parent) {
         final ObservableList<?> obsList1 = (ObservableList<?>) list1;
         final ObservableList<?> obsList2 = (ObservableList<?>) list2;
         final Observer observer = new Observer(obsList1, obsList2, parent);

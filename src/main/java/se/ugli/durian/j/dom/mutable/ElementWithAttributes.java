@@ -10,19 +10,12 @@ import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
-public class ElementNoText extends AbstractElement implements ListObserver<MutableElement> {
+public class ElementWithAttributes extends AbstractElement {
 
     private final Set<Attribute> attributes = new LinkedHashSet<Attribute>();
-    private final List<MutableElement> elements = new ObservableList2<MutableElement>(this);
 
-    public ElementNoText(final String name, final String uri, final NodeFactory nodeFactory) {
+    public ElementWithAttributes(final String name, final String uri, final NodeFactory nodeFactory) {
         super(name, uri, nodeFactory);
-    }
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    @Override
-    public List<Content> getContent() {
-        return (List) elements;
     }
 
     @Override
@@ -32,7 +25,7 @@ public class ElementNoText extends AbstractElement implements ListObserver<Mutab
 
     @Override
     public List<MutableElement> getElements() {
-        return elements;
+        return Collections.emptyList();
     }
 
     @Override
@@ -41,12 +34,8 @@ public class ElementNoText extends AbstractElement implements ListObserver<Mutab
     }
 
     @Override
-    public void add(final ObservableList2<MutableElement> list, final MutableElement e) {
-        e.setParent(this);
-    }
-
-    @Override
-    public void remove(final ObservableList2<MutableElement> list, final MutableElement e) {
+    public List<Content> getContent() {
+        return Collections.emptyList();
     }
 
 }

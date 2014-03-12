@@ -9,13 +9,13 @@ import java.util.ListIterator;
 public class ObservableList2<E> implements List<E> {
 
     private List<E> backendList;
-    private Observer2<E> observer;
+    private ListObserver<E> observer;
 
-    public ObservableList2(final Observer2<E> observer) {
+    public ObservableList2(final ListObserver<E> observer) {
         this(observer, new ArrayList<E>());
     }
 
-    public ObservableList2(final Observer2<E> observer, final List<E> backendList) {
+    public ObservableList2(final ListObserver<E> observer, final List<E> backendList) {
         this.backendList = backendList;
         this.observer = observer;
     }

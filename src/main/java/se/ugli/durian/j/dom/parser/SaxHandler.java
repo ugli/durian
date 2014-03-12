@@ -1,6 +1,7 @@
 package se.ugli.durian.j.dom.parser;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 
 import org.xml.sax.Attributes;
@@ -36,7 +37,8 @@ class SaxHandler extends DefaultHandler {
         }
         stack.push(element);
         if (parent != null) {
-            parent.getElements().add(element);
+            final List elements = parent.getElements();
+            elements.add(element);
         }
         else {
             root = element;

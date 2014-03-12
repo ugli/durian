@@ -9,7 +9,7 @@ public class MutableNodeFactory implements NodeFactory {
 
     @Override
     public Element createElement(final String name, final String uri, final Element parent) {
-        return new MutableElement(name, uri, this);
+        return new ElementImpl(name, uri, this);
     }
 
     @Override
