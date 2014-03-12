@@ -9,7 +9,7 @@ import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
-public class ElementSimpleText extends AbstractElement implements ListObserver<Text> {
+public class ElementSimpleText extends AbstractElement implements ListObserver {
 
     private final List<Text> texts = new ObservableList2<Text>(this);
     private final NodeFactory nodeFactory;
@@ -52,14 +52,14 @@ public class ElementSimpleText extends AbstractElement implements ListObserver<T
     }
 
     @Override
-    public void add(final ObservableList2<Text> list, final Text e) {
+    public void add(final ObservableList2<?> list, final Object obj) {
         if (list.size() == 1) {
             throw new IllegalStateException("This is a Simple Text Element, just one text node is allowed");
         }
     }
 
     @Override
-    public void remove(final ObservableList2<Text> list, final Text e) {
+    public void remove(final ObservableList2<?> list, final Object obj) {
     }
 
 }

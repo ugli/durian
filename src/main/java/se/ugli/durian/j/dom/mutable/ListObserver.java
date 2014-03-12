@@ -1,9 +1,9 @@
 package se.ugli.durian.j.dom.mutable;
 
-public interface ListObserver<E> {
+public interface ListObserver {
 
-    void add(ObservableList2<E> list, E e);
+    void add(ObservableList2<?> list, Object obj);
 
-    void remove(ObservableList2<E> list, E e);
+    void remove(ObservableList2<?> list, Object obj);
 
 }

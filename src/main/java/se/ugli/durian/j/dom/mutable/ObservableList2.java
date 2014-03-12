@@ -9,13 +9,13 @@ import java.util.ListIterator;
 public class ObservableList2<E> implements List<E> {
 
     private List<E> backendList;
-    private ListObserver<E> observer;
+    private ListObserver observer;
 
-    public ObservableList2(final ListObserver<E> observer) {
+    public ObservableList2(final ListObserver observer) {
         this(observer, new ArrayList<E>());
     }
 
-    public ObservableList2(final ListObserver<E> observer, final List<E> backendList) {
+    public ObservableList2(final ListObserver observer, final List<E> backendList) {
         this.backendList = backendList;
         this.observer = observer;
     }
@@ -60,10 +60,9 @@ public class ObservableList2<E> implements List<E> {
         return backendList.add(e);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public boolean remove(final Object o) {
-        observer.remove(this, (E) o);
+        observer.remove(this, o);
         return backendList.remove(o);
     }
 

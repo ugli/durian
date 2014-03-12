@@ -10,7 +10,7 @@ import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
-public class ElementNoText extends AbstractElement implements ListObserver<MutableElement> {
+public class ElementNoText extends AbstractElement implements ListObserver {
 
     private final Set<Attribute> attributes = new LinkedHashSet<Attribute>();
     private final List<MutableElement> elements = new ObservableList2<MutableElement>(this);
@@ -41,12 +41,13 @@ public class ElementNoText extends AbstractElement implements ListObserver<Mutab
     }
 
     @Override
-    public void add(final ObservableList2<MutableElement> list, final MutableElement e) {
+    public void add(final ObservableList2<?> list, final Object obj) {
+        final MutableElement e = (MutableElement) obj;
         e.setParent(this);
     }
 
     @Override
-    public void remove(final ObservableList2<MutableElement> list, final MutableElement e) {
+    public void remove(final ObservableList2<?> list, final Object obj) {
     }
 
 }
