@@ -2,12 +2,15 @@ package se.ugli.durian.j.dom.mutable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
+import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
@@ -180,6 +183,21 @@ public abstract class AbstractElement implements MutableElement {
             result.addAll(element.getUriSet());
         }
         return result;
+    }
+
+    public void sortElements(final Map<String, Integer> elementNameSortMap) {
+        Collections.sort(getElements(), new Comparator<Element>() {
+
+            @Override
+            public int compare(final Element o1, final Element o2) {
+                final String name1 = o1.getName();
+                final String name2 = o2.getName();
+                final Integer v1 = elementNameSortMap.get(name1);
+                final Integer v2 = elementNameSortMap.get(name2);
+
+                return v1.compareTo(v2);
+            }
+        });
     }
 
 }
