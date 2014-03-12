@@ -10,29 +10,27 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import se.ugli.durian.j.dom.node.Attribute;
-import se.ugli.durian.j.dom.node.Document;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
 class SaxHandler extends DefaultHandler {
 
-    final Document document;
     private final Stack<Element> stack = new Stack<Element>();
     private final NodeFactory nodeFactory;
     private final ErrorHandler errorHandler;
+    Element root;
 
     SaxHandler(final NodeFactory nodeFactory, final ErrorHandler errorHandler) {
         this.nodeFactory = nodeFactory;
         this.errorHandler = errorHandler;
-        document = nodeFactory.createDocument();
     }
 
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes saxAttributes) {
         final Element parent = stack.isEmpty() ? null : stack.peek();
-        final Element element = nodeFactory.createElement(localName, uri, document, parent);
+        final Element element = nodeFactory.createElement(localName, uri, parent);
         for (final Attribute attribute : new AttributesFactory(nodeFactory, element, saxAttributes).create()) {
             element.getAttributes().add(attribute);
         }
@@ -41,7 +39,7 @@ class SaxHandler extends DefaultHandler {
             parent.getElements().add(element);
         }
         else {
-            document.setRoot(element);
+            root = element;
         }
     }
 
@@ -58,15 +56,6 @@ class SaxHandler extends DefaultHandler {
             final Element element = stack.peek();
             final Text text = nodeFactory.createText(element, trimedStr);
             element.getTexts().add(text);
-        }
-    }
-
-    @Override
-    public void startPrefixMapping(final String prefix, final String uri) {
-        final String trimedPrefix = trimedOrNull(prefix);
-        final String trimedUri = trimedOrNull(uri);
-        if (trimedUri != null) {
-            document.addPrefixMapping(trimedUri, trimedPrefix);
         }
     }
 

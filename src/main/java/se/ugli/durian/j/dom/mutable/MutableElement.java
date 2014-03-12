@@ -8,7 +8,6 @@ import java.util.Set;
 
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
-import se.ugli.durian.j.dom.node.Document;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
@@ -19,23 +18,17 @@ public class MutableElement implements Element {
     private final List<Content> content = new ObservableList<Content>();
     private final List<Element> elements = new ObservableList<Element>();
     private final List<Text> texts = new ObservableList<Text>();
-    private Document document;
     private Element parent;
     private final String name;
     private final String uri;
     private final NodeFactory nodeFactory;
 
-    public MutableElement(final String name, final String uri, final Document document, final NodeFactory nodeFactory) {
+    public MutableElement(final String name, final String uri, final NodeFactory nodeFactory) {
         this.name = name;
         this.uri = uri;
-        this.document = document;
         this.nodeFactory = nodeFactory;
         ListSynchronizer.applyLiveUpdates(elements, content, this);
         ListSynchronizer.applyLiveUpdates(texts, content, this);
-    }
-
-    public MutableElement(final String name, final String uri, final NodeFactory nodeFactory) {
-        this(name, uri, null, nodeFactory);
     }
 
     @Override
@@ -46,11 +39,6 @@ public class MutableElement implements Element {
     @Override
     public List<Content> getContent() {
         return content;
-    }
-
-    @Override
-    public Document getDocument() {
-        return document;
     }
 
     @Override
@@ -156,11 +144,10 @@ public class MutableElement implements Element {
 
     public void elementAdded(final MutableElement element) {
         element.parent = this;
-        element.document = document;
     }
 
     public Element clone(final String elementName) {
-        final Element element = nodeFactory.createElement(elementName, uri, null, null);
+        final Element element = nodeFactory.createElement(elementName, uri, null);
         for (final Attribute attribute : attributes) {
             element.getAttributes()
                     .add(nodeFactory.createAttribute(attribute.getName(), attribute.getUri(), element,
@@ -182,11 +169,6 @@ public class MutableElement implements Element {
     @Override
     public Element clone() {
         return clone(name);
-    }
-
-    @Override
-    public void setDocument(final Document document) {
-        this.document = document;
     }
 
     @Override
@@ -217,6 +199,18 @@ public class MutableElement implements Element {
             return name + childPath;
         }
         return name + "/" + childPath;
+    }
+
+    @Override
+    public Set<String> getUriSet() {
+        final Set<String> result = new LinkedHashSet<String>();
+        if (uri != null) {
+            result.add(uri);
+        }
+        for (final Element element : elements) {
+            result.addAll(element.getUriSet());
+        }
+        return result;
     }
 
 }

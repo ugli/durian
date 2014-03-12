@@ -8,7 +8,6 @@ import java.util.Set;
 
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
-import se.ugli.durian.j.dom.node.Document;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
@@ -17,7 +16,6 @@ public class ElementNoText implements Element, Observer2<Element> {
 
     private final Set<Attribute> attributes = new LinkedHashSet<Attribute>();
     private final List<Element> elements = new ObservableList2<Element>(this);
-    private Document document;
     private Element parent;
     private final String name;
     private final String uri;
@@ -48,11 +46,6 @@ public class ElementNoText implements Element, Observer2<Element> {
     @Override
     public String getUri() {
         return uri;
-    }
-
-    @Override
-    public Document getDocument() {
-        return document;
     }
 
     @Override
@@ -127,7 +120,7 @@ public class ElementNoText implements Element, Observer2<Element> {
     }
 
     public Element clone(final String elementName) {
-        final Element element = nodeFactory.createElement(elementName, uri, null, null);
+        final Element element = nodeFactory.createElement(elementName, uri, null);
         for (final Attribute attribute : attributes) {
             element.getAttributes()
                     .add(nodeFactory.createAttribute(attribute.getName(), attribute.getUri(), element,
@@ -165,13 +158,7 @@ public class ElementNoText implements Element, Observer2<Element> {
     }
 
     @Override
-    public void setDocument(final Document document) {
-        this.document = document;
-    }
-
-    @Override
     public void add(final ObservableList2<Element> list, final Element e) {
-        e.setDocument(document);
         e.setParent(this);
     }
 
@@ -209,6 +196,18 @@ public class ElementNoText implements Element, Observer2<Element> {
             return name + childPath;
         }
         return name + "/" + childPath;
+    }
+
+    @Override
+    public Set<String> getUriSet() {
+        final Set<String> result = new LinkedHashSet<String>();
+        if (uri != null) {
+            result.add(uri);
+        }
+        for (final Element element : elements) {
+            result.addAll(element.getUriSet());
+        }
+        return result;
     }
 
 }

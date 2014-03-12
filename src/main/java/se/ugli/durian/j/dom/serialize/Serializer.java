@@ -1,23 +1,21 @@
 package se.ugli.durian.j.dom.serialize;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
-import se.ugli.durian.j.dom.node.Document;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Text;
 
 public class Serializer {
 
     private static final String TAB = "  ";
-
-    public static String serialize(final Document document) {
-        final StringBuilder stringBuffer = new StringBuilder();
-        stringBuffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        if (document.getRoot() != null) {
-            serialize(document.getRoot(), stringBuffer, 0, true);
-        }
-        return stringBuffer.toString();
-    }
+    // TODO
+    @Deprecated
+    private static Map<String, String> prefixMapping = new HashMap<String, String>();
+    @Deprecated
+    private static int prefixNumber = 0;
 
     public static String serialize(final Element element) {
         final StringBuilder stringBuffer = new StringBuilder();
@@ -64,11 +62,19 @@ public class Serializer {
         return element.getName();
     }
 
+    @Deprecated
     private static String getPrefix(final Element element) {
-        if (element.getDocument() != null) {
-            return element.getDocument().getPrefix(element.getUri());
+        return getPrefix(element.getUri());
+    }
+
+    @Deprecated
+    private synchronized static String getPrefix(final String uri) {
+        String prefix = prefixMapping.get(uri);
+        if (prefix == null) {
+            prefix = "ns" + prefixNumber++;
+            prefixMapping.put(uri, prefix);
         }
-        return null;
+        return prefix;
     }
 
     private static void appendWithTab(final String str, final StringBuilder stringBuffer, final int tab) {
@@ -79,19 +85,16 @@ public class Serializer {
     }
 
     private static void appendPrefixMapping(final Element element, final StringBuilder stringBuffer) {
-        if (element.getDocument() != null) {
-            final Document document = element.getDocument();
-            for (final String uri : document.getUriSet()) {
-                final String prefix = document.getPrefix(uri);
-                stringBuffer.append(" xmlns");
-                if (prefix != null) {
-                    stringBuffer.append(":");
-                    stringBuffer.append(prefix);
-                }
-                stringBuffer.append("=\"");
-                stringBuffer.append(uri);
-                stringBuffer.append("\"");
+        for (final String uri : element.getUriSet()) {
+            final String prefix = getPrefix(uri);
+            stringBuffer.append(" xmlns");
+            if (prefix != null) {
+                stringBuffer.append(":");
+                stringBuffer.append(prefix);
             }
+            stringBuffer.append("=\"");
+            stringBuffer.append(uri);
+            stringBuffer.append("\"");
         }
     }
 

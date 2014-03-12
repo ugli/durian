@@ -15,7 +15,7 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import se.ugli.durian.j.dom.node.Document;
+import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 
 public class Parser {
@@ -32,10 +32,10 @@ public class Parser {
         saxHandler = new SaxHandler(nodeFactory, errorHandler);
     }
 
-    public Document parse(final InputStream stream) {
+    public Element parse(final InputStream stream) {
         try {
             saxParser.parse(stream, saxHandler);
-            return saxHandler.document;
+            return saxHandler.root;
         }
         catch (final IOException e) {
             throw new RuntimeException(e);
@@ -45,19 +45,19 @@ public class Parser {
         }
     }
 
-    public Document parse(final Reader reader) {
+    public Element parse(final Reader reader) {
         return parse(new InputSource(reader));
     }
 
-    public Document parse(final char[] chars) {
+    public Element parse(final char[] chars) {
         return parse(new CharArrayReader(chars));
     }
 
-    public Document parse(final byte[] bytes) {
+    public Element parse(final byte[] bytes) {
         return parse(new ByteArrayInputStream(bytes));
     }
 
-    public Document parseResource(final String resource) {
+    public Element parseResource(final String resource) {
         final InputStream resourceAsStream = getClass().getResourceAsStream(resource);
         if (resourceAsStream != null) {
             return parse(resourceAsStream);
@@ -65,10 +65,10 @@ public class Parser {
         throw new RuntimeException("Resource not found: " + resource);
     }
 
-    public Document parse(final File file) {
+    public Element parse(final File file) {
         try {
             saxParser.parse(file, saxHandler);
-            return saxHandler.document;
+            return saxHandler.root;
         }
         catch (final IOException e) {
             throw new RuntimeException(e);
@@ -78,10 +78,10 @@ public class Parser {
         }
     }
 
-    public Document parseUri(final String uri) {
+    public Element parseUri(final String uri) {
         try {
             saxParser.parse(uri, saxHandler);
-            return saxHandler.document;
+            return saxHandler.root;
         }
         catch (final IOException e) {
             throw new RuntimeException(e);
@@ -91,7 +91,7 @@ public class Parser {
         }
     }
 
-    public Document parse(final URL url) {
+    public Element parse(final URL url) {
         InputStream inputStream = null;
         try {
             inputStream = url.openStream();
@@ -112,10 +112,10 @@ public class Parser {
         }
     }
 
-    public Document parse(final InputSource source) {
+    public Element parse(final InputSource source) {
         try {
             saxParser.parse(source, saxHandler);
-            return saxHandler.document;
+            return saxHandler.root;
         }
         catch (final IOException e) {
             throw new RuntimeException(e);
@@ -125,7 +125,7 @@ public class Parser {
         }
     }
 
-    public Document parse(final Source source) {
+    public Element parse(final Source source) {
         // TODO
         throw new UnsupportedOperationException("TBD");
     }

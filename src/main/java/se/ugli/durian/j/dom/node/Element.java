@@ -5,13 +5,9 @@ import java.util.Set;
 
 public interface Element extends Content {
 
-    // TODO create interface Root
-
     String getName();
 
     String getUri();
-
-    Document getDocument();
 
     Set<Attribute> getAttributes();
 
@@ -35,12 +31,12 @@ public interface Element extends Content {
 
     Element clone();
 
-    void setDocument(Document document);
-
     void setParent(Element element);
 
     String getPath(String childPath);
 
     String getRelativePath(String childPath);
+
+    Set<String> getUriSet();
 
 }
