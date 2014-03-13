@@ -31,7 +31,8 @@ class SaxHandler extends DefaultHandler {
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes saxAttributes) {
         final Element parent = stack.isEmpty() ? null : stack.peek();
-        final Element element = nodeFactory.createElement(localName, uri, parent);
+        final String uri2 = uri == null || uri.trim().isEmpty() ? null : uri.trim();
+        final Element element = nodeFactory.createElement(localName, uri2, parent);
         for (final Attribute attribute : new AttributesFactory(nodeFactory, element, saxAttributes).create()) {
             element.getAttributes().add(attribute);
         }

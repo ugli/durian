@@ -3,6 +3,8 @@ package se.ugli.durian.j.dom.serialize;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
@@ -104,7 +106,7 @@ public class Serializer {
             // TODO handle qname !?
             stringBuffer.append(attribute.getName());
             stringBuffer.append("=\"");
-            stringBuffer.append(attribute.getValue());
+            stringBuffer.append(xmlEncode(attribute.getValue()));
             stringBuffer.append("\"");
         }
     }
@@ -115,11 +117,16 @@ public class Serializer {
                 serialize((Element) content, stringBuffer, tab + 1, false);
             }
             else if (content instanceof Text) {
-                stringBuffer.append(((Text) content).getValue());
+                final String textValue = ((Text) content).getValue();
+                stringBuffer.append(xmlEncode(textValue));
             }
             else {
                 throw new IllegalStateException(content.getClass().getName());
             }
         }
+    }
+
+    private static String xmlEncode(final String textValue) {
+        return StringEscapeUtils.escapeXml11(textValue);
     }
 }

@@ -70,9 +70,14 @@ public abstract class AbstractElement implements MutableElement {
     public void setAttributeValue(final String attributeName, final String value) {
         final Attribute attribute = getAttribute(attributeName);
         if (attribute != null) {
-            attribute.setValue(value);
+            if (value != null) {
+                attribute.setValue(value);
+            }
+            else {
+                getAttributes().remove(attribute);
+            }
         }
-        else {
+        else if (value != null) {
             getAttributes().add(nodeFactory.createAttribute(attributeName, uri, this, value));
         }
     }
@@ -108,12 +113,12 @@ public abstract class AbstractElement implements MutableElement {
         return (T) getElement(elementName);
     }
 
-    public void setElement(final MutableElement element) {
+    public void setElement(final MutableElement element, final String elementName) {
+        final MutableElement oldElement = getElement(elementName);
+        if (oldElement != null) {
+            getElements().remove(oldElement);
+        }
         if (element != null) {
-            final MutableElement element2 = getElement(element.getName());
-            if (element2 != null) {
-                getElements().remove(element2);
-            }
             getElements().add(element);
         }
     }
@@ -192,12 +197,25 @@ public abstract class AbstractElement implements MutableElement {
             public int compare(final Element o1, final Element o2) {
                 final String name1 = o1.getName();
                 final String name2 = o2.getName();
-                final Integer v1 = elementNameSortMap.get(name1);
-                final Integer v2 = elementNameSortMap.get(name2);
-
+                Integer v1 = elementNameSortMap.get(name1);
+                if (v1 == null) {
+                    v1 = Integer.MAX_VALUE;
+                }
+                Integer v2 = elementNameSortMap.get(name2);
+                if (v2 == null) {
+                    v2 = Integer.MAX_VALUE;
+                }
                 return v1.compareTo(v2);
             }
         });
+    }
+
+    public String getElementText(final String elementName) {
+        final MutableElement element = getElement(elementName);
+        if (element != null && !element.getTexts().isEmpty()) {
+            return element.getTexts().get(0).getValue();
+        }
+        return null;
     }
 
 }
