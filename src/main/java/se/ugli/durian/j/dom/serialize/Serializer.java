@@ -1,6 +1,6 @@
 package se.ugli.durian.j.dom.serialize;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -12,22 +12,36 @@ import se.ugli.durian.j.dom.node.Text;
 
 public class Serializer {
 
-    private static final String TAB = "  ";
-    // TODO
-    @Deprecated
-    private static Map<String, String> prefixMapping = new HashMap<String, String>();
-    @Deprecated
-    private static int prefixNumber = 0;
+    // TODO put in builder
+    private static final String NAMESPACE_PREFIX_PREFIX = "ns";
 
-    public static String serialize(final Element element) {
+    // TODO put in builder
+    private static final String TAB = "  ";
+
+    private final Map<String, String> prefixMapping;
+    private int prefixNumber = 0;
+
+    private Serializer(final Map<String, String> prefixMapping) {
+        this.prefixMapping = prefixMapping;
+    }
+
+    public static Serializer apply() {
+        return new Serializer(new LinkedHashMap<String, String>());
+    }
+
+    static Serializer apply(final Map<String, String> prefixMapping) {
+        return new Serializer(prefixMapping);
+    }
+
+    public String serialize(final Element element) {
         final StringBuilder stringBuffer = new StringBuilder();
+        // TODO handle encoding
         stringBuffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         serialize(element, stringBuffer, 1, true);
         return stringBuffer.toString();
     }
 
-    private static void serialize(final Element element, final StringBuilder stringBuffer, final int tab,
-            final boolean root) {
+    private void serialize(final Element element, final StringBuilder stringBuffer, final int tab, final boolean root) {
         stringBuffer.append("\n");
         appendWithTab("<", stringBuffer, tab);
         final String qName = getQName(element, root);
@@ -54,7 +68,7 @@ public class Serializer {
         }
     }
 
-    private static String getQName(final Element element, final boolean root) {
+    private String getQName(final Element element, final boolean root) {
         if (root) {
             final String prefix = getPrefix(element);
             if (prefix != null) {
@@ -64,29 +78,28 @@ public class Serializer {
         return element.getName();
     }
 
-    @Deprecated
-    private static String getPrefix(final Element element) {
+    private String getPrefix(final Element element) {
         return getPrefix(element.getUri());
     }
 
-    @Deprecated
-    private synchronized static String getPrefix(final String uri) {
+    private synchronized String getPrefix(final String uri) {
         String prefix = prefixMapping.get(uri);
         if (prefix == null) {
-            prefix = "ns" + prefixNumber++;
+            // TODO make block synchronized
+            prefix = NAMESPACE_PREFIX_PREFIX + prefixNumber++;
             prefixMapping.put(uri, prefix);
         }
         return prefix;
     }
 
-    private static void appendWithTab(final String str, final StringBuilder stringBuffer, final int tab) {
+    private void appendWithTab(final String str, final StringBuilder stringBuffer, final int tab) {
         for (int step = 0; step < tab - 1; step++) {
             stringBuffer.append(TAB);
         }
         stringBuffer.append(str);
     }
 
-    private static void appendPrefixMapping(final Element element, final StringBuilder stringBuffer) {
+    private void appendPrefixMapping(final Element element, final StringBuilder stringBuffer) {
         for (final String uri : element.getUriSet()) {
             final String prefix = getPrefix(uri);
             stringBuffer.append(" xmlns");
@@ -100,7 +113,7 @@ public class Serializer {
         }
     }
 
-    private static void appendAttributes(final Element element, final StringBuilder stringBuffer) {
+    private void appendAttributes(final Element element, final StringBuilder stringBuffer) {
         for (final Attribute attribute : element.getAttributes()) {
             stringBuffer.append(" ");
             // TODO handle qname !?
@@ -111,7 +124,7 @@ public class Serializer {
         }
     }
 
-    private static void appendContent(final Element element, final StringBuilder stringBuffer, final int tab) {
+    private void appendContent(final Element element, final StringBuilder stringBuffer, final int tab) {
         for (final Content content : element.getContent()) {
             if (content instanceof Element) {
                 serialize((Element) content, stringBuffer, tab + 1, false);
@@ -126,7 +139,7 @@ public class Serializer {
         }
     }
 
-    private static String xmlEncode(final String textValue) {
+    private String xmlEncode(final String textValue) {
         return StringEscapeUtils.escapeXml11(textValue);
     }
 }
