@@ -11,8 +11,10 @@ import java.util.Set;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
+import se.ugli.durian.j.dom.node.Node;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
+import se.ugli.durian.j.dom.query.QueryEngineFactory;
 
 public abstract class AbstractElement implements MutableElement {
 
@@ -99,18 +101,14 @@ public abstract class AbstractElement implements MutableElement {
     }
 
     @Override
-    public MutableElement getElement(final String elementName) {
+    @SuppressWarnings("unchecked")
+    public <T extends Element> T getElement(final String elementName) {
         for (final MutableElement element : getElements()) {
             if (element.getName().equals(elementName)) {
-                return element;
+                return (T) element;
             }
         }
         return null;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends MutableElement> T getTypedElement(final String elementName) {
-        return (T) getElement(elementName);
     }
 
     public void setElement(final MutableElement element, final String elementName) {
@@ -218,4 +216,13 @@ public abstract class AbstractElement implements MutableElement {
         return null;
     }
 
+    @Override
+    public <T extends Node> T selectNode(final String path) {
+        return QueryEngineFactory.create().selectNode(this, path);
+    }
+
+    @Override
+    public List<? extends Node> selectNodes(final String path) {
+        return QueryEngineFactory.create().selectNodes(this, path);
+    }
 }

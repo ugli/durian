@@ -13,7 +13,7 @@ public interface Element extends Content {
 
     String getAttributeValue(String attributeName);
 
-    Element getElement(String elementName);
+    <T extends Element> T getElement(String elementName);
 
     List<? extends Element> getElements();
 
@@ -33,4 +33,7 @@ public interface Element extends Content {
 
     boolean isSimpleTextNode();
 
+    <T extends Node> T selectNode(String path);
+
+    List<? extends Node> selectNodes(String path);
 }
