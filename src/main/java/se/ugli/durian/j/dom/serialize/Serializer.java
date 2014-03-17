@@ -15,35 +15,39 @@ public class Serializer {
     // TODO put in builder
     private static final String NAMESPACE_PREFIX_PREFIX = "ns";
 
-    // TODO put in builder
-    private static final String TAB = "  ";
-
+    private final String tab;
     private final Map<String, String> prefixMapping;
     private int prefixNumber = 0;
 
-    private Serializer(final Map<String, String> prefixMapping) {
+    private Serializer(final Map<String, String> prefixMapping, final int indentSize) {
         this.prefixMapping = prefixMapping;
+        final StringBuilder tabBuilder = new StringBuilder();
+        for (int i = 0; i < indentSize; i++) {
+            tabBuilder.append(" ");
+        }
+        tab = tabBuilder.toString();
     }
 
     public static Serializer apply() {
-        return new Serializer(new LinkedHashMap<String, String>());
+        return new Serializer(new LinkedHashMap<String, String>(), 2);
     }
 
-    static Serializer apply(final Map<String, String> prefixMapping) {
-        return new Serializer(prefixMapping);
+    static Serializer apply(final Map<String, String> prefixMapping, final int indentSize) {
+        return new Serializer(prefixMapping, indentSize);
     }
 
     public String serialize(final Element element) {
         final StringBuilder stringBuffer = new StringBuilder();
         // TODO handle encoding
         stringBuffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        serialize(element, stringBuffer, 1, true);
+        serialize(element, stringBuffer, 0, true);
         return stringBuffer.toString();
     }
 
-    private void serialize(final Element element, final StringBuilder stringBuffer, final int tab, final boolean root) {
+    private void serialize(final Element element, final StringBuilder stringBuffer, final int indentDepth,
+            final boolean root) {
         stringBuffer.append("\n");
-        appendWithTab("<", stringBuffer, tab);
+        appendWithTab("<", stringBuffer, indentDepth);
         final String qName = getQName(element, root);
         stringBuffer.append(qName);
         if (root) {
@@ -55,13 +59,13 @@ public class Serializer {
         }
         else {
             stringBuffer.append(">");
-            appendContent(element, stringBuffer, tab);
+            appendContent(element, stringBuffer, indentDepth);
             if (element.isSimpleTextNode()) {
                 stringBuffer.append("</");
             }
             else {
                 stringBuffer.append("\n");
-                appendWithTab("</", stringBuffer, tab);
+                appendWithTab("</", stringBuffer, indentDepth);
             }
             stringBuffer.append(qName);
             stringBuffer.append(">");
@@ -92,9 +96,9 @@ public class Serializer {
         return prefix;
     }
 
-    private void appendWithTab(final String str, final StringBuilder stringBuffer, final int tab) {
-        for (int step = 0; step < tab - 1; step++) {
-            stringBuffer.append(TAB);
+    private void appendWithTab(final String str, final StringBuilder stringBuffer, final int indentDepth) {
+        for (int step = 0; step < indentDepth; step++) {
+            stringBuffer.append(tab);
         }
         stringBuffer.append(str);
     }
@@ -124,10 +128,10 @@ public class Serializer {
         }
     }
 
-    private void appendContent(final Element element, final StringBuilder stringBuffer, final int tab) {
+    private void appendContent(final Element element, final StringBuilder stringBuffer, final int indentDepth) {
         for (final Content content : element.getContent()) {
             if (content instanceof Element) {
-                serialize((Element) content, stringBuffer, tab + 1, false);
+                serialize((Element) content, stringBuffer, indentDepth + 1, false);
             }
             else if (content instanceof Text) {
                 final String textValue = ((Text) content).getValue();

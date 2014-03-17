@@ -6,6 +6,7 @@ import java.util.Map;
 public final class SerializerBuilder {
 
     private final Map<String, String> prefixMapping = new LinkedHashMap<String, String>();
+    private int indentSize = 2;
 
     private SerializerBuilder() {
 
@@ -20,8 +21,13 @@ public final class SerializerBuilder {
         return this;
     }
 
+    public SerializerBuilder indentSize(final int indentSize) {
+        this.indentSize = indentSize;
+        return this;
+    }
+
     public Serializer build() {
-        return Serializer.apply(prefixMapping);
+        return Serializer.apply(prefixMapping, indentSize);
     }
 
 }
