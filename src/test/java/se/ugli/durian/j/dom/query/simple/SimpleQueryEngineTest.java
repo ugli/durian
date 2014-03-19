@@ -20,7 +20,7 @@ public class SimpleQueryEngineTest {
     }
 
     @Test
-    public void superPath() {
+    public void getChildAxisIteratorPath() {
         final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
         final List<? extends Node> nodes = element.selectNodes("//rule");
         assertEquals(9, nodes.size());

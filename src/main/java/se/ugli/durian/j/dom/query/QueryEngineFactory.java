@@ -10,5 +10,4 @@ public class QueryEngineFactory {
     public static QueryEngine create() {
         return new SimpleQueryEngine();
     }
-
 }

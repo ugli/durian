@@ -1,5 +1,6 @@
 package se.ugli.durian.j.dom.serialize;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -104,7 +105,7 @@ public class Serializer {
     }
 
     private void appendPrefixMapping(final Element element, final StringBuilder stringBuffer) {
-        for (final String uri : element.getUriSet()) {
+        for (final String uri : new ArrayList<String>(element.getUriSet())) {
             final String prefix = getPrefix(uri);
             stringBuffer.append(" xmlns");
             if (prefix != null) {
@@ -118,7 +119,7 @@ public class Serializer {
     }
 
     private void appendAttributes(final Element element, final StringBuilder stringBuffer) {
-        for (final Attribute attribute : element.getAttributes()) {
+        for (final Attribute attribute : new ArrayList<Attribute>(element.getAttributes())) {
             stringBuffer.append(" ");
             // TODO handle qname !?
             stringBuffer.append(attribute.getName());
@@ -129,7 +130,7 @@ public class Serializer {
     }
 
     private void appendContent(final Element element, final StringBuilder stringBuffer, final int indentDepth) {
-        for (final Content content : element.getContent()) {
+        for (final Content content : new ArrayList<Content>(element.getContent())) {
             if (content instanceof Element) {
                 serialize((Element) content, stringBuffer, indentDepth + 1, false);
             }

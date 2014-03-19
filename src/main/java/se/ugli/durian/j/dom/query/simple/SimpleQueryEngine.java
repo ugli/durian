@@ -9,19 +9,6 @@ import se.ugli.durian.j.dom.query.QueryEngine;
 
 public class SimpleQueryEngine implements QueryEngine {
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends Node> T selectNode(final Element element, final String path) {
-        final List<? extends Node> nodes = selectNodes(element, path);
-        if (nodes.isEmpty()) {
-            return null;
-        }
-        else if (nodes.size() == 1) {
-            return (T) nodes.get(0);
-        }
-        throw new IllegalStateException("Size: " + nodes.size());
-    }
-
     @Override
     public List<? extends Node> selectNodes(final Element element, final String path) {
         return selectNodes(element, new Path(path));

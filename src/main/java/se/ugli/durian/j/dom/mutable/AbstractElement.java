@@ -14,7 +14,7 @@ import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Node;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
-import se.ugli.durian.j.dom.query.QueryEngineFactory;
+import se.ugli.durian.j.dom.query.QueryManager;
 
 public abstract class AbstractElement implements MutableElement {
 
@@ -218,11 +218,11 @@ public abstract class AbstractElement implements MutableElement {
 
     @Override
     public <T extends Node> T selectNode(final String path) {
-        return QueryEngineFactory.create().selectNode(this, path);
+        return QueryManager.selectNode(this, path);
     }
 
     @Override
     public List<? extends Node> selectNodes(final String path) {
-        return QueryEngineFactory.create().selectNodes(this, path);
+        return QueryManager.selectNodes(this, path);
     }
 }
