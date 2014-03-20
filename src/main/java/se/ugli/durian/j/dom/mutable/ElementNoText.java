@@ -1,9 +1,9 @@
 package se.ugli.durian.j.dom.mutable;
 
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
@@ -12,7 +12,7 @@ import se.ugli.durian.j.dom.node.Text;
 
 public class ElementNoText extends AbstractElement implements ListObserver {
 
-    private final Set<Attribute> attributes = new LinkedHashSet<Attribute>();
+    private final Set<Attribute> attributes = Collections.newSetFromMap(new ConcurrentHashMap<Attribute, Boolean>());
     private final List<MutableElement> elements = new ObservableList2<MutableElement>(this);
 
     public ElementNoText(final String name, final String uri, final NodeFactory nodeFactory) {
