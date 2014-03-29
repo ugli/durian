@@ -11,7 +11,7 @@ public class MutableNodeFactory implements NodeFactory {
     @Override
     public <T extends Attribute> T createAttribute(final String name, final String uri, final Element parent,
             final String value) {
-        return (T) new MutableAttribute(name, uri, parent, value);
+        return (T) new MutableAttribute(name, uri, parent, value, this);
     }
 
     @SuppressWarnings({ "unchecked", "unused" })
@@ -23,7 +23,7 @@ public class MutableNodeFactory implements NodeFactory {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Text> T createText(final Element element, final String value) {
-        return (T) new MutableText(element, value);
+        return (T) new MutableText(element, value, this);
     }
 
 }

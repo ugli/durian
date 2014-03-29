@@ -1,5 +1,7 @@
 package se.ugli.durian.j.dom.mutable;
 
+import java.util.Map;
+
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
@@ -29,6 +31,16 @@ public interface MutableElement extends Element {
 
     void setAttributeValue(String attributeName, String value);
 
-    void setParent(final MutableElement parent);
+    void setElement(final Element element, final String elementName);
+
+    void setName(String name);
+
+    void setNodeFactory(NodeFactory nodeFactory);
+
+    void setParent(final Element parent);
+
+    void setUri(String uri);
+
+    void sortElements(final Map<String, Integer> elementNameSortMap);
 
 }

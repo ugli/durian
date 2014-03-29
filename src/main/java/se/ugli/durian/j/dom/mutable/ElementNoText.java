@@ -11,7 +11,7 @@ import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
-public class ElementNoText extends AbstractElement implements ListObserver {
+public class ElementNoText extends AbstractMutableElement implements ListObserver {
 
     private final Set<Attribute> attributes = Collections.newSetFromMap(new ConcurrentHashMap<Attribute, Boolean>());
     private final List<Element> elements = new ObservableList2<Element>(this);

@@ -16,14 +16,14 @@ import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 import se.ugli.durian.j.dom.query.QueryManager;
 
-public abstract class AbstractElement implements MutableElement {
+public abstract class AbstractMutableElement implements MutableElement {
 
-    private final String name;
-    private final NodeFactory nodeFactory;
+    private String name;
+    private NodeFactory nodeFactory;
     private Element parent;
-    private final String uri;
+    private String uri;
 
-    public AbstractElement(final String name, final String uri, final NodeFactory nodeFactory) {
+    public AbstractMutableElement(final String name, final String uri, final NodeFactory nodeFactory) {
         this.name = name;
         this.uri = uri;
         this.nodeFactory = nodeFactory;
@@ -92,6 +92,11 @@ public abstract class AbstractElement implements MutableElement {
     }
 
     @Override
+    public NodeFactory getNodeFactory() {
+        return nodeFactory;
+    }
+
+    @Override
     public <T extends Element> T cloneElement(final NodeFactory nodeFactory) {
         return cloneElement(name, nodeFactory);
     }
@@ -105,18 +110,16 @@ public abstract class AbstractElement implements MutableElement {
     public <T extends Element> T cloneElement(final String elementName, final NodeFactory nodeFactory) {
         final T element = nodeFactory.createElement(elementName, uri, null);
         for (final Attribute attribute : getAttributes()) {
-            element.getAttributes()
-                    .add(nodeFactory.createAttribute(attribute.getName(), attribute.getUri(), element,
-                            attribute.getValue()));
+            element.getAttributes().add(attribute.cloneAttribute(nodeFactory));
         }
         for (final Content content : getContent()) {
             if (content instanceof Text) {
                 final Text text = (Text) content;
-                element.getTexts().add(nodeFactory.createText(element, text.getValue()));
+                element.getTexts().add(text.cloneText(nodeFactory));
             }
-            else if (content instanceof MutableElement) {
-                final MutableElement child = (MutableElement) content;
-                element.getElements().add(child.cloneElement());
+            else if (content instanceof Element) {
+                final Element child = (Element) content;
+                element.getElements().add(child.cloneElement(nodeFactory));
             }
         }
         return element;
@@ -144,8 +147,7 @@ public abstract class AbstractElement implements MutableElement {
 
     @Override
     public <T extends Element> T getElement(final String elementName) {
-        final List<T> elements = getElements();
-        for (final T element : elements) {
+        for (final T element : this.<T> getElements()) {
             if (element.getName().equals(elementName)) {
                 return element;
             }
@@ -156,8 +158,7 @@ public abstract class AbstractElement implements MutableElement {
     @Override
     public <T extends Element> List<T> getElements(final String elementName) {
         final List<T> result = new ArrayList<T>();
-        final List<T> elements = getElements();
-        for (final T element : elements) {
+        for (final T element : this.<T> getElements()) {
             if (element.getName().equals(elementName)) {
                 result.add(element);
             }
@@ -165,10 +166,15 @@ public abstract class AbstractElement implements MutableElement {
         return Collections.unmodifiableList(result);
     }
 
+    @Override
     public String getElementText(final String elementName) {
         final MutableElement element = getElement(elementName);
         if (element != null && !element.getTexts().isEmpty()) {
-            return element.getTexts().get(0).getValue();
+            final StringBuilder textBuilder = new StringBuilder();
+            for (final Text text : getTexts()) {
+                textBuilder.append(text.getValue());
+            }
+            return textBuilder.toString();
         }
         return null;
     }
@@ -232,52 +238,43 @@ public abstract class AbstractElement implements MutableElement {
     }
 
     @Override
-    public <T extends Attribute> T selectAttribute(final String path) {
-        return QueryManager.selectNode(this, path);
+    public <T extends Attribute> T selectAttribute(final String query) {
+        return QueryManager.selectNode(this, query);
     }
 
     @Override
-    public <T extends Attribute> List<T> selectAttributes(final String path) {
-        return QueryManager.selectNodes(this, path);
+    public <T extends Attribute> List<T> selectAttributes(final String query) {
+        return QueryManager.selectNodes(this, query);
     }
 
     @Override
-    public <T extends Element> T selectElement(final String path) {
-        return QueryManager.selectNode(this, path);
+    public <T extends Element> T selectElement(final String query) {
+        return QueryManager.selectNode(this, query);
     }
 
     @Override
-    public <T extends Element> List<T> selectElements(final String path) {
-        return QueryManager.selectNodes(this, path);
+    public <T extends Element> List<T> selectElements(final String query) {
+        return QueryManager.selectNodes(this, query);
     }
 
     @Override
-    public <T extends Node> T selectNode(final String path) {
-        return QueryManager.selectNode(this, path);
+    public <T extends Node> T selectNode(final String query) {
+        return QueryManager.selectNode(this, query);
     }
 
     @Override
-    public <T extends Node> List<T> selectNodes(final String path) {
-        return QueryManager.selectNodes(this, path);
+    public <T extends Node> List<T> selectNodes(final String query) {
+        return QueryManager.selectNodes(this, query);
     }
 
     @Override
-    public String selectText(final String path) {
-        final Text text = QueryManager.selectNode(this, path);
-        if (text != null) {
-            return text.getValue();
-        }
-        return null;
+    public String selectText(final String query) {
+        return QueryManager.selectText(this, query);
     }
 
     @Override
-    public List<String> selectTexts(final String path) {
-        final List<Text> texts = QueryManager.selectNodes(this, path);
-        final List<String> strings = new ArrayList<String>();
-        for (final Text text : texts) {
-            strings.add(text.getValue());
-        }
-        return strings;
+    public List<String> selectTexts(final String query) {
+        return QueryManager.selectTexts(this, query);
     }
 
     @Override
@@ -296,8 +293,9 @@ public abstract class AbstractElement implements MutableElement {
         }
     }
 
-    public void setElement(final MutableElement element, final String elementName) {
-        final MutableElement oldElement = getElement(elementName);
+    @Override
+    public void setElement(final Element element, final String elementName) {
+        final Element oldElement = getElement(elementName);
         if (oldElement != null) {
             getElements().remove(oldElement);
         }
@@ -307,10 +305,26 @@ public abstract class AbstractElement implements MutableElement {
     }
 
     @Override
-    public void setParent(final MutableElement parent) {
+    public void setName(final String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void setNodeFactory(final NodeFactory nodeFactory) {
+        this.nodeFactory = nodeFactory;
+    }
+
+    @Override
+    public void setParent(final Element parent) {
         this.parent = parent;
     }
 
+    @Override
+    public void setUri(final String uri) {
+        this.uri = uri;
+    }
+
+    @Override
     public void sortElements(final Map<String, Integer> elementNameSortMap) {
         Collections.sort(getElements(), new Comparator<Element>() {
 

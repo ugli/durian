@@ -10,7 +10,7 @@ import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
-public class ElementImpl extends AbstractElement {
+public class ElementImpl extends AbstractMutableElement {
 
     private final Set<Attribute> attributes = new LinkedHashSet<Attribute>();
     private final List<Content> content = new ObservableList<Content>();

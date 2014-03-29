@@ -10,14 +10,12 @@ import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
-public class ElementSimpleText extends AbstractElement implements ListObserver {
+public class ElementSimpleText extends AbstractMutableElement implements ListObserver {
 
-    private final NodeFactory nodeFactory;
     private final List<Text> texts = new ObservableList2<Text>(this);
 
     public ElementSimpleText(final String name, final String uri, final NodeFactory nodeFactory) {
         super(name, uri, nodeFactory);
-        this.nodeFactory = nodeFactory;
     }
 
     @SuppressWarnings("unused")
@@ -63,7 +61,7 @@ public class ElementSimpleText extends AbstractElement implements ListObserver {
         if (!texts.isEmpty()) {
             texts.clear();
         }
-        texts.add(nodeFactory.createText(this, text));
+        texts.add(getNodeFactory().createText(this, text));
     }
 
 }

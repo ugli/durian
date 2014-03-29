@@ -25,6 +25,8 @@ public interface Element extends Content {
 
     <T extends Element> List<T> getElements(String elementName);
 
+    String getElementText(final String elementName);
+
     String getName();
 
     String getPath(String childPath);

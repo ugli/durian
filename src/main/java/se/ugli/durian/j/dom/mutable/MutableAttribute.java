@@ -2,6 +2,7 @@ package se.ugli.durian.j.dom.mutable;
 
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
+import se.ugli.durian.j.dom.node.NodeFactory;
 
 public class MutableAttribute implements Attribute {
 
@@ -9,12 +10,40 @@ public class MutableAttribute implements Attribute {
     private final Element parent;
     private final String uri;
     private String value;
+    private final NodeFactory nodeFactory;
 
-    public MutableAttribute(final String name, final String uri, final Element parent, final String value) {
+    public MutableAttribute(final String name, final String uri, final Element parent, final String value,
+            final NodeFactory nodeFactory) {
         this.name = name;
         this.uri = uri;
         this.parent = parent;
         this.value = value;
+        this.nodeFactory = nodeFactory;
+    }
+
+    @Override
+    public NodeFactory getNodeFactory() {
+        return nodeFactory;
+    }
+
+    @Override
+    public <T extends Attribute> T cloneAttribute() {
+        return cloneAttribute(name, nodeFactory);
+    }
+
+    @Override
+    public <T extends Attribute> T cloneAttribute(final NodeFactory nodeFactory) {
+        return cloneAttribute(name, nodeFactory);
+    }
+
+    @Override
+    public <T extends Attribute> T cloneAttribute(final String attributeName) {
+        return cloneAttribute(attributeName, nodeFactory);
+    }
+
+    @Override
+    public <T extends Attribute> T cloneAttribute(final String attributeName, final NodeFactory nodeFactory) {
+        return nodeFactory.createAttribute(attributeName, uri, null, value);
     }
 
     @Override

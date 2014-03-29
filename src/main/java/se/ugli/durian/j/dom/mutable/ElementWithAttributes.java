@@ -11,7 +11,7 @@ import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
-public class ElementWithAttributes extends AbstractElement {
+public class ElementWithAttributes extends AbstractMutableElement {
 
     private final Set<Attribute> attributes = new LinkedHashSet<Attribute>();
 

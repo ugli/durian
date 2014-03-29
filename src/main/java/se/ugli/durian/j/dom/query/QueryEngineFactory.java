@@ -5,9 +5,7 @@ import java.io.InputStream;
 
 import se.ugli.durian.j.dom.query.simple.SimpleQueryEngine;
 
-class QueryEngineFactory {
-
-    final static String SPI_RESOURCE_PATH = "/META-INF/services/se.ugli.durian.j.dom.query.engine";
+public class QueryEngineFactory {
 
     private static QueryEngine queryEngine;
 
@@ -21,12 +19,12 @@ class QueryEngineFactory {
         return queryEngine;
     }
 
-    static void setQueryEngine(final QueryEngine queryEngine) {
+    public static void setQueryEngine(final QueryEngine queryEngine) {
         QueryEngineFactory.queryEngine = queryEngine;
     }
 
     private static QueryEngine createFromSpi() {
-        final InputStream classNameStream = QueryEngineFactory.class.getResourceAsStream(SPI_RESOURCE_PATH);
+        final InputStream classNameStream = QueryEngineFactory.class.getResourceAsStream(QueryEngine.SPI_RESOURCE_PATH);
         if (classNameStream != null) {
             try {
                 final byte[] bytes = new byte[classNameStream.available()];
