@@ -2,7 +2,7 @@ package se.ugli.durian.j.dom.node;
 
 public interface Node {
 
-    Element getParent();
+    <T extends Element> T getParent();
 
     String getPath();
 }

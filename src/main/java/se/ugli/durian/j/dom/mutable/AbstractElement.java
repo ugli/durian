@@ -18,10 +18,10 @@ import se.ugli.durian.j.dom.query.QueryManager;
 
 public abstract class AbstractElement implements MutableElement {
 
-    private MutableElement parent;
     private final String name;
-    private final String uri;
     private final NodeFactory nodeFactory;
+    private Element parent;
+    private final String uri;
 
     public AbstractElement(final String name, final String uri, final NodeFactory nodeFactory) {
         this.name = name;
@@ -30,99 +30,80 @@ public abstract class AbstractElement implements MutableElement {
     }
 
     @Override
-    public MutableElement getParent() {
-        return parent;
+    public <T extends Attribute> T addAttribute(final String name, final String value) {
+        return addAttribute(name, uri, value, nodeFactory);
     }
 
     @Override
-    public boolean isSimpleTextNode() {
-        return getTexts().size() == 1 && getContent().size() == 1;
+    public <T extends Attribute> T addAttribute(final String name, final String value, final NodeFactory nodeFactory) {
+        return addAttribute(name, uri, value, nodeFactory);
     }
 
     @Override
-    public String getName() {
-        return name;
+    public <T extends Attribute> T addAttribute(final String name, final String uri, final String value) {
+        return addAttribute(name, uri, value, nodeFactory);
     }
 
     @Override
-    public String getUri() {
-        return uri;
+    public <T extends Attribute> T addAttribute(final String name, final String uri, final String value,
+            final NodeFactory nodeFactory) {
+        final T attribute = nodeFactory.createAttribute(name, uri, this, value);
+        getAttributes().add(attribute);
+        return attribute;
     }
 
     @Override
-    public String getAttributeValue(final String attributeName) {
-        final Attribute attribute = getAttribute(attributeName);
-        if (attribute != null) {
-            return attribute.getValue();
-        }
-        return null;
+    public <T extends Element> T addElement(final String name) {
+        return addElement(name, uri, nodeFactory);
     }
 
     @Override
-    public Attribute getAttribute(final String attributeName) {
-        for (final Attribute attribute : getAttributes()) {
-            if (attribute.getName().equals(attributeName)) {
-                return attribute;
-            }
-        }
-        return null;
+    public <T extends Element> T addElement(final String name, final NodeFactory nodeFactory) {
+        return addElement(name, uri, nodeFactory);
     }
 
     @Override
-    public void setAttributeValue(final String attributeName, final String value) {
-        final Attribute attribute = getAttribute(attributeName);
-        if (attribute != null) {
-            if (value != null) {
-                attribute.setValue(value);
-            }
-            else {
-                getAttributes().remove(attribute);
-            }
-        }
-        else if (value != null) {
-            getAttributes().add(nodeFactory.createAttribute(attributeName, uri, this, value));
-        }
+    public <T extends Element> T addElement(final String name, final String uri) {
+        return addElement(name, uri, nodeFactory);
     }
 
     @Override
-    public List<MutableElement> getElements(final String elementName) {
-        final List<MutableElement> result = new ArrayList<MutableElement>();
-        for (final MutableElement element : getElements()) {
-            if (element.getName().equals(elementName)) {
-                result.add(element);
-            }
-        }
-        return Collections.unmodifiableList(result);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends MutableElement> List<T> getTypedElements(final String elementName) {
-        return (List<T>) getElements(elementName);
+    public <T extends Element> T addElement(final String name, final String uri, final NodeFactory nodeFactory) {
+        final T element = nodeFactory.createElement(name, uri, this);
+        getElements().add(element);
+        return element;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T extends Element> T getElement(final String elementName) {
-        for (final MutableElement element : getElements()) {
-            if (element.getName().equals(elementName)) {
-                return (T) element;
-            }
-        }
-        return null;
+    public <T extends Text> T addText(final String value) {
+        return addText(value, nodeFactory);
     }
 
-    public void setElement(final MutableElement element, final String elementName) {
-        final MutableElement oldElement = getElement(elementName);
-        if (oldElement != null) {
-            getElements().remove(oldElement);
-        }
-        if (element != null) {
-            getElements().add(element);
-        }
+    @Override
+    public <T extends Text> T addText(final String value, final NodeFactory nodeFactory) {
+        final T text = nodeFactory.createText(this, value);
+        getTexts().add(text);
+        return text;
     }
 
-    public MutableElement clone(final String elementName) {
-        final MutableElement element = (MutableElement) nodeFactory.createElement(elementName, uri, null);
+    @Override
+    public <T extends Element> T cloneElement() {
+        return cloneElement(name, nodeFactory);
+    }
+
+    @Override
+    public <T extends Element> T cloneElement(final NodeFactory nodeFactory) {
+        return cloneElement(name, nodeFactory);
+    }
+
+    @Override
+    public <T extends Element> T cloneElement(final String elementName) {
+        return cloneElement(elementName, nodeFactory);
+    }
+
+    @Override
+    public <T extends Element> T cloneElement(final String elementName, final NodeFactory nodeFactory) {
+        final T element = nodeFactory.createElement(elementName, uri, null);
         for (final Attribute attribute : getAttributes()) {
             element.getAttributes()
                     .add(nodeFactory.createAttribute(attribute.getName(), attribute.getUri(), element,
@@ -135,20 +116,72 @@ public abstract class AbstractElement implements MutableElement {
             }
             else if (content instanceof MutableElement) {
                 final MutableElement child = (MutableElement) content;
-                element.getElements().add(child.clone());
+                element.getElements().add(child.cloneElement());
             }
         }
         return element;
     }
 
     @Override
-    public MutableElement clone() {
-        return clone(name);
+    public <T extends Attribute> T getAttribute(final String attributeName) {
+        final Set<T> attributes = getAttributes();
+        for (final T attribute : attributes) {
+            if (attribute.getName().equals(attributeName)) {
+                return attribute;
+            }
+        }
+        return null;
     }
 
     @Override
-    public void setParent(final MutableElement parent) {
-        this.parent = parent;
+    public String getAttributeValue(final String attributeName) {
+        final Attribute attribute = getAttribute(attributeName);
+        if (attribute != null) {
+            return attribute.getValue();
+        }
+        return null;
+    }
+
+    @Override
+    public <T extends Element> T getElement(final String elementName) {
+        final List<T> elements = getElements();
+        for (final T element : elements) {
+            if (element.getName().equals(elementName)) {
+                return element;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public <T extends Element> List<T> getElements(final String elementName) {
+        final List<T> result = new ArrayList<T>();
+        final List<T> elements = getElements();
+        for (final T element : elements) {
+            if (element.getName().equals(elementName)) {
+                result.add(element);
+            }
+        }
+        return Collections.unmodifiableList(result);
+    }
+
+    public String getElementText(final String elementName) {
+        final MutableElement element = getElement(elementName);
+        if (element != null && !element.getTexts().isEmpty()) {
+            return element.getTexts().get(0).getValue();
+        }
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends Element> T getParent() {
+        return (T) parent;
     }
 
     @Override
@@ -177,15 +210,105 @@ public abstract class AbstractElement implements MutableElement {
     }
 
     @Override
+    public String getUri() {
+        return uri;
+    }
+
+    @Override
     public Set<String> getUriSet() {
         final Set<String> result = new LinkedHashSet<String>();
         if (uri != null) {
             result.add(uri);
         }
-        for (final MutableElement element : getElements()) {
+        for (final Element element : getElements()) {
             result.addAll(element.getUriSet());
         }
         return result;
+    }
+
+    @Override
+    public boolean isSimpleTextNode() {
+        return getTexts().size() == 1 && getContent().size() == 1;
+    }
+
+    @Override
+    public <T extends Attribute> T selectAttribute(final String path) {
+        return QueryManager.selectNode(this, path);
+    }
+
+    @Override
+    public <T extends Attribute> List<T> selectAttributes(final String path) {
+        return QueryManager.selectNodes(this, path);
+    }
+
+    @Override
+    public <T extends Element> T selectElement(final String path) {
+        return QueryManager.selectNode(this, path);
+    }
+
+    @Override
+    public <T extends Element> List<T> selectElements(final String path) {
+        return QueryManager.selectNodes(this, path);
+    }
+
+    @Override
+    public <T extends Node> T selectNode(final String path) {
+        return QueryManager.selectNode(this, path);
+    }
+
+    @Override
+    public <T extends Node> List<T> selectNodes(final String path) {
+        return QueryManager.selectNodes(this, path);
+    }
+
+    @Override
+    public String selectText(final String path) {
+        final Text text = QueryManager.selectNode(this, path);
+        if (text != null) {
+            return text.getValue();
+        }
+        return null;
+    }
+
+    @Override
+    public List<String> selectTexts(final String path) {
+        final List<Text> texts = QueryManager.selectNodes(this, path);
+        final List<String> strings = new ArrayList<String>();
+        for (final Text text : texts) {
+            strings.add(text.getValue());
+        }
+        return strings;
+    }
+
+    @Override
+    public void setAttributeValue(final String attributeName, final String value) {
+        final Attribute attribute = getAttribute(attributeName);
+        if (attribute != null) {
+            if (value != null) {
+                attribute.setValue(value);
+            }
+            else {
+                getAttributes().remove(attribute);
+            }
+        }
+        else if (value != null) {
+            getAttributes().add(nodeFactory.createAttribute(attributeName, uri, this, value));
+        }
+    }
+
+    public void setElement(final MutableElement element, final String elementName) {
+        final MutableElement oldElement = getElement(elementName);
+        if (oldElement != null) {
+            getElements().remove(oldElement);
+        }
+        if (element != null) {
+            getElements().add(element);
+        }
+    }
+
+    @Override
+    public void setParent(final MutableElement parent) {
+        this.parent = parent;
     }
 
     public void sortElements(final Map<String, Integer> elementNameSortMap) {
@@ -208,21 +331,4 @@ public abstract class AbstractElement implements MutableElement {
         });
     }
 
-    public String getElementText(final String elementName) {
-        final MutableElement element = getElement(elementName);
-        if (element != null && !element.getTexts().isEmpty()) {
-            return element.getTexts().get(0).getValue();
-        }
-        return null;
-    }
-
-    @Override
-    public <T extends Node> T selectNode(final String path) {
-        return QueryManager.selectNode(this, path);
-    }
-
-    @Override
-    public List<? extends Node> selectNodes(final String path) {
-        return QueryManager.selectNodes(this, path);
-    }
 }

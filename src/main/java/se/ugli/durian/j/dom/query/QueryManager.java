@@ -5,19 +5,9 @@ import java.util.List;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Node;
 
-public class QueryManager {
+public final class QueryManager {
 
     private QueryManager() {
-
-    }
-
-    private static QueryEngine queryEngine;
-
-    private static QueryEngine getQueryEngine() {
-        if (queryEngine == null) {
-            queryEngine = QueryEngineFactory.create();
-        }
-        return queryEngine;
     }
 
     @SuppressWarnings("unchecked")
@@ -32,8 +22,8 @@ public class QueryManager {
         throw new IllegalStateException("Size: " + nodes.size());
     }
 
-    public static List<? extends Node> selectNodes(final Element element, final String query) {
-        return getQueryEngine().selectNodes(element, query);
+    public static <T extends Node> List<T> selectNodes(final Element element, final String query) {
+        return QueryEngineFactory.create().selectNodes(element, query);
     }
 
 }

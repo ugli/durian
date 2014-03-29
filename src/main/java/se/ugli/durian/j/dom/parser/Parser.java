@@ -32,10 +32,11 @@ public class Parser {
         saxHandler = new SaxHandler(nodeFactory, errorHandler);
     }
 
-    public Element parse(final InputStream stream) {
+    @SuppressWarnings("unchecked")
+    public <T extends Element> T parse(final InputStream stream) {
         try {
             saxParser.parse(stream, saxHandler);
-            return saxHandler.root;
+            return (T) saxHandler.root;
         }
         catch (final IOException e) {
             throw new RuntimeException(e);
@@ -45,19 +46,19 @@ public class Parser {
         }
     }
 
-    public Element parse(final Reader reader) {
+    public <T extends Element> T parse(final Reader reader) {
         return parse(new InputSource(reader));
     }
 
-    public Element parse(final char[] chars) {
+    public <T extends Element> T parse(final char[] chars) {
         return parse(new CharArrayReader(chars));
     }
 
-    public Element parse(final byte[] bytes) {
+    public <T extends Element> T parse(final byte[] bytes) {
         return parse(new ByteArrayInputStream(bytes));
     }
 
-    public Element parseResource(final String resource) {
+    public <T extends Element> T parseResource(final String resource) {
         final InputStream resourceAsStream = getClass().getResourceAsStream(resource);
         if (resourceAsStream != null) {
             return parse(resourceAsStream);
@@ -65,10 +66,11 @@ public class Parser {
         throw new RuntimeException("Resource not found: " + resource);
     }
 
-    public Element parse(final File file) {
+    @SuppressWarnings("unchecked")
+    public <T extends Element> T parse(final File file) {
         try {
             saxParser.parse(file, saxHandler);
-            return saxHandler.root;
+            return (T) saxHandler.root;
         }
         catch (final IOException e) {
             throw new RuntimeException(e);
@@ -78,10 +80,11 @@ public class Parser {
         }
     }
 
-    public Element parseUri(final String uri) {
+    @SuppressWarnings("unchecked")
+    public <T extends Element> T parseUri(final String uri) {
         try {
             saxParser.parse(uri, saxHandler);
-            return saxHandler.root;
+            return (T) saxHandler.root;
         }
         catch (final IOException e) {
             throw new RuntimeException(e);
@@ -91,7 +94,7 @@ public class Parser {
         }
     }
 
-    public Element parse(final URL url) {
+    public <T extends Element> T parse(final URL url) {
         InputStream inputStream = null;
         try {
             inputStream = url.openStream();
@@ -112,10 +115,11 @@ public class Parser {
         }
     }
 
-    public Element parse(final InputSource source) {
+    @SuppressWarnings("unchecked")
+    public <T extends Element> T parse(final InputSource source) {
         try {
             saxParser.parse(source, saxHandler);
-            return saxHandler.root;
+            return (T) saxHandler.root;
         }
         catch (final IOException e) {
             throw new RuntimeException(e);
@@ -125,6 +129,7 @@ public class Parser {
         }
     }
 
+    @SuppressWarnings("unused")
     public Element parse(final Source source) {
         // TODO
         throw new UnsupportedOperationException("TBD");

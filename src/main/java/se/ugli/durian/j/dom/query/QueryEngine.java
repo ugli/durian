@@ -7,6 +7,6 @@ import se.ugli.durian.j.dom.node.Node;
 
 public interface QueryEngine {
 
-    List<? extends Node> selectNodes(Element element, String path);
+    <T extends Node> List<T> selectNodes(Element element, String path) throws QueryException;
 
 }

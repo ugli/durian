@@ -11,8 +11,8 @@ public class MutableText implements Text {
 
     private final static List<Content> EMPTY_CONTENT = Collections.emptyList();
 
-    private final String value;
     private final Element parent;
+    private final String value;
 
     public MutableText(final Element parent, final String value) {
         this.parent = parent;
@@ -24,19 +24,20 @@ public class MutableText implements Text {
         return EMPTY_CONTENT;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public String getValue() {
-        return value;
-    }
-
-    @Override
-    public Element getParent() {
-        return parent;
+    public <T extends Element> T getParent() {
+        return (T) parent;
     }
 
     @Override
     public String getPath() {
         return parent.getPath() + "/text()";
+    }
+
+    @Override
+    public String getValue() {
+        return value;
     }
 
 }

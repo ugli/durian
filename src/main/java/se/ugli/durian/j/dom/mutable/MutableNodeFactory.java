@@ -7,19 +7,23 @@ import se.ugli.durian.j.dom.node.Text;
 
 public class MutableNodeFactory implements NodeFactory {
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Element createElement(final String name, final String uri, final Element parent) {
-        return new ElementImpl(name, uri, this);
+    public <T extends Attribute> T createAttribute(final String name, final String uri, final Element parent,
+            final String value) {
+        return (T) new MutableAttribute(name, uri, parent, value);
     }
 
+    @SuppressWarnings({ "unchecked", "unused" })
     @Override
-    public Attribute createAttribute(final String name, final String uri, final Element parent, final String value) {
-        return new MutableAttribute(name, uri, parent, value);
+    public <T extends Element> T createElement(final String name, final String uri, final Element parent) {
+        return (T) new ElementImpl(name, uri, this);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Text createText(final Element element, final String value) {
-        return new MutableText(element, value);
+    public <T extends Text> T createText(final Element element, final String value) {
+        return (T) new MutableText(element, value);
     }
 
 }

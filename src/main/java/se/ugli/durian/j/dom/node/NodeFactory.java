@@ -2,10 +2,10 @@ package se.ugli.durian.j.dom.node;
 
 public interface NodeFactory {
 
-    Element createElement(String name, String uri, Element parent);
+    <T extends Attribute> T createAttribute(String name, String uri, Element parent, String value);
 
-    Attribute createAttribute(String name, String uri, Element parent, String value);
+    <T extends Element> T createElement(String name, String uri, Element parent);
 
-    Text createText(Element parent, String value);
+    <T extends Text> T createText(Element parent, String value);
 
 }

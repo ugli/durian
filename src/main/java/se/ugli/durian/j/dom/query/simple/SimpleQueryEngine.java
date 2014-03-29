@@ -10,11 +10,11 @@ import se.ugli.durian.j.dom.query.QueryEngine;
 public class SimpleQueryEngine implements QueryEngine {
 
     @Override
-    public List<? extends Node> selectNodes(final Element element, final String path) {
+    public <T extends Node> List<T> selectNodes(final Element element, final String path) {
         return selectNodes(element, new Path(path));
     }
 
-    private List<? extends Node> selectNodes(final Element element, final Path path) {
+    private <T extends Node> List<T> selectNodes(final Element element, final Path path) {
         if (path.isAbsolute()) {
             final Element root = getRoot(element);
             return selectAbsolute(root, path);
@@ -28,7 +28,8 @@ public class SimpleQueryEngine implements QueryEngine {
         throw new IllegalStateException("Path: " + path);
     }
 
-    private List<? extends Node> selectRelative(final Node node, final Path path) {
+    @SuppressWarnings("unchecked")
+    private <T extends Node> List<T> selectRelative(final Node node, final Path path) {
         final List<Node> nodes = new ArrayList<Node>();
         if (node.getPath().endsWith(path.value)) {
             nodes.add(node);
@@ -42,10 +43,11 @@ public class SimpleQueryEngine implements QueryEngine {
                 nodes.addAll(selectRelative(child, path));
             }
         }
-        return nodes;
+        return (List<T>) nodes;
     }
 
-    private List<? extends Node> selectDescendantOrSelf(final Node node, final Path path) {
+    @SuppressWarnings("unchecked")
+    private <T extends Node> List<T> selectDescendantOrSelf(final Node node, final Path path) {
         final List<Node> nodes = new ArrayList<Node>();
         final String relativePath = path.superAsRelative();
         if (node.getPath().endsWith(relativePath)) {
@@ -60,10 +62,11 @@ public class SimpleQueryEngine implements QueryEngine {
                 nodes.addAll(selectDescendantOrSelf(child, path));
             }
         }
-        return nodes;
+        return (List<T>) nodes;
     }
 
-    private List<? extends Node> selectAbsolute(final Node node, final Path path) {
+    @SuppressWarnings("unchecked")
+    private <T extends Node> List<T> selectAbsolute(final Node node, final Path path) {
         final List<Node> nodes = new ArrayList<Node>();
         if (node.getPath().equals(path.value)) {
             nodes.add(node);
@@ -77,7 +80,7 @@ public class SimpleQueryEngine implements QueryEngine {
                 nodes.addAll(selectAbsolute(child, path));
             }
         }
-        return nodes;
+        return (List<T>) nodes;
     }
 
     private Element getRoot(final Element element) {

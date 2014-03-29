@@ -5,19 +5,25 @@ import java.util.Set;
 
 public interface Element extends Content {
 
-    Element clone();
+    <T extends Element> T cloneElement();
 
-    Attribute getAttribute(String attributeName);
+    <T extends Element> T cloneElement(NodeFactory nodeFactory);
 
-    Set<Attribute> getAttributes();
+    <T extends Element> T cloneElement(String elementName);
+
+    <T extends Element> T cloneElement(String elementName, NodeFactory nodeFactory);
+
+    <T extends Attribute> T getAttribute(String attributeName);
+
+    <T extends Attribute> Set<T> getAttributes();
 
     String getAttributeValue(String attributeName);
 
     <T extends Element> T getElement(String elementName);
 
-    List<? extends Element> getElements();
+    <T extends Element> List<T> getElements();
 
-    List<? extends Element> getElements(String elementName);
+    <T extends Element> List<T> getElements(String elementName);
 
     String getName();
 
@@ -25,7 +31,7 @@ public interface Element extends Content {
 
     String getRelativePath(String childPath);
 
-    List<Text> getTexts();
+    <T extends Text> List<T> getTexts();
 
     String getUri();
 
@@ -33,7 +39,20 @@ public interface Element extends Content {
 
     boolean isSimpleTextNode();
 
-    <T extends Node> T selectNode(String path);
+    <T extends Attribute> T selectAttribute(String query);
 
-    List<? extends Node> selectNodes(String path);
+    <T extends Attribute> List<T> selectAttributes(String query);
+
+    <T extends Element> T selectElement(String query);
+
+    <T extends Element> List<T> selectElements(final String query);
+
+    <T extends Node> T selectNode(String query);
+
+    <T extends Node> List<T> selectNodes(String query);
+
+    String selectText(String query);
+
+    List<String> selectTexts(String query);
+
 }

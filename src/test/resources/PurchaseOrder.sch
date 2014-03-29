@@ -1,18 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xpath2" xmlns:s="http://test.se">
-    <!--
- Schematron structural schema to validate purchase orders 
--->
-    <!--  Note: content models are treated as "open".  -->
-    <!--  1999-11-11  -->
     <s:title a="a" b="b">Schema for Purchase Order Example</s:title>
-    <!--  First, simulate types  -->
     <pattern>
         <rule context="name| city | state | zip">
-            <!--
- This rule couples the elements of the address type together, so that
-			if one appears anywhere, the others must also. 
--->
             <assert test="parent::*/street">An address should have a street.</assert>
             <assert test="parent::*/city">An address should have a city.</assert>
             <assert test="parent::*/state">An address should have a state.</assert>
@@ -29,10 +19,6 @@
     </pattern>
     <pattern>
         <rule context="shipTo | shipDate | Items">
-            <!--
- This rule couples the elements of the address type together, so that
-			if one appears anywhere, the others must also. 
--->
             <assert test="parent::*/shipTo">A purchase order should have a shipTo element.</assert>
             <assert test="parent::*/shipDate">A purchase order should have a shipDate element.</assert>
             <assert test="parent::*/Items">A purchase order should have an Items element.</assert>
@@ -71,10 +57,6 @@ There should be a shipTo element contained by the PurchaseOrder element.
             <assert test="name">
                 A shipping address element should have a name element.
             </assert>
-            <!--
- The rest of the content model is tested through the
-				addressType pattern. 
--->
         </rule>
         <rule context="Items">
             <assert test="count(child::*) = count(child::Item)">The Items element can only contain Item elements</assert>

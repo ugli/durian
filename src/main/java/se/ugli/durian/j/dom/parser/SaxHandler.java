@@ -27,6 +27,7 @@ class SaxHandler extends DefaultHandler {
         this.errorHandler = errorHandler;
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes saxAttributes) {
@@ -38,7 +39,7 @@ class SaxHandler extends DefaultHandler {
         }
         stack.push(element);
         if (parent != null) {
-            final List elements = parent.getElements();
+            final List<Element> elements = parent.getElements();
             elements.add(element);
         }
         else {
@@ -46,6 +47,7 @@ class SaxHandler extends DefaultHandler {
         }
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void endElement(final String uri, final String localName, final String qName) {
         stack.pop();
@@ -60,16 +62,6 @@ class SaxHandler extends DefaultHandler {
             final Text text = nodeFactory.createText(element, trimedStr);
             element.getTexts().add(text);
         }
-    }
-
-    private String trimedOrNull(final String str) {
-        if (str != null) {
-            final String result = str.trim();
-            if (!result.isEmpty()) {
-                return result;
-            }
-        }
-        return null;
     }
 
     @Override
