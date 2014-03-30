@@ -17,7 +17,7 @@ public final class ListSynchronizer<E> implements CollectionObserver<E> {
         new ListSynchronizer(list1, list2);
     }
 
-    private ObservableList<E> getOtherList(final ObservableCollection<?> list) {
+    private ObservableList<E> getOtherList(final ObservableCollection<E> list) {
         if (list == list1) {
             return list2;
         }
@@ -30,13 +30,13 @@ public final class ListSynchronizer<E> implements CollectionObserver<E> {
     }
 
     @Override
-    public void elementAdded(final ObservableCollection<?> list, final E obj) {
+    public void elementAdded(final ObservableCollection<E> list, final E obj) {
         final ObservableList<E> otherList = getOtherList(list);
         otherList.getBackendList().add(obj);
     }
 
     @Override
-    public void elementRemoved(final ObservableCollection<?> list, final E obj) {
+    public void elementRemoved(final ObservableCollection<E> list, final Object obj) {
         final ObservableList<?> otherList = getOtherList(list);
         otherList.getBackendList().remove(obj);
     }

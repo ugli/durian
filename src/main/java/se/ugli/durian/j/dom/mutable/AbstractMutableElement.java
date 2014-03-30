@@ -348,13 +348,13 @@ public abstract class AbstractMutableElement implements MutableElement {
 
     @SuppressWarnings("unused")
     @Override
-    public void elementAdded(final ObservableCollection<?> list, final MutableNode node) {
+    public void elementAdded(final ObservableCollection<MutableNode> list, final MutableNode node) {
         node.setParent(this);
     }
 
     @SuppressWarnings("unused")
     @Override
-    public void elementRemoved(final ObservableCollection<?> list, final MutableNode node) {
+    public void elementRemoved(final ObservableCollection<MutableNode> list, final Object object) {
     }
 
 }

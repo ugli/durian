@@ -22,7 +22,7 @@ public class ElementSimpleText extends AbstractMutableElement {
 
     @SuppressWarnings("unused")
     @Override
-    public void elementAdded(final ObservableCollection<?> list, final MutableNode node) {
+    public void elementAdded(final ObservableCollection<MutableNode> list, final MutableNode node) {
         if (list.size() == 1) {
             throw new IllegalStateException("This is a Simple Text Element, just one text node is allowed");
         }

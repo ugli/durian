@@ -8,7 +8,7 @@ import java.util.List;
 public abstract class ObservableCollection<E> implements Collection<E> {
 
     private final Collection<E> backendCollecion;
-    private final List<CollectionObserver<?>> observers = new ArrayList<CollectionObserver<?>>();
+    private final List<CollectionObserver<E>> observers = new ArrayList<CollectionObserver<E>>();
 
     protected ObservableCollection() {
         this(null);
@@ -18,27 +18,26 @@ public abstract class ObservableCollection<E> implements Collection<E> {
         this(new ArrayList<E>(), observer);
     }
 
+    @SuppressWarnings("unchecked")
     protected ObservableCollection(final Collection<E> backendCollecion, final CollectionObserver<?> observer) {
         this.backendCollecion = backendCollecion;
         if (observer != null) {
-            observers.add(observer);
+            observers.add((CollectionObserver<E>) observer);
         }
     }
 
-    public List<CollectionObserver<?>> getObservers() {
+    public List<CollectionObserver<E>> getObservers() {
         return observers;
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     protected void notifyAdd(final E e) {
-        for (final CollectionObserver observer : observers) {
+        for (final CollectionObserver<E> observer : observers) {
             observer.elementAdded(this, e);
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     protected void notifyRemove(final Object e) {
-        for (final CollectionObserver observer : observers) {
+        for (final CollectionObserver<E> observer : observers) {
             observer.elementRemoved(this, e);
         }
     }
