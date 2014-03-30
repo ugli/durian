@@ -8,16 +8,15 @@ import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
-public class MutableText implements Text {
+public class MutableText implements Text, MutableNode {
 
     private final static List<Content> EMPTY_CONTENT = Collections.emptyList();
 
-    private final Element parent;
+    private Element parent;
     private final String value;
-    private final NodeFactory nodeFactory;
+    private NodeFactory nodeFactory;
 
-    public MutableText(final Element parent, final String value, final NodeFactory nodeFactory) {
-        this.parent = parent;
+    public MutableText(final String value, final NodeFactory nodeFactory) {
         this.value = value;
         this.nodeFactory = nodeFactory;
     }
@@ -56,6 +55,16 @@ public class MutableText implements Text {
     @Override
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public void setParent(final Element parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public void setNodeFactory(final NodeFactory nodeFactory) {
+        this.nodeFactory = nodeFactory;
     }
 
 }

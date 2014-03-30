@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import se.ugli.durian.j.dom.collections.ObservableCollection;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
@@ -343,6 +344,17 @@ public abstract class AbstractMutableElement implements MutableElement {
                 return v1.compareTo(v2);
             }
         });
+    }
+
+    @SuppressWarnings("unused")
+    @Override
+    public void elementAdded(final ObservableCollection<?> list, final MutableNode node) {
+        node.setParent(this);
+    }
+
+    @SuppressWarnings("unused")
+    @Override
+    public void elementRemoved(final ObservableCollection<?> list, final MutableNode node) {
     }
 
 }

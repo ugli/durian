@@ -4,19 +4,17 @@ import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 
-public class MutableAttribute implements Attribute {
+public class MutableAttribute implements Attribute, MutableNode {
 
     private final String name;
-    private final Element parent;
+    private Element parent;
     private final String uri;
     private String value;
-    private final NodeFactory nodeFactory;
+    private NodeFactory nodeFactory;
 
-    public MutableAttribute(final String name, final String uri, final Element parent, final String value,
-            final NodeFactory nodeFactory) {
+    public MutableAttribute(final String name, final String uri, final String value, final NodeFactory nodeFactory) {
         this.name = name;
         this.uri = uri;
-        this.parent = parent;
         this.value = value;
         this.nodeFactory = nodeFactory;
     }
@@ -106,6 +104,16 @@ public class MutableAttribute implements Attribute {
     @Override
     public void setValue(final String value) {
         this.value = value;
+    }
+
+    @Override
+    public void setParent(final Element parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public void setNodeFactory(final NodeFactory nodeFactory) {
+        this.nodeFactory = nodeFactory;
     }
 
 }

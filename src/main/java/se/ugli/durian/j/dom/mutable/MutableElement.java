@@ -2,12 +2,13 @@ package se.ugli.durian.j.dom.mutable;
 
 import java.util.Map;
 
+import se.ugli.durian.j.dom.collections.CollectionObserver;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
-public interface MutableElement extends Element {
+public interface MutableElement extends Element, MutableNode, CollectionObserver<MutableNode> {
 
     <T extends Attribute> T addAttribute(String name, String value);
 
@@ -34,10 +35,6 @@ public interface MutableElement extends Element {
     void setElement(final Element element, final String elementName);
 
     void setName(String name);
-
-    void setNodeFactory(NodeFactory nodeFactory);
-
-    void setParent(final Element parent);
 
     void setUri(String uri);
 

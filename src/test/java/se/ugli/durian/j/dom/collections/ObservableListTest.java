@@ -1,22 +1,20 @@
-package se.ugli.durian.j.dom.mutable;
+package se.ugli.durian.j.dom.collections;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
-
 import org.junit.Test;
 
-import se.ugli.durian.j.dom.mutable.ListSynchronizer;
-import se.ugli.durian.j.dom.mutable.ObservableList;
+import se.ugli.durian.j.dom.collections.ListSynchronizer;
+import se.ugli.durian.j.dom.collections.ObservableList;
 
 public class ObservableListTest {
 
     @Test
     public void test() {
-        final List<Integer> intList = new ObservableList<Integer>();
-        final List<Number> numberList = new ObservableList<Number>();
+        final ObservableList<Integer> intList = new ObservableList<Integer>();
+        final ObservableList<Number> numberList = new ObservableList<Number>();
 
-        ListSynchronizer.applyLiveUpdates(intList, numberList, null);
+        ListSynchronizer.applyLiveUpdates(intList, numberList);
 
         intList.add(3);
         intList.add(4);

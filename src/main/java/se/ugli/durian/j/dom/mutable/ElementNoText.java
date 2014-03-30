@@ -3,28 +3,22 @@ package se.ugli.durian.j.dom.mutable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
+import se.ugli.durian.j.dom.collections.ObservableList;
+import se.ugli.durian.j.dom.collections.ObservableSet;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
-public class ElementNoText extends AbstractMutableElement implements ListObserver {
+public class ElementNoText extends AbstractMutableElement {
 
-    private final Set<Attribute> attributes = Collections.newSetFromMap(new ConcurrentHashMap<Attribute, Boolean>());
-    private final List<Element> elements = new ObservableList2<Element>(this);
+    private final Set<Attribute> attributes = new ObservableSet<Attribute>(this);
+    private final List<Element> elements = new ObservableList<Element>(this);
 
     public ElementNoText(final String name, final String uri, final NodeFactory nodeFactory) {
         super(name, uri, nodeFactory);
-    }
-
-    @SuppressWarnings("unused")
-    @Override
-    public void add(final ObservableList2<?> list, final Object obj) {
-        final MutableElement e = (MutableElement) obj;
-        e.setParent(this);
     }
 
     @SuppressWarnings("unchecked")
@@ -46,13 +40,8 @@ public class ElementNoText extends AbstractMutableElement implements ListObserve
     }
 
     @Override
-    public List<Text> getTexts() {
+    public <T extends Text> List<T> getTexts() {
         return Collections.emptyList();
-    }
-
-    @SuppressWarnings("unused")
-    @Override
-    public void remove(final ObservableList2<?> list, final Object obj) {
     }
 
 }
