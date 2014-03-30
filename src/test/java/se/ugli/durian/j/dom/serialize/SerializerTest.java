@@ -10,12 +10,14 @@ import org.dom4j.DocumentException;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.parser.Parser;
 
+@Ignore
 public class SerializerTest {
 
     @Test
