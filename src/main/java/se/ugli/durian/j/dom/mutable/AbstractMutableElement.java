@@ -93,11 +93,6 @@ public abstract class AbstractMutableElement implements MutableElement {
     }
 
     @Override
-    public NodeFactory getNodeFactory() {
-        return nodeFactory;
-    }
-
-    @Override
     public <T extends Element> T cloneElement(final NodeFactory nodeFactory) {
         return cloneElement(name, nodeFactory);
     }
@@ -124,6 +119,17 @@ public abstract class AbstractMutableElement implements MutableElement {
             }
         }
         return element;
+    }
+
+    @SuppressWarnings("unused")
+    @Override
+    public void elementAdded(final ObservableCollection<MutableNode> list, final MutableNode node) {
+        node.setParent(this);
+    }
+
+    @SuppressWarnings("unused")
+    @Override
+    public void elementRemoved(final ObservableCollection<MutableNode> list, final Object object) {
     }
 
     @Override
@@ -172,7 +178,7 @@ public abstract class AbstractMutableElement implements MutableElement {
         final MutableElement element = getElement(elementName);
         if (element != null && !element.getTexts().isEmpty()) {
             final StringBuilder textBuilder = new StringBuilder();
-            for (final Text text : getTexts()) {
+            for (final Text text : element.getTexts()) {
                 textBuilder.append(text.getValue());
             }
             return textBuilder.toString();
@@ -183,6 +189,11 @@ public abstract class AbstractMutableElement implements MutableElement {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public NodeFactory getNodeFactory() {
+        return nodeFactory;
     }
 
     @SuppressWarnings("unchecked")
@@ -244,6 +255,22 @@ public abstract class AbstractMutableElement implements MutableElement {
     }
 
     @Override
+    public <T extends Attribute> T selectAttributeClone(final String query) {
+        return QueryManager.selectNodeClone(this, query, nodeFactory);
+    }
+
+    @Override
+    public <T extends Attribute> T selectAttributeClone(final String query, final NodeFactory nodeFactory) {
+        return QueryManager.selectNodeClone(this, query, nodeFactory);
+    }
+
+    @Override
+    public <T extends Attribute> T selectAttributeClone(final String query, final NodeFactory nodeFactory,
+            final String elementName) {
+        return QueryManager.selectNodeClone(this, query, nodeFactory, elementName);
+    }
+
+    @Override
     public <T extends Attribute> List<T> selectAttributes(final String query) {
         return QueryManager.selectNodes(this, query);
     }
@@ -251,6 +278,22 @@ public abstract class AbstractMutableElement implements MutableElement {
     @Override
     public <T extends Element> T selectElement(final String query) {
         return QueryManager.selectNode(this, query);
+    }
+
+    @Override
+    public <T extends Element> T selectElementClone(final String query) {
+        return QueryManager.selectNodeClone(this, query, nodeFactory);
+    }
+
+    @Override
+    public <T extends Element> T selectElementClone(final String query, final NodeFactory nodeFactory) {
+        return QueryManager.selectNodeClone(this, query, nodeFactory);
+    }
+
+    @Override
+    public <T extends Attribute> T selectElementClone(final String query, final NodeFactory nodeFactory,
+            final String elementName) {
+        return QueryManager.selectNodeClone(this, query, nodeFactory, elementName);
     }
 
     @Override
@@ -344,17 +387,6 @@ public abstract class AbstractMutableElement implements MutableElement {
                 return v1.compareTo(v2);
             }
         });
-    }
-
-    @SuppressWarnings("unused")
-    @Override
-    public void elementAdded(final ObservableCollection<MutableNode> list, final MutableNode node) {
-        node.setParent(this);
-    }
-
-    @SuppressWarnings("unused")
-    @Override
-    public void elementRemoved(final ObservableCollection<MutableNode> list, final Object object) {
     }
 
 }

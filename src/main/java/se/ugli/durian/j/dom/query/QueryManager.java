@@ -3,8 +3,10 @@ package se.ugli.durian.j.dom.query;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Node;
+import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
 public final class QueryManager {
@@ -22,6 +24,52 @@ public final class QueryManager {
             return (T) nodes.get(0);
         }
         throw new IllegalStateException("Size: " + nodes.size());
+    }
+
+    public static <T extends Node> T selectNodeClone(final Element element, final String query,
+            final NodeFactory nodeFactory, final String nodeName) {
+        final Node node = selectNode(element, query);
+        if (node != null) {
+            if (node instanceof Element) {
+                final Element elementNode = (Element) node;
+                return elementNode.cloneElement(nodeName, nodeFactory);
+            }
+            else if (node instanceof Attribute) {
+                final Attribute attributeNode = (Attribute) node;
+                return attributeNode.cloneAttribute(nodeName, nodeFactory);
+            }
+            else if (node instanceof Text) {
+                final Text textNode = (Text) node;
+                return textNode.cloneText(nodeFactory);
+            }
+            else {
+                throw new IllegalStateException();
+            }
+        }
+        return null;
+    }
+
+    public static <T extends Node> T selectNodeClone(final Element element, final String query,
+            final NodeFactory nodeFactory) {
+        final Node node = selectNode(element, query);
+        if (node != null) {
+            if (node instanceof Element) {
+                final Element elementNode = (Element) node;
+                return elementNode.cloneElement(nodeFactory);
+            }
+            else if (node instanceof Attribute) {
+                final Attribute attributeNode = (Attribute) node;
+                return attributeNode.cloneAttribute(nodeFactory);
+            }
+            else if (node instanceof Text) {
+                final Text textNode = (Text) node;
+                return textNode.cloneText(nodeFactory);
+            }
+            else {
+                throw new IllegalStateException();
+            }
+        }
+        return null;
     }
 
     public static <T extends Node> List<T> selectNodes(final Element element, final String query) {
