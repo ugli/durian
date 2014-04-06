@@ -323,7 +323,7 @@ public abstract class AbstractMutableElement implements MutableElement {
 
     @Override
     public void setAttributeValue(final String attributeName, final String value) {
-        final Attribute attribute = getAttribute(attributeName);
+        final MutableAttribute attribute = getAttribute(attributeName);
         if (attribute != null) {
             if (value != null) {
                 attribute.setValue(value);

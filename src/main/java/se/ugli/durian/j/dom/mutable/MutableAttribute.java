@@ -101,7 +101,6 @@ public class MutableAttribute implements Attribute, MutableNode {
         return result;
     }
 
-    @Override
     public void setValue(final String value) {
         this.value = value;
     }

@@ -1,16 +1,10 @@
 package se.ugli.durian.j.dom.mutable;
 
-import java.util.Collections;
-import java.util.List;
-
-import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
 public class MutableText implements Text, MutableNode {
-
-    private final static List<Content> EMPTY_CONTENT = Collections.emptyList();
 
     private Element parent;
     private final String value;
@@ -34,11 +28,6 @@ public class MutableText implements Text, MutableNode {
     @Override
     public <T extends Text> T cloneText(final NodeFactory nodeFactory) {
         return nodeFactory.createText(null, value);
-    }
-
-    @Override
-    public List<Content> getContent() {
-        return EMPTY_CONTENT;
     }
 
     @SuppressWarnings("unchecked")

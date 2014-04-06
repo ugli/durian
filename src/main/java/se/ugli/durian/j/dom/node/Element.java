@@ -19,6 +19,8 @@ public interface Element extends Content {
 
     String getAttributeValue(String attributeName);
 
+    List<Content> getContent();
+
     <T extends Element> T getElement(String elementName);
 
     <T extends Element> List<T> getElements();
@@ -37,8 +39,10 @@ public interface Element extends Content {
 
     String getUri();
 
+    // TODO remove
     Set<String> getUriSet();
 
+    // TODO remove
     boolean isSimpleTextNode();
 
     <T extends Attribute> T selectAttribute(String query);
