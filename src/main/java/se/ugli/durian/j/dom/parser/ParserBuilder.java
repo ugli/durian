@@ -12,33 +12,35 @@ import se.ugli.durian.j.dom.node.NodeFactory;
 
 public final class ParserBuilder {
 
-    private static SAXParser createSaxParser() {
-        try {
-            final SAXParserFactory factory = SAXParserFactory.newInstance();
-            factory.setNamespaceAware(true);
-            final SAXParser parser = factory.newSAXParser();
-            return parser;
-        }
-        catch (final ParserConfigurationException e) {
-            throw new RuntimeException(e);
-        }
-        catch (final SAXException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private static SAXParser defaultSaxParser;
 
     public static ParserBuilder apply() {
         return new ParserBuilder();
     }
 
-    private NodeFactory nodeFactory;
     private ErrorHandler errorHandler;
+    private NodeFactory nodeFactory;
     private SAXParser saxParser;
 
     private ParserBuilder() {
-        nodeFactory = new MutableNodeFactory();
-        errorHandler = new DefaultErrorHandler();
-        saxParser = createSaxParser();
+    }
+
+    public Parser build() {
+        if (nodeFactory == null) {
+            nodeFactory = new MutableNodeFactory();
+        }
+        if (errorHandler == null) {
+            errorHandler = new DefaultErrorHandler();
+        }
+        if (saxParser == null) {
+            saxParser = getDefaultSaxParser();
+        }
+        return new Parser(nodeFactory, errorHandler, saxParser);
+    }
+
+    public ParserBuilder errorHandler(final ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
+        return this;
     }
 
     public ParserBuilder nodeFactory(final NodeFactory nodeFactory) {
@@ -51,13 +53,21 @@ public final class ParserBuilder {
         return this;
     }
 
-    public ParserBuilder errorHandler(final ErrorHandler errorHandler) {
-        this.errorHandler = errorHandler;
-        return this;
-    }
-
-    public Parser build() {
-        return new Parser(nodeFactory, errorHandler, saxParser);
+    private SAXParser getDefaultSaxParser() {
+        if (defaultSaxParser == null) {
+            try {
+                final SAXParserFactory factory = SAXParserFactory.newInstance();
+                factory.setNamespaceAware(true);
+                defaultSaxParser = factory.newSAXParser();
+            }
+            catch (final ParserConfigurationException e) {
+                throw new RuntimeException(e);
+            }
+            catch (final SAXException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return defaultSaxParser;
     }
 
 }
