@@ -16,18 +16,8 @@ public class MutableText implements Text, MutableNode {
     }
 
     @Override
-    public <T extends Text> T cloneText() {
-        return cloneText(nodeFactory);
-    }
-
-    @Override
     public NodeFactory getNodeFactory() {
         return nodeFactory;
-    }
-
-    @Override
-    public <T extends Text> T cloneText(final NodeFactory nodeFactory) {
-        return nodeFactory.createText(null, value);
     }
 
     @SuppressWarnings("unchecked")
@@ -54,6 +44,11 @@ public class MutableText implements Text, MutableNode {
     @Override
     public void setNodeFactory(final NodeFactory nodeFactory) {
         this.nodeFactory = nodeFactory;
+    }
+
+    @Override
+    public String toString() {
+        return "MutableText [value=" + value + "]";
     }
 
 }

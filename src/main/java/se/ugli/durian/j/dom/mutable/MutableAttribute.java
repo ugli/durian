@@ -25,26 +25,6 @@ public class MutableAttribute implements Attribute, MutableNode {
     }
 
     @Override
-    public <T extends Attribute> T cloneAttribute() {
-        return cloneAttribute(name, nodeFactory);
-    }
-
-    @Override
-    public <T extends Attribute> T cloneAttribute(final NodeFactory nodeFactory) {
-        return cloneAttribute(name, nodeFactory);
-    }
-
-    @Override
-    public <T extends Attribute> T cloneAttribute(final String attributeName) {
-        return cloneAttribute(attributeName, nodeFactory);
-    }
-
-    @Override
-    public <T extends Attribute> T cloneAttribute(final String attributeName, final NodeFactory nodeFactory) {
-        return nodeFactory.createAttribute(attributeName, uri, null, value);
-    }
-
-    @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
@@ -113,6 +93,11 @@ public class MutableAttribute implements Attribute, MutableNode {
     @Override
     public void setNodeFactory(final NodeFactory nodeFactory) {
         this.nodeFactory = nodeFactory;
+    }
+
+    @Override
+    public String toString() {
+        return "MutableAttribute [name=" + name + ", uri=" + uri + ", value=" + value + "]";
     }
 
 }

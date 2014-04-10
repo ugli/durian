@@ -10,12 +10,12 @@ import java.util.Set;
 
 import se.ugli.durian.j.dom.collections.ObservableCollection;
 import se.ugli.durian.j.dom.node.Attribute;
-import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Node;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 import se.ugli.durian.j.dom.query.QueryManager;
+import se.ugli.durian.j.dom.utils.ElementCloneCommand;
 
 public abstract class AbstractMutableElement implements MutableElement {
 
@@ -89,36 +89,22 @@ public abstract class AbstractMutableElement implements MutableElement {
 
     @Override
     public <T extends Element> T cloneElement() {
-        return cloneElement(name, nodeFactory);
+        return ElementCloneCommand.execute(name, this, nodeFactory);
     }
 
     @Override
     public <T extends Element> T cloneElement(final NodeFactory nodeFactory) {
-        return cloneElement(name, nodeFactory);
+        return ElementCloneCommand.execute(name, this, nodeFactory);
     }
 
     @Override
     public <T extends Element> T cloneElement(final String elementName) {
-        return cloneElement(elementName, nodeFactory);
+        return ElementCloneCommand.execute(elementName, this, nodeFactory);
     }
 
     @Override
     public <T extends Element> T cloneElement(final String elementName, final NodeFactory nodeFactory) {
-        final T element = nodeFactory.createElement(elementName, uri, null);
-        for (final Attribute attribute : getAttributes()) {
-            element.getAttributes().add(attribute.cloneAttribute(nodeFactory));
-        }
-        for (final Content content : getContent()) {
-            if (content instanceof Text) {
-                final Text text = (Text) content;
-                element.getTexts().add(text.cloneText(nodeFactory));
-            }
-            else if (content instanceof Element) {
-                final Element child = (Element) content;
-                element.getElements().add(child.cloneElement(nodeFactory));
-            }
-        }
-        return element;
+        return ElementCloneCommand.execute(elementName, this, nodeFactory);
     }
 
     @SuppressWarnings("unused")
@@ -387,6 +373,11 @@ public abstract class AbstractMutableElement implements MutableElement {
                 return v1.compareTo(v2);
             }
         });
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[name=" + name + ", uri=" + uri + "]";
     }
 
 }

@@ -8,6 +8,8 @@ import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Node;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
+import se.ugli.durian.j.dom.utils.AttributeCloneCommand;
+import se.ugli.durian.j.dom.utils.TextCloneCommand;
 
 public final class QueryManager {
 
@@ -35,12 +37,12 @@ public final class QueryManager {
                 return elementNode.cloneElement(nodeName, nodeFactory);
             }
             else if (node instanceof Attribute) {
-                final Attribute attributeNode = (Attribute) node;
-                return attributeNode.cloneAttribute(nodeName, nodeFactory);
+                final Attribute attributeToClone = (Attribute) node;
+                return AttributeCloneCommand.execute(attributeToClone, null, nodeFactory);
             }
             else if (node instanceof Text) {
-                final Text textNode = (Text) node;
-                return textNode.cloneText(nodeFactory);
+                final Text textToClone = (Text) node;
+                return TextCloneCommand.execute(textToClone, null, nodeFactory);
             }
             else {
                 throw new IllegalStateException();
@@ -58,12 +60,12 @@ public final class QueryManager {
                 return elementNode.cloneElement(nodeFactory);
             }
             else if (node instanceof Attribute) {
-                final Attribute attributeNode = (Attribute) node;
-                return attributeNode.cloneAttribute(nodeFactory);
+                final Attribute attributeToClone = (Attribute) node;
+                return AttributeCloneCommand.execute(attributeToClone, null, nodeFactory);
             }
             else if (node instanceof Text) {
-                final Text textNode = (Text) node;
-                return textNode.cloneText(nodeFactory);
+                final Text textToClone = (Text) node;
+                return TextCloneCommand.execute(textToClone, null, nodeFactory);
             }
             else {
                 throw new IllegalStateException();
