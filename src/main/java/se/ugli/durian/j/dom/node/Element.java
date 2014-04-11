@@ -39,9 +39,6 @@ public interface Element extends Content {
 
     String getUri();
 
-    // TODO remove
-    Set<String> getUriSet();
-
     <T extends Attribute> T selectAttribute(String query);
 
     <T extends Attribute> T selectAttributeClone(String query);

@@ -2,7 +2,9 @@ package se.ugli.durian.j.dom.serialize;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -73,8 +75,19 @@ public class Serializer {
         }
     }
 
-    public boolean isSimpleTextNode(final Element element) {
+    private boolean isSimpleTextNode(final Element element) {
         return element.getTexts().size() == 1 && element.getContent().size() == 1;
+    }
+
+    public Set<String> getUriSet(final Element e) {
+        final Set<String> result = new LinkedHashSet<String>();
+        if (e.getUri() != null) {
+            result.add(e.getUri());
+        }
+        for (final Element element : e.getElements()) {
+            result.addAll(getUriSet(element));
+        }
+        return result;
     }
 
     private String getQName(final Element element, final boolean root) {
@@ -109,7 +122,7 @@ public class Serializer {
     }
 
     private void appendPrefixMapping(final Element element, final StringBuilder stringBuffer) {
-        for (final String uri : new ArrayList<String>(element.getUriSet())) {
+        for (final String uri : new ArrayList<String>(getUriSet(element))) {
             final String prefix = getPrefix(uri);
             stringBuffer.append(" xmlns");
             if (prefix != null) {

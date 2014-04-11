@@ -3,7 +3,6 @@ package se.ugli.durian.j.dom.mutable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -216,18 +215,6 @@ public abstract class AbstractMutableElement implements MutableElement {
     @Override
     public String getUri() {
         return uri;
-    }
-
-    @Override
-    public Set<String> getUriSet() {
-        final Set<String> result = new LinkedHashSet<String>();
-        if (uri != null) {
-            result.add(uri);
-        }
-        for (final Element element : getElements()) {
-            result.addAll(element.getUriSet());
-        }
-        return result;
     }
 
     @Override
