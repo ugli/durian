@@ -25,7 +25,7 @@ public final class QueryManager {
         else if (nodes.size() == 1) {
             return (T) nodes.get(0);
         }
-        throw new IllegalStateException("Size: " + nodes.size());
+        throw new QueryException("Result contains " + nodes.size() + " nodes.");
     }
 
     public static <T extends Node> T selectNodeClone(final Element element, final String query,

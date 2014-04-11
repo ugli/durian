@@ -51,7 +51,9 @@ public interface Element extends Content {
 
     <T extends Attribute> T selectAttributeClone(String query, NodeFactory nodeFactory);
 
-    <T extends Attribute> T selectAttributeClone(String query, NodeFactory nodeFactory, String elementName);
+    <T extends Attribute> T selectAttributeClone(String query, NodeFactory nodeFactory, String attributeName);
+
+    String selectAttributeValue(String query);
 
     <T extends Attribute> List<T> selectAttributes(String query);
 

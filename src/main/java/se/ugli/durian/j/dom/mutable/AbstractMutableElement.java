@@ -252,13 +252,22 @@ public abstract class AbstractMutableElement implements MutableElement {
 
     @Override
     public <T extends Attribute> T selectAttributeClone(final String query, final NodeFactory nodeFactory,
-            final String elementName) {
-        return QueryManager.selectNodeClone(this, query, nodeFactory, elementName);
+            final String attributeName) {
+        return QueryManager.selectNodeClone(this, query, nodeFactory, attributeName);
     }
 
     @Override
     public <T extends Attribute> List<T> selectAttributes(final String query) {
         return QueryManager.selectNodes(this, query);
+    }
+
+    @Override
+    public String selectAttributeValue(final String query) {
+        final Attribute attribute = QueryManager.selectNode(this, query);
+        if (attribute != null) {
+            return attribute.getValue();
+        }
+        return null;
     }
 
     @Override
