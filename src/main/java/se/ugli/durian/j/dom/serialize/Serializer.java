@@ -61,7 +61,7 @@ public class Serializer {
         else {
             stringBuffer.append(">");
             appendContent(element, stringBuffer, indentDepth);
-            if (element.isSimpleTextNode()) {
+            if (isSimpleTextNode(element)) {
                 stringBuffer.append("</");
             }
             else {
@@ -71,6 +71,10 @@ public class Serializer {
             stringBuffer.append(qName);
             stringBuffer.append(">");
         }
+    }
+
+    public boolean isSimpleTextNode(final Element element) {
+        return element.getTexts().size() == 1 && element.getContent().size() == 1;
     }
 
     private String getQName(final Element element, final boolean root) {

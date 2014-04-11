@@ -231,11 +231,6 @@ public abstract class AbstractMutableElement implements MutableElement {
     }
 
     @Override
-    public boolean isSimpleTextNode() {
-        return getTexts().size() == 1 && getContent().size() == 1;
-    }
-
-    @Override
     public <T extends Attribute> T selectAttribute(final String query) {
         return QueryManager.selectNode(this, query);
     }

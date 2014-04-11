@@ -42,9 +42,6 @@ public interface Element extends Content {
     // TODO remove
     Set<String> getUriSet();
 
-    // TODO remove
-    boolean isSimpleTextNode();
-
     <T extends Attribute> T selectAttribute(String query);
 
     <T extends Attribute> T selectAttributeClone(String query);
