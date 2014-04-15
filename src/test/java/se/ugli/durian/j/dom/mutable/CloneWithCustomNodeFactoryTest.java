@@ -12,7 +12,7 @@ import se.ugli.durian.j.dom.parser.ParserBuilder;
 
 public class CloneWithCustomNodeFactoryTest {
 
-    class TitleElement extends ElementImpl {
+    class TitleElement extends MutableElement {
 
         public TitleElement(final String name, final String uri, final NodeFactory nodeFactory) {
             super(name, uri, nodeFactory);
@@ -22,9 +22,8 @@ public class CloneWithCustomNodeFactoryTest {
 
     class QueryBindingAttribute extends MutableAttribute {
 
-        public QueryBindingAttribute(final String name, final String uri, final String value,
-                final NodeFactory nodeFactory) {
-            super(name, uri, value, nodeFactory);
+        public QueryBindingAttribute(final String name, final String uri, final String value) {
+            super(name, uri, value);
         }
 
     }
@@ -45,7 +44,7 @@ public class CloneWithCustomNodeFactoryTest {
         public <T extends Attribute> T createAttribute(final String name, final String uri, final Element parent,
                 final String value) {
             if (parent != null && parent.getName().equals("schema") && name.equals("queryBinding")) {
-                return (T) new QueryBindingAttribute(name, uri, value, this);
+                return (T) new QueryBindingAttribute(name, uri, value);
             }
             return super.createAttribute(name, uri, parent, value);
         }

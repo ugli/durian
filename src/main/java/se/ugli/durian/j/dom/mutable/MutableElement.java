@@ -1,43 +1,383 @@
 package se.ugli.durian.j.dom.mutable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import se.ugli.durian.j.dom.collections.CollectionObserver;
+import se.ugli.durian.j.dom.collections.ListSynchronizer;
+import se.ugli.durian.j.dom.collections.ObservableCollection;
+import se.ugli.durian.j.dom.collections.ObservableList;
+import se.ugli.durian.j.dom.collections.ObservableSet;
 import se.ugli.durian.j.dom.node.Attribute;
+import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
+import se.ugli.durian.j.dom.node.Node;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
+import se.ugli.durian.j.dom.query.QueryManager;
+import se.ugli.durian.j.dom.utils.ElementCloneCommand;
 
-public interface MutableElement extends Element, MutableNode, CollectionObserver<MutableNode> {
+public class MutableElement implements Element, MutableNode, CollectionObserver<MutableNode> {
 
-    <T extends Attribute> T addAttribute(String name, String value);
+    private final Set<Attribute> attributes = new ObservableSet<Attribute>(this);
+    private final ObservableList<Content> content = new ObservableList<Content>(this);
+    private final ObservableList<Element> elements = new ObservableList<Element>(this);
+    private String name;
+    private final NodeFactory nodeFactory;
+    private Element parent;
+    private final ObservableList<Text> texts = new ObservableList<Text>(this);
+    private String uri;
 
-    <T extends Attribute> T addAttribute(String name, String value, NodeFactory nodeFactory);
+    public MutableElement(final String name, final String uri, final NodeFactory nodeFactory) {
+        this.name = name;
+        this.uri = uri;
+        this.nodeFactory = nodeFactory;
+        ListSynchronizer.applyLiveUpdates(elements, content);
+        ListSynchronizer.applyLiveUpdates(texts, content);
+    }
 
-    <T extends Attribute> T addAttribute(String name, String uri, String value);
+    public <T extends Attribute> T addAttribute(final String name, final String value) {
+        return addAttribute(name, uri, value, nodeFactory);
+    }
 
-    <T extends Attribute> T addAttribute(String name, String uri, String value, NodeFactory nodeFactory);
+    public <T extends Attribute> T addAttribute(final String name, final String value, final NodeFactory nodeFactory) {
+        return addAttribute(name, uri, value, nodeFactory);
+    }
 
-    <T extends Element> T addElement(String name);
+    public <T extends Attribute> T addAttribute(final String name, final String uri, final String value) {
+        return addAttribute(name, uri, value, nodeFactory);
+    }
 
-    <T extends Element> T addElement(String name, NodeFactory nodeFactory);
+    public <T extends Attribute> T addAttribute(final String name, final String uri, final String value,
+            final NodeFactory nodeFactory) {
+        final T attribute = nodeFactory.createAttribute(name, uri, this, value);
+        getAttributes().add(attribute);
+        return attribute;
+    }
 
-    <T extends Element> T addElement(String name, String uri);
+    public <T extends Element> T addElement(final String name) {
+        return addElement(name, uri, nodeFactory);
+    }
 
-    <T extends Element> T addElement(String name, String uri, NodeFactory nodeFactory);
+    public <T extends Element> T addElement(final String name, final NodeFactory nodeFactory) {
+        return addElement(name, uri, nodeFactory);
+    }
 
-    <T extends Text> T addText(String value);
+    public <T extends Element> T addElement(final String name, final String uri) {
+        return addElement(name, uri, nodeFactory);
+    }
 
-    <T extends Text> T addText(String value, NodeFactory nodeFactory);
+    public <T extends Element> T addElement(final String name, final String uri, final NodeFactory nodeFactory) {
+        final T element = nodeFactory.createElement(name, uri, this);
+        getElements().add(element);
+        return element;
+    }
 
-    void setAttributeValue(String attributeName, String value);
+    public <T extends Text> T addText(final String value) {
+        return addText(value, nodeFactory);
+    }
 
-    void setElement(final Element element, final String elementName);
+    public <T extends Text> T addText(final String value, final NodeFactory nodeFactory) {
+        final T text = nodeFactory.createText(this, value);
+        getTexts().add(text);
+        return text;
+    }
 
-    void setName(String name);
+    @Override
+    public <T extends Element> T cloneElement() {
+        return ElementCloneCommand.execute(name, this, nodeFactory);
+    }
 
-    void setUri(String uri);
+    @Override
+    public <T extends Element> T cloneElement(final NodeFactory nodeFactory) {
+        return ElementCloneCommand.execute(name, this, nodeFactory);
+    }
 
-    void sortElements(final Map<String, Integer> elementNameSortMap);
+    @Override
+    public <T extends Element> T cloneElement(final String elementName) {
+        return ElementCloneCommand.execute(elementName, this, nodeFactory);
+    }
+
+    @Override
+    public <T extends Element> T cloneElement(final String elementName, final NodeFactory nodeFactory) {
+        return ElementCloneCommand.execute(elementName, this, nodeFactory);
+    }
+
+    @SuppressWarnings("unused")
+    @Override
+    public void elementAdded(final ObservableCollection<MutableNode> list, final MutableNode node) {
+        node.setParent(this);
+    }
+
+    @SuppressWarnings("unused")
+    @Override
+    public void elementRemoved(final ObservableCollection<MutableNode> list, final Object object) {
+    }
+
+    @Override
+    public <T extends Attribute> T getAttribute(final String attributeName) {
+        final Set<T> attributes = getAttributes();
+        for (final T attribute : attributes) {
+            if (attribute.getName().equals(attributeName)) {
+                return attribute;
+            }
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends Attribute> Set<T> getAttributes() {
+        return (Set<T>) attributes;
+    }
+
+    @Override
+    public String getAttributeValue(final String attributeName) {
+        final Attribute attribute = getAttribute(attributeName);
+        if (attribute != null) {
+            return attribute.getValue();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Content> getContent() {
+        return content;
+    }
+
+    @Override
+    public <T extends Element> T getElement(final String elementName) {
+        for (final T element : this.<T> getElements()) {
+            if (element.getName().equals(elementName)) {
+                return element;
+            }
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends Element> List<T> getElements() {
+        return (List<T>) elements;
+    }
+
+    @Override
+    public <T extends Element> List<T> getElements(final String elementName) {
+        final List<T> result = new ArrayList<T>();
+        for (final T element : this.<T> getElements()) {
+            if (element.getName().equals(elementName)) {
+                result.add(element);
+            }
+        }
+        return Collections.unmodifiableList(result);
+    }
+
+    @Override
+    public String getElementText(final String elementName) {
+        final MutableElement element = getElement(elementName);
+        if (element != null && !element.getTexts().isEmpty()) {
+            final StringBuilder textBuilder = new StringBuilder();
+            for (final Text text : element.getTexts()) {
+                textBuilder.append(text.getValue());
+            }
+            return textBuilder.toString();
+        }
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends Element> T getParent() {
+        return (T) parent;
+    }
+
+    @Override
+    public String getPath() {
+        final String elementPath = "/" + name;
+        if (parent == null) {
+            return elementPath;
+        }
+        return parent.getPath() + elementPath;
+    }
+
+    @Override
+    public String getPath(final String childPath) {
+        if (childPath.startsWith("/")) {
+            return getPath() + childPath;
+        }
+        return getPath() + "/" + childPath;
+    }
+
+    @Override
+    public String getRelativePath(final String childPath) {
+        if (childPath.startsWith("/")) {
+            return name + childPath;
+        }
+        return name + "/" + childPath;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends Text> List<T> getTexts() {
+        return (List<T>) texts;
+    }
+
+    @Override
+    public String getUri() {
+        return uri;
+    }
+
+    @Override
+    public <T extends Attribute> T selectAttribute(final String query) {
+        return QueryManager.selectNode(this, query);
+    }
+
+    @Override
+    public <T extends Attribute> T selectAttributeClone(final String query) {
+        return QueryManager.selectNodeClone(this, query, nodeFactory);
+    }
+
+    @Override
+    public <T extends Attribute> T selectAttributeClone(final String query, final NodeFactory nodeFactory) {
+        return QueryManager.selectNodeClone(this, query, nodeFactory);
+    }
+
+    @Override
+    public <T extends Attribute> T selectAttributeClone(final String query, final NodeFactory nodeFactory,
+            final String attributeName) {
+        return QueryManager.selectNodeClone(this, query, nodeFactory, attributeName);
+    }
+
+    @Override
+    public <T extends Attribute> List<T> selectAttributes(final String query) {
+        return QueryManager.selectNodes(this, query);
+    }
+
+    @Override
+    public String selectAttributeValue(final String query) {
+        final Attribute attribute = QueryManager.selectNode(this, query);
+        if (attribute != null) {
+            return attribute.getValue();
+        }
+        return null;
+    }
+
+    @Override
+    public <T extends Element> T selectElement(final String query) {
+        return QueryManager.selectNode(this, query);
+    }
+
+    @Override
+    public <T extends Element> T selectElementClone(final String query) {
+        return QueryManager.selectNodeClone(this, query, nodeFactory);
+    }
+
+    @Override
+    public <T extends Element> T selectElementClone(final String query, final NodeFactory nodeFactory) {
+        return QueryManager.selectNodeClone(this, query, nodeFactory);
+    }
+
+    @Override
+    public <T extends Attribute> T selectElementClone(final String query, final NodeFactory nodeFactory,
+            final String elementName) {
+        return QueryManager.selectNodeClone(this, query, nodeFactory, elementName);
+    }
+
+    @Override
+    public <T extends Element> List<T> selectElements(final String query) {
+        return QueryManager.selectNodes(this, query);
+    }
+
+    @Override
+    public <T extends Node> T selectNode(final String query) {
+        return QueryManager.selectNode(this, query);
+    }
+
+    @Override
+    public <T extends Node> List<T> selectNodes(final String query) {
+        return QueryManager.selectNodes(this, query);
+    }
+
+    @Override
+    public String selectText(final String query) {
+        return QueryManager.selectText(this, query);
+    }
+
+    @Override
+    public List<String> selectTexts(final String query) {
+        return QueryManager.selectTexts(this, query);
+    }
+
+    public void setAttributeValue(final String attributeName, final String value) {
+        final MutableAttribute attribute = getAttribute(attributeName);
+        if (attribute != null) {
+            if (value != null) {
+                attribute.setValue(value);
+            }
+            else {
+                getAttributes().remove(attribute);
+            }
+        }
+        else if (value != null) {
+            getAttributes().add(nodeFactory.createAttribute(attributeName, uri, this, value));
+        }
+    }
+
+    public void setElement(final Element element, final String elementName) {
+        final Element oldElement = getElement(elementName);
+        if (oldElement != null) {
+            getElements().remove(oldElement);
+        }
+        if (element != null) {
+            getElements().add(element);
+        }
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void setParent(final Element parent) {
+        this.parent = parent;
+    }
+
+    public void setUri(final String uri) {
+        this.uri = uri;
+    }
+
+    public void sortElements(final Map<String, Integer> elementNameSortMap) {
+        Collections.sort(getElements(), new Comparator<Element>() {
+
+            @Override
+            public int compare(final Element o1, final Element o2) {
+                final String name1 = o1.getName();
+                final String name2 = o2.getName();
+                Integer v1 = elementNameSortMap.get(name1);
+                if (v1 == null) {
+                    v1 = Integer.MAX_VALUE;
+                }
+                Integer v2 = elementNameSortMap.get(name2);
+                if (v2 == null) {
+                    v2 = Integer.MAX_VALUE;
+                }
+                return v1.compareTo(v2);
+            }
+        });
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[name=" + name + ", uri=" + uri + "]";
+    }
 
 }

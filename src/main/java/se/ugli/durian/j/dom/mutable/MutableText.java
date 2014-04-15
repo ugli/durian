@@ -1,23 +1,15 @@
 package se.ugli.durian.j.dom.mutable;
 
 import se.ugli.durian.j.dom.node.Element;
-import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
 public class MutableText implements Text, MutableNode {
 
     private Element parent;
     private final String value;
-    private NodeFactory nodeFactory;
 
-    public MutableText(final String value, final NodeFactory nodeFactory) {
+    public MutableText(final String value) {
         this.value = value;
-        this.nodeFactory = nodeFactory;
-    }
-
-    @Override
-    public NodeFactory getNodeFactory() {
-        return nodeFactory;
     }
 
     @SuppressWarnings("unchecked")
@@ -39,11 +31,6 @@ public class MutableText implements Text, MutableNode {
     @Override
     public void setParent(final Element parent) {
         this.parent = parent;
-    }
-
-    @Override
-    public void setNodeFactory(final NodeFactory nodeFactory) {
-        this.nodeFactory = nodeFactory;
     }
 
     @Override
