@@ -5,7 +5,7 @@
 	<artifactId>durian-java-dom</artifactId>
 	<packaging>jar</packaging>
 	<name>Durian DOM for Java</name>
-	<version>0.9.8</version>
+	<version>0.9.9-SNAPSHOT</version>
 	<description>Durian DOM for Java</description>
 	<url>https://github.com/ugli/durian-java-dom</url>
 	<licenses>
@@ -19,7 +19,7 @@
 		<connection>scm:git:git@github.com:ugli/durian-java-dom.git</connection>
 		<developerConnection>scm:git:git@github.com:ugli/durian-java-dom.git</developerConnection>
 		<url>git@github.com:ugli/durian.git</url>
-		<tag>durian-java-dom-0.9.8</tag>
+		<tag>durian-java-dom-0.9.1</tag>
 	</scm>
 	<developers>
 		<developer>
