@@ -12,8 +12,6 @@ import se.ugli.durian.j.dom.node.NodeFactory;
 
 public final class ParserBuilder {
 
-    private static SAXParser defaultSaxParser;
-
     public static ParserBuilder apply() {
         return new ParserBuilder();
     }
@@ -54,20 +52,17 @@ public final class ParserBuilder {
     }
 
     private SAXParser getDefaultSaxParser() {
-        if (defaultSaxParser == null) {
-            try {
-                final SAXParserFactory factory = SAXParserFactory.newInstance();
-                factory.setNamespaceAware(true);
-                defaultSaxParser = factory.newSAXParser();
-            }
-            catch (final ParserConfigurationException e) {
-                throw new RuntimeException(e);
-            }
-            catch (final SAXException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            final SAXParserFactory factory = SAXParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+            return factory.newSAXParser();
         }
-        return defaultSaxParser;
+        catch (final ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+        catch (final SAXException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
