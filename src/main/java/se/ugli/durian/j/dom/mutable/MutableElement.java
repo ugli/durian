@@ -335,7 +335,9 @@ public class MutableElement implements Element, MutableNode, CollectionObserver<
     public void setElement(final Element element, final String elementName) {
         final Element oldElement = getElement(elementName);
         if (oldElement != null) {
-            getElements().remove(oldElement);
+            elements.remove(oldElement);
+            content.remove(oldElement);
+
         }
         if (element != null) {
             getElements().add(element);
