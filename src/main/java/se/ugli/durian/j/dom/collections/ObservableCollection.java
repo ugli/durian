@@ -80,6 +80,7 @@ public abstract class ObservableCollection<E> implements Collection<E> {
 
     @Override
     public boolean remove(final Object o) {
+        notifyRemove(o);
         return backendCollecion.remove(o);
     }
 

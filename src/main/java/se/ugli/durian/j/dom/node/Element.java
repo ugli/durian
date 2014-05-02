@@ -13,7 +13,7 @@ public interface Element extends Content {
 
     <T extends Element> T cloneElement(String elementName, NodeFactory nodeFactory);
 
-    <T extends Attribute> T getAttribute(String attributeName);
+    <T extends Attribute> T getAttributeByName(String attributeName);
 
     <T extends Attribute> Set<T> getAttributes();
 
@@ -21,11 +21,11 @@ public interface Element extends Content {
 
     List<Content> getContent();
 
-    <T extends Element> T getElement(String elementName);
+    <T extends Element> T getElementByName(String elementName);
 
     <T extends Element> List<T> getElements();
 
-    <T extends Element> List<T> getElements(String elementName);
+    <T extends Element> List<T> getElementsByName(String elementName);
 
     String getElementText(final String elementName);
 
@@ -47,9 +47,9 @@ public interface Element extends Content {
 
     <T extends Attribute> T selectAttributeClone(String query, NodeFactory nodeFactory, String attributeName);
 
-    String selectAttributeValue(String query);
-
     <T extends Attribute> List<T> selectAttributes(String query);
+
+    String selectAttributeValue(String query);
 
     <T extends Element> T selectElement(String query);
 

@@ -52,6 +52,7 @@ public class ObservableList<E> extends ObservableCollection<E> implements List<E
     @Override
     public E set(final int index, final E element) {
         notifyRemove(backendList.get(index));
+        // TODO not correct index
         notifyAdd(element);
         return backendList.set(index, element);
     }

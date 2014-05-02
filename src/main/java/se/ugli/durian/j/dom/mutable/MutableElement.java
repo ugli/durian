@@ -3,6 +3,7 @@ package se.ugli.durian.j.dom.mutable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,19 +24,30 @@ import se.ugli.durian.j.dom.utils.ElementCloneCommand;
 
 public class MutableElement implements Element, MutableNode, CollectionObserver<MutableNode> {
 
-    private final Set<Attribute> attributes = new ObservableSet<Attribute>(this);
-    private final ObservableList<Content> content = new ObservableList<Content>(this);
-    private final ObservableList<Element> elements = new ObservableList<Element>(this);
+    private final Set<Attribute> attributes;
+    private final ObservableList<Content> content;
+    private final ObservableList<Element> elements;
+    private final ObservableList<Text> texts;
     private String name;
     private final NodeFactory nodeFactory;
-    private Element parent;
-    private final ObservableList<Text> texts = new ObservableList<Text>(this);
     private String uri;
+    private Element parent;
 
     public MutableElement(final String name, final String uri, final NodeFactory nodeFactory) {
+        this(name, uri, nodeFactory, new LinkedHashSet<Attribute>(), new ArrayList<Content>(),
+                new ArrayList<Element>(), new ArrayList<Text>());
+    }
+
+    public MutableElement(final String name, final String uri, final NodeFactory nodeFactory,
+            final Set<Attribute> attributeBackedSet, final List<Content> contentBackendList,
+            final List<Element> elementBackendList, final List<Text> textBackendList) {
         this.name = name;
         this.uri = uri;
         this.nodeFactory = nodeFactory;
+        attributes = new ObservableSet<Attribute>(attributeBackedSet, this);
+        content = new ObservableList<Content>(contentBackendList, this);
+        elements = new ObservableList<Element>(elementBackendList, this);
+        texts = new ObservableList<Text>(textBackendList, this);
         ListSynchronizer.applyLiveUpdates(elements, content);
         ListSynchronizer.applyLiveUpdates(texts, content);
     }
@@ -119,7 +131,7 @@ public class MutableElement implements Element, MutableNode, CollectionObserver<
     }
 
     @Override
-    public <T extends Attribute> T getAttribute(final String attributeName) {
+    public <T extends Attribute> T getAttributeByName(final String attributeName) {
         final Set<T> attributes = getAttributes();
         for (final T attribute : attributes) {
             if (attribute.getName().equals(attributeName)) {
@@ -137,7 +149,7 @@ public class MutableElement implements Element, MutableNode, CollectionObserver<
 
     @Override
     public String getAttributeValue(final String attributeName) {
-        final Attribute attribute = getAttribute(attributeName);
+        final Attribute attribute = getAttributeByName(attributeName);
         if (attribute != null) {
             return attribute.getValue();
         }
@@ -149,14 +161,17 @@ public class MutableElement implements Element, MutableNode, CollectionObserver<
         return content;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public <T extends Element> T getElement(final String elementName) {
-        for (final T element : this.<T> getElements()) {
-            if (element.getName().equals(elementName)) {
-                return element;
-            }
+    public <T extends Element> T getElementByName(final String elementName) {
+        final List<Element> elementsByName = getElementsByName(elementName);
+        if (elementsByName.isEmpty()) {
+            return null;
         }
-        return null;
+        else if (elementsByName.size() == 1) {
+            return (T) elementsByName.get(0);
+        }
+        throw new IllegalStateException("There is more than one element with name: " + elementName);
     }
 
     @SuppressWarnings("unchecked")
@@ -166,7 +181,7 @@ public class MutableElement implements Element, MutableNode, CollectionObserver<
     }
 
     @Override
-    public <T extends Element> List<T> getElements(final String elementName) {
+    public <T extends Element> List<T> getElementsByName(final String elementName) {
         final List<T> result = new ArrayList<T>();
         for (final T element : this.<T> getElements()) {
             if (element.getName().equals(elementName)) {
@@ -178,7 +193,7 @@ public class MutableElement implements Element, MutableNode, CollectionObserver<
 
     @Override
     public String getElementText(final String elementName) {
-        final MutableElement element = getElement(elementName);
+        final Element element = getElementByName(elementName);
         if (element != null && !element.getTexts().isEmpty()) {
             final StringBuilder textBuilder = new StringBuilder();
             for (final Text text : element.getTexts()) {
@@ -234,6 +249,28 @@ public class MutableElement implements Element, MutableNode, CollectionObserver<
     @Override
     public String getUri() {
         return uri;
+    }
+
+    public int removeByQuery(final String query) {
+        final List<Node> nodes = selectNodes(query);
+        elements.removeAll(nodes);
+        texts.removeAll(nodes);
+        attributes.removeAll(nodes);
+        return nodes.size();
+    }
+
+    public boolean removeElementByName(final String elementName) {
+        final Element elementByName = getElementByName(elementName);
+        if (elementByName != null) {
+            return elements.remove(elementByName);
+        }
+        return false;
+    }
+
+    public int removeElementsByName(final String elementName) {
+        final List<Element> elementsByName = getElementsByName(elementName);
+        elements.removeAll(elementsByName);
+        return elementsByName.size();
     }
 
     @Override
@@ -317,28 +354,43 @@ public class MutableElement implements Element, MutableNode, CollectionObserver<
         return QueryManager.selectTexts(this, query);
     }
 
-    public void setAttributeValue(final String attributeName, final String value) {
-        final MutableAttribute attribute = getAttribute(attributeName);
+    public void setAttributeValueByName(final String attributeName, final String value) {
+        final Attribute attribute = getAttributeByName(attributeName);
         if (attribute != null) {
-            if (value != null) {
-                attribute.setValue(value);
-            }
-            else {
-                getAttributes().remove(attribute);
-            }
+            setAttributeValue(attribute, value);
         }
         else if (value != null) {
             getAttributes().add(nodeFactory.createAttribute(attributeName, uri, this, value));
         }
     }
 
-    public void setElement(final Element element, final String elementName) {
-        final Element oldElement = getElement(elementName);
-        if (oldElement != null) {
-            elements.remove(oldElement);
-            content.remove(oldElement);
-
+    public boolean setAttributeValueByQuery(final String query, final String value) {
+        final Attribute attribute = selectAttribute(query);
+        if (attribute != null) {
+            setAttributeValue(attribute, value);
         }
+        return false;
+    }
+
+    private static void setAttributeValue(final Attribute attribute, final String value) {
+        if (value != null && attribute instanceof MutableAttribute) {
+            final MutableAttribute mutableAttribute = (MutableAttribute) attribute;
+            mutableAttribute.setValue(value);
+        }
+        else if (value != null && !(attribute instanceof MutableAttribute)) {
+            throw new IllegalStateException("Attribute: " + attribute + " isn't mutable.");
+        }
+        else {
+            final Element parent = attribute.getParent();
+            parent.getAttributes().remove(attribute);
+        }
+    }
+
+    public void setElementByName(final String elementName, final Element element) {
+        if (element != null && !element.getName().equals(elementName)) {
+            throw new IllegalStateException(elementName + "!=" + element.getName());
+        }
+        removeElementByName(elementName);
         if (element != null) {
             getElements().add(element);
         }
