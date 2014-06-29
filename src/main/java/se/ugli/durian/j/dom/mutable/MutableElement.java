@@ -324,7 +324,7 @@ public class MutableElement implements Element, MutableNode, CollectionObserver<
     }
 
     @Override
-    public <T extends Attribute> T selectElementClone(final String query, final NodeFactory nodeFactory,
+    public <T extends Element> T selectElementClone(final String query, final NodeFactory nodeFactory,
             final String elementName) {
         return QueryManager.selectNodeClone(this, query, nodeFactory, elementName);
     }
