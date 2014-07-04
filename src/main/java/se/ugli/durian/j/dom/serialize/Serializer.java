@@ -137,12 +137,16 @@ public class Serializer {
 
     private void appendAttributes(final Element element, final StringBuilder stringBuffer) {
         for (final Attribute attribute : new ArrayList<Attribute>(element.getAttributes())) {
-            stringBuffer.append(" ");
-            // TODO handle qname !?
-            stringBuffer.append(attribute.getName());
-            stringBuffer.append("=\"");
-            stringBuffer.append(xmlEncode(attribute.getValue()));
-            stringBuffer.append("\"");
+            final String attributeValue = attribute.getValue();
+            if (attributeValue != null) {
+                final String attributeName = attribute.getName();
+                stringBuffer.append(" ");
+                // TODO handle qname !?
+                stringBuffer.append(attributeName);
+                stringBuffer.append("=\"");
+                stringBuffer.append(xmlEncode(attributeValue));
+                stringBuffer.append("\"");
+            }
         }
     }
 
