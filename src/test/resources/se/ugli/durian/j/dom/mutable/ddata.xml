@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns0:distributionsdata xmlns:ns0="http://www.folksam.se/schemas/j80">
+  <eventRef>
+    <id>KF 5953069-001</id>
+    <version>2015-09-08-12.27.38.375482</version>
+    <TypeOfId>policyId</TypeOfId>
+    <ReferenceData/>
+  </eventRef>
+  <utskriftsinfo utskriftsspecifikation="grupp" bearbetningsdatum="2015-09-08" systemId="O24"/>
+  <gruppforsakringsavtal gfavtalsnummer="GF 14383-00000" forsakringsberattigade="Förbundets medlemmar">
+    <avtalsslutandePart namn="SRAT"/>
+    <individavtal avtalsnummer="KF-5953069-001">
+      <parter>
+        <gruppmedlem>
+          <partref typ="KUNDNUMMER" varde="GBB227942"/>
+        </gruppmedlem>
+      </parter>
+      <produkt forsakrad="GRUPPMEDLEM">
+        <produkttyp kortkod="KHEM" klartext="Hemförsäkring"/>
+        <premie>73.00</premie>
+      </produkt>
+    </individavtal>
+  </gruppforsakringsavtal>
+</ns0:distributionsdata>

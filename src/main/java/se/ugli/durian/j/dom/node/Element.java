@@ -1,7 +1,6 @@
 package se.ugli.durian.j.dom.node;
 
 import java.util.List;
-import java.util.Set;
 
 public interface Element extends Content {
 
@@ -15,17 +14,17 @@ public interface Element extends Content {
 
     <T extends Attribute> T getAttributeByName(String attributeName);
 
-    <T extends Attribute> Set<T> getAttributes();
+    <T extends Attribute> Iterable<T> getAttributes();
 
     String getAttributeValue(String attributeName);
 
-    List<Content> getContent();
+    Iterable<Content> getContent();
 
     <T extends Element> T getElementByName(String elementName);
 
-    <T extends Element> List<T> getElements();
+    <T extends Element> Iterable<T> getElements();
 
-    <T extends Element> List<T> getElementsByName(String elementName);
+    <T extends Element> Iterable<T> getElementsByName(String elementName);
 
     String getElementText(final String elementName);
 
@@ -35,7 +34,7 @@ public interface Element extends Content {
 
     String getRelativePath(String childPath);
 
-    <T extends Text> List<T> getTexts();
+    <T extends Text> Iterable<T> getTexts();
 
     String getUri();
 

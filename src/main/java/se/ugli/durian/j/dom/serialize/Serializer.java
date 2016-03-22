@@ -1,6 +1,7 @@
 package se.ugli.durian.j.dom.serialize;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -25,9 +26,8 @@ public class Serializer {
     private Serializer(final Map<String, String> prefixMapping, final int indentSize) {
         this.prefixMapping = prefixMapping;
         final StringBuilder tabBuilder = new StringBuilder();
-        for (int i = 0; i < indentSize; i++) {
+        for (int i = 0; i < indentSize; i++)
             tabBuilder.append(" ");
-        }
         tab = tabBuilder.toString();
     }
 
@@ -47,25 +47,21 @@ public class Serializer {
         return stringBuffer.toString();
     }
 
-    private void serialize(final Element element, final StringBuilder stringBuffer, final int indentDepth,
-            final boolean root) {
+    private void serialize(final Element element, final StringBuilder stringBuffer, final int indentDepth, final boolean root) {
         stringBuffer.append("\n");
         appendWithTab("<", stringBuffer, indentDepth);
         final String qName = getQName(element, root);
         stringBuffer.append(qName);
-        if (root) {
+        if (root)
             appendPrefixMapping(element, stringBuffer);
-        }
         appendAttributes(element, stringBuffer);
-        if (element.getContent().isEmpty()) {
+        if (!element.getContent().iterator().hasNext())
             stringBuffer.append("/>");
-        }
         else {
             stringBuffer.append(">");
             appendContent(element, stringBuffer, indentDepth);
-            if (isSimpleTextNode(element)) {
+            if (isSimpleTextNode(element))
                 stringBuffer.append("</");
-            }
             else {
                 stringBuffer.append("\n");
                 appendWithTab("</", stringBuffer, indentDepth);
@@ -76,26 +72,26 @@ public class Serializer {
     }
 
     private boolean isSimpleTextNode(final Element element) {
-        return element.getTexts().size() == 1 && element.getContent().size() == 1;
+        final Iterator<Content> iterator = element.getContent().iterator();
+        if (iterator.hasNext())
+            return iterator.next() instanceof Text && !iterator.hasNext();
+        return false;
     }
 
     public Set<String> getUriSet(final Element e) {
         final Set<String> result = new LinkedHashSet<String>();
-        if (e.getUri() != null) {
+        if (e.getUri() != null)
             result.add(e.getUri());
-        }
-        for (final Element element : e.getElements()) {
+        for (final Element element : e.getElements())
             result.addAll(getUriSet(element));
-        }
         return result;
     }
 
     private String getQName(final Element element, final boolean root) {
         if (root) {
             final String prefix = getPrefix(element);
-            if (prefix != null) {
+            if (prefix != null)
                 return prefix + ":" + element.getName();
-            }
         }
         return element.getName();
     }
@@ -115,9 +111,8 @@ public class Serializer {
     }
 
     private void appendWithTab(final String str, final StringBuilder stringBuffer, final int indentDepth) {
-        for (int step = 0; step < indentDepth; step++) {
+        for (int step = 0; step < indentDepth; step++)
             stringBuffer.append(tab);
-        }
         stringBuffer.append(str);
     }
 
@@ -136,7 +131,7 @@ public class Serializer {
     }
 
     private void appendAttributes(final Element element, final StringBuilder stringBuffer) {
-        for (final Attribute attribute : new ArrayList<Attribute>(element.getAttributes())) {
+        for (final Attribute attribute : element.getAttributes()) {
             final String attributeValue = attribute.getValue();
             if (attributeValue != null) {
                 final String attributeName = attribute.getName();
@@ -151,18 +146,15 @@ public class Serializer {
     }
 
     private void appendContent(final Element element, final StringBuilder stringBuffer, final int indentDepth) {
-        for (final Content content : new ArrayList<Content>(element.getContent())) {
-            if (content instanceof Element) {
+        for (final Content content : element.getContent())
+            if (content instanceof Element)
                 serialize((Element) content, stringBuffer, indentDepth + 1, false);
-            }
             else if (content instanceof Text) {
                 final String textValue = ((Text) content).getValue();
                 stringBuffer.append(xmlEncode(textValue));
             }
-            else {
+            else
                 throw new IllegalStateException(content.getClass().getName());
-            }
-        }
     }
 
     private String xmlEncode(final String textValue) {

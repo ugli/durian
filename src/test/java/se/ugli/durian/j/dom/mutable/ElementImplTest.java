@@ -20,8 +20,8 @@ public class ElementImplTest {
     public void selectClone() {
         final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
         final Element elementClone = element.selectElementClone("/schema/title");
-        assertNotEquals(elementClone, element.getElements().get(0));
-        assertEquals("Schema for Purchase Order Example", elementClone.getTexts().get(0).getValue());
+        assertNotEquals(elementClone, element.getElements().iterator().next());
+        assertEquals("Schema for Purchase Order Example", elementClone.getTexts().iterator().next().getValue());
     }
 
 }

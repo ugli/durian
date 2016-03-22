@@ -1,7 +1,6 @@
 package se.ugli.durian.j.dom.parser;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Stack;
 
 import org.xml.sax.Attributes;
@@ -10,6 +9,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import se.ugli.durian.j.dom.mutable.MutableElement;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
@@ -17,7 +17,7 @@ import se.ugli.durian.j.dom.node.Text;
 
 class SaxHandler extends DefaultHandler {
 
-    private final Stack<Element> stack = new Stack<Element>();
+    private final Stack<MutableElement> stack = new Stack<MutableElement>();
     private final NodeFactory nodeFactory;
     private final ErrorHandler errorHandler;
     Element root;
@@ -29,22 +29,17 @@ class SaxHandler extends DefaultHandler {
 
     @SuppressWarnings("unused")
     @Override
-    public void startElement(final String uri, final String localName, final String qName,
-            final Attributes saxAttributes) {
-        final Element parent = stack.isEmpty() ? null : stack.peek();
+    public void startElement(final String uri, final String localName, final String qName, final Attributes saxAttributes) {
+        final MutableElement parent = stack.isEmpty() ? null : stack.peek();
         final String uri2 = uri == null || uri.trim().isEmpty() ? null : uri.trim();
-        final Element element = nodeFactory.createElement(localName, uri2, parent);
-        for (final Attribute attribute : new AttributesFactory(nodeFactory, element, saxAttributes).create()) {
-            element.getAttributes().add(attribute);
-        }
+        final MutableElement element = nodeFactory.createElement(localName, uri2, parent);
+        for (final Attribute attribute : new AttributesFactory(nodeFactory, element, saxAttributes).create())
+            element.add(attribute);
         stack.push(element);
-        if (parent != null) {
-            final List<Element> elements = parent.getElements();
-            elements.add(element);
-        }
-        else {
+        if (parent != null)
+            parent.add(element);
+        else
             root = element;
-        }
     }
 
     @SuppressWarnings("unused")
@@ -58,9 +53,9 @@ class SaxHandler extends DefaultHandler {
         final String str = new String(Arrays.copyOfRange(ch, start, start + length));
         final String trimedStr = str.trim();
         if (trimedStr.length() > 0) {
-            final Element element = stack.peek();
+            final MutableElement element = stack.peek();
             final Text text = nodeFactory.createText(element, trimedStr);
-            element.getTexts().add(text);
+            element.add(text);
         }
     }
 
