@@ -1,11 +1,10 @@
 package se.ugli.durian.j.dom.mutable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import se.ugli.durian.j.dom.node.Attribute;
@@ -13,6 +12,7 @@ import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Node;
 import se.ugli.durian.j.dom.node.NodeFactory;
+import se.ugli.durian.j.dom.node.NodeListener;
 import se.ugli.durian.j.dom.node.Text;
 import se.ugli.durian.j.dom.query.QueryManager;
 import se.ugli.durian.j.dom.utils.ElementCloneCommand;
@@ -25,11 +25,45 @@ public class MutableElement implements Element, MutableNode {
     private final NodeFactory nodeFactory;
     private String uri;
     private Element parent;
+    private final List<NodeListener> nodeListeners = new ArrayList<NodeListener>();
 
     public MutableElement(final String name, final String uri, final NodeFactory nodeFactory) {
         this.name = name;
         this.uri = uri;
         this.nodeFactory = nodeFactory;
+        nodeListeners.add(new SetParentListener(this));
+    }
+
+    private static class SetParentListener implements NodeListener {
+
+        private final Element parent;
+
+        SetParentListener(final Element parent) {
+            this.parent = parent;
+        }
+
+        @Override
+        public void nodeAdded(final Node node) {
+            ((MutableNode) node).setParent(parent);
+        }
+
+        @Override
+        public void nodeRemoved(final Node node) {
+            ((MutableNode) node).setParent(null);
+        }
+
+    }
+
+    public void addListener(final NodeListener listener) {
+        nodeListeners.add(listener);
+    }
+
+    public void removeListener(final NodeListener listener) {
+        nodeListeners.add(listener);
+    }
+
+    public Iterable<NodeListener> getNodeListeners() {
+        return Collections.unmodifiableList(nodeListeners);
     }
 
     public void add(final Node node) {
@@ -37,13 +71,38 @@ public class MutableElement implements Element, MutableNode {
             content.add((Content) node);
         else if (node instanceof Attribute)
             attributes.add((Attribute) node);
-        ((MutableNode) node).setParent(this);
+        for (final NodeListener listener : nodeListeners)
+            listener.nodeAdded(node);
     }
 
-    public void remove(final Node c) {
-        content.remove(c);
-        attributes.remove(c);
-        ((MutableNode) c).setParent(null);
+    public void addAll(final Collection<? extends Node> nodes) {
+        for (final Node node : nodes)
+            add(node);
+    }
+
+    public void remove(final Node node) {
+        if (node instanceof Content)
+            content.remove(node);
+        if (node instanceof Attribute)
+            attributes.remove(node);
+        for (final NodeListener listener : nodeListeners)
+            listener.nodeAdded(node);
+    }
+
+    public void removeAll(final Collection<? extends Node> nodes) {
+        for (final Node node : nodes)
+            remove(node);
+    }
+
+    public void removeAll(final Class<? extends Node> type) {
+        if (type.isAssignableFrom(Attribute.class))
+            for (final Attribute attribute : attributes)
+                if (type.isInstance(attribute))
+                    remove(attribute);
+        if (type.isAssignableFrom(Content.class))
+            for (final Content content : this.content)
+                if (type.isInstance(content))
+                    remove(content);
     }
 
     public <T extends Attribute> T addAttribute(final String name, final String value) {
@@ -380,27 +439,30 @@ public class MutableElement implements Element, MutableNode {
         this.uri = uri;
     }
 
-    @Deprecated
-    public void sortElements(final Map<String, Integer> elementNameSortMap) {
-        Collections.sort(content, new Comparator<Content>() {
+    @Override
+    public boolean hasAttributes() {
+        return !attributes.isEmpty();
+    }
 
-            @Override
-            public int compare(final Content c1, final Content c2) {
-                if (c1 instanceof Text || c2 instanceof Text)
-                    return -1;
-                final Element o1 = (Element) c1;
-                final Element o2 = (Element) c2;
-                final String name1 = o1.getName();
-                final String name2 = o2.getName();
-                Integer v1 = elementNameSortMap.get(name1);
-                if (v1 == null)
-                    v1 = Integer.MAX_VALUE;
-                Integer v2 = elementNameSortMap.get(name2);
-                if (v2 == null)
-                    v2 = Integer.MAX_VALUE;
-                return v1.compareTo(v2);
-            }
-        });
+    @Override
+    public boolean hasElements() {
+        for (final Content content : this.content)
+            if (content instanceof Element)
+                return true;
+        return false;
+    }
+
+    @Override
+    public boolean hasTexts() {
+        for (final Content content : this.content)
+            if (content instanceof Text)
+                return true;
+        return false;
+    }
+
+    @Override
+    public boolean hasNodes() {
+        return !attributes.isEmpty() && !content.isEmpty();
     }
 
     @Override

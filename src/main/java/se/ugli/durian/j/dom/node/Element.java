@@ -16,6 +16,8 @@ public interface Element extends Content {
 
     <T extends Attribute> Iterable<T> getAttributes();
 
+    boolean hasAttributes();
+
     String getAttributeValue(String attributeName);
 
     Iterable<Content> getContent();
@@ -23,6 +25,8 @@ public interface Element extends Content {
     <T extends Element> T getElementByName(String elementName);
 
     <T extends Element> Iterable<T> getElements();
+
+    boolean hasElements();
 
     <T extends Element> Iterable<T> getElementsByName(String elementName);
 
@@ -35,6 +39,10 @@ public interface Element extends Content {
     String getRelativePath(String childPath);
 
     <T extends Text> Iterable<T> getTexts();
+
+    boolean hasTexts();
+
+    boolean hasNodes();
 
     String getUri();
 

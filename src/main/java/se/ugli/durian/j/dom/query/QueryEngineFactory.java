@@ -3,8 +3,6 @@ package se.ugli.durian.j.dom.query;
 import java.io.IOException;
 import java.io.InputStream;
 
-import se.ugli.durian.j.dom.query.simple.SimpleQueryEngine;
-
 public class QueryEngineFactory {
 
     private static QueryEngine queryEngine;
@@ -13,9 +11,8 @@ public class QueryEngineFactory {
     }
 
     static QueryEngine create() {
-        if (queryEngine == null) {
+        if (queryEngine == null)
             queryEngine = createFromSpi();
-        }
         return queryEngine;
     }
 
@@ -25,7 +22,7 @@ public class QueryEngineFactory {
 
     private static QueryEngine createFromSpi() {
         final InputStream classNameStream = QueryEngineFactory.class.getResourceAsStream(QueryEngine.SPI_RESOURCE_PATH);
-        if (classNameStream != null) {
+        if (classNameStream != null)
             try {
                 final byte[] bytes = new byte[classNameStream.available()];
                 classNameStream.read(bytes);
@@ -52,7 +49,6 @@ public class QueryEngineFactory {
                     throw new QueryEngineException(e);
                 }
             }
-        }
-        return new SimpleQueryEngine();
+        throw new IllegalStateException("No Query Engine defined");
     }
 }
