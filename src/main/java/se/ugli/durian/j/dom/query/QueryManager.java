@@ -19,19 +19,17 @@ public final class QueryManager {
     @SuppressWarnings("unchecked")
     public static <T extends Node> T selectNode(final Element element, final String query) {
         final List<? extends Node> nodes = selectNodes(element, query);
-        if (nodes.isEmpty()) {
+        if (nodes.isEmpty())
             return null;
-        }
-        else if (nodes.size() == 1) {
+        else if (nodes.size() == 1)
             return (T) nodes.get(0);
-        }
         throw new QueryException("Result contains " + nodes.size() + " nodes.");
     }
 
-    public static <T extends Node> T selectNodeClone(final Element element, final String query,
-            final NodeFactory nodeFactory, final String nodeName) {
+    public static <T extends Node> T selectNodeClone(final Element element, final String query, final NodeFactory nodeFactory,
+            final String nodeName) {
         final Node node = selectNode(element, query);
-        if (node != null) {
+        if (node != null)
             if (node instanceof Element) {
                 final Element elementNode = (Element) node;
                 return elementNode.cloneElement(nodeName, nodeFactory);
@@ -44,17 +42,14 @@ public final class QueryManager {
                 final Text textToClone = (Text) node;
                 return TextCloneCommand.execute(textToClone, null, nodeFactory);
             }
-            else {
+            else
                 throw new IllegalStateException();
-            }
-        }
         return null;
     }
 
-    public static <T extends Node> T selectNodeClone(final Element element, final String query,
-            final NodeFactory nodeFactory) {
+    public static <T extends Node> T selectNodeClone(final Element element, final String query, final NodeFactory nodeFactory) {
         final Node node = selectNode(element, query);
-        if (node != null) {
+        if (node != null)
             if (node instanceof Element) {
                 final Element elementNode = (Element) node;
                 return elementNode.cloneElement(nodeFactory);
@@ -67,10 +62,8 @@ public final class QueryManager {
                 final Text textToClone = (Text) node;
                 return TextCloneCommand.execute(textToClone, null, nodeFactory);
             }
-            else {
+            else
                 throw new IllegalStateException();
-            }
-        }
         return null;
     }
 
@@ -80,18 +73,16 @@ public final class QueryManager {
 
     public static String selectText(final Element element, final String path) {
         final Text text = selectNode(element, path);
-        if (text != null) {
+        if (text != null)
             return text.getValue();
-        }
         return null;
     }
 
     public static List<String> selectTexts(final Element element, final String path) {
         final List<Text> texts = selectNodes(element, path);
         final List<String> strings = new ArrayList<String>();
-        for (final Text text : texts) {
+        for (final Text text : texts)
             strings.add(text.getValue());
-        }
         return strings;
     }
 
