@@ -9,7 +9,6 @@ import java.io.Reader;
 import java.net.URL;
 
 import javax.xml.parsers.SAXParser;
-import javax.xml.transform.Source;
 
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
@@ -60,9 +59,8 @@ public class Parser {
 
     public <T extends Element> T parseResource(final String resource) {
         final InputStream resourceAsStream = getClass().getResourceAsStream(resource);
-        if (resourceAsStream != null) {
+        if (resourceAsStream != null)
             return parse(resourceAsStream);
-        }
         throw new RuntimeException("Resource not found: " + resource);
     }
 
@@ -104,14 +102,13 @@ public class Parser {
             throw new RuntimeException(e);
         }
         finally {
-            if (inputStream != null) {
+            if (inputStream != null)
                 try {
                     inputStream.close();
                 }
                 catch (final IOException e) {
                     e.printStackTrace();
                 }
-            }
         }
     }
 
@@ -127,12 +124,6 @@ public class Parser {
         catch (final SAXException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @SuppressWarnings("unused")
-    public Element parse(final Source source) {
-        // TODO
-        throw new UnsupportedOperationException("TBD");
     }
 
 }

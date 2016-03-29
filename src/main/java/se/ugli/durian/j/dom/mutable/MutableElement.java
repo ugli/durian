@@ -34,20 +34,14 @@ public class MutableElement implements Element, MutableNode {
         this.name = name;
         this.uri = uri;
         this.nodeFactory = nodeFactory;
-        nodeListeners.add(new SetParentListener(this));
+        nodeListeners.add(new SetParentListener());
     }
 
-    private static class SetParentListener implements NodeListener {
-
-        private final Element parent;
-
-        SetParentListener(final Element parent) {
-            this.parent = parent;
-        }
+    private class SetParentListener implements NodeListener {
 
         @Override
         public void nodeAdded(final Node node) {
-            ((MutableNode) node).setParent(parent);
+            ((MutableNode) node).setParent(MutableElement.this);
         }
 
         @Override
@@ -65,17 +59,16 @@ public class MutableElement implements Element, MutableNode {
         nodeListeners.add(listener);
     }
 
-    public Iterable<NodeListener> getNodeListeners() {
-        return Collections.unmodifiableList(nodeListeners);
-    }
-
-    public void add(final Node node) {
-        if (node instanceof Content)
-            content.add((Content) node);
-        else if (node instanceof Attribute)
-            attributes.add((Attribute) node);
-        for (final NodeListener listener : nodeListeners)
-            listener.nodeAdded(node);
+    public Node add(final Node node) {
+        if (node != null) {
+            if (node instanceof Content)
+                content.add((Content) node);
+            else if (node instanceof Attribute)
+                attributes.add((Attribute) node);
+            for (final NodeListener listener : nodeListeners)
+                listener.nodeAdded(node);
+        }
+        return node;
     }
 
     public void addAll(final Collection<? extends Node> nodes) {
@@ -83,29 +76,40 @@ public class MutableElement implements Element, MutableNode {
             add(node);
     }
 
-    public void remove(final Node node) {
-        if (node instanceof Content)
-            content.remove(node);
-        if (node instanceof Attribute)
-            attributes.remove(node);
-        for (final NodeListener listener : nodeListeners)
-            listener.nodeAdded(node);
+    public boolean remove(final Node node) {
+        boolean result = false;
+        if (node != null) {
+            if (node instanceof Content)
+                result = content.remove(node);
+            if (node instanceof Attribute)
+                result = attributes.remove(node);
+            for (final NodeListener listener : nodeListeners)
+                listener.nodeAdded(node);
+        }
+        return result;
     }
 
-    public void removeAll(final Collection<? extends Node> nodes) {
+    public int removeAll(final Collection<? extends Node> nodes) {
+        int result = 0;
         for (final Node node : nodes)
-            remove(node);
+            if (remove(node))
+                result++;
+        return result;
     }
 
-    public void removeAll(final Class<? extends Node> type) {
+    public int removeAll(final Class<? extends Node> type) {
+        int result = 0;
         if (type.isAssignableFrom(Attribute.class))
-            for (final Attribute attribute : attributes)
+            for (final Attribute attribute : new ArrayList<Attribute>(attributes))
                 if (type.isInstance(attribute))
-                    remove(attribute);
+                    if (remove(attribute))
+                        result++;
         if (type.isAssignableFrom(Content.class))
-            for (final Content content : this.content)
+            for (final Content content : new ArrayList<Content>(this.content))
                 if (type.isInstance(content))
-                    remove(content);
+                    if (remove(content))
+                        result++;
+        return result;
     }
 
     public <T extends Attribute> T addAttribute(final String name, final String value) {
@@ -122,9 +126,7 @@ public class MutableElement implements Element, MutableNode {
 
     @SuppressWarnings("unchecked")
     public <T extends Attribute> T addAttribute(final String name, final String uri, final String value, final NodeFactory nodeFactory) {
-        final MutableAttribute attribute = nodeFactory.createAttribute(name, uri, this, value);
-        add(attribute);
-        return (T) attribute;
+        return (T) add(nodeFactory.createAttribute(name, uri, this, value));
     }
 
     public <T extends Element> T addElement(final String name) {
@@ -141,9 +143,7 @@ public class MutableElement implements Element, MutableNode {
 
     @SuppressWarnings("unchecked")
     public <T extends Element> T addElement(final String name, final String uri, final NodeFactory nodeFactory) {
-        final MutableElement element = nodeFactory.createElement(name, uri, this);
-        add(element);
-        return (T) element;
+        return (T) add(nodeFactory.createElement(name, uri, this));
     }
 
     public <T extends Text> T addText(final String value) {
@@ -152,9 +152,7 @@ public class MutableElement implements Element, MutableNode {
 
     @SuppressWarnings("unchecked")
     public <T extends Text> T addText(final String value, final NodeFactory nodeFactory) {
-        final MutableText text = nodeFactory.createText(this, value);
-        add(text);
-        return (T) text;
+        return (T) add(nodeFactory.createText(this, value));
     }
 
     @Override
@@ -189,7 +187,7 @@ public class MutableElement implements Element, MutableNode {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Attribute> Iterable<T> getAttributes() {
-        return (Set<T>) Collections.unmodifiableSet(attributes);
+        return (Iterable<T>) Collections.unmodifiableSet(attributes);
     }
 
     @Override
@@ -296,23 +294,15 @@ public class MutableElement implements Element, MutableNode {
     }
 
     public int removeByQuery(final String query) {
-        final List<Node> nodes = selectNodes(query);
-        content.removeAll(nodes);
-        attributes.removeAll(nodes);
-        return nodes.size();
+        return removeAll(selectNodes(query));
     }
 
     public boolean removeElementByName(final String elementName) {
-        final Element elementByName = getElementByName(elementName);
-        if (elementByName != null)
-            return content.remove(elementByName);
-        return false;
+        return remove(getElementByName(elementName));
     }
 
     public int removeElementsByName(final String elementName) {
-        final List<Element> elementsByName = getElementsByName(elementName);
-        content.removeAll(elementsByName);
-        return elementsByName.size();
+        return removeAll(getElementsByName(elementName));
     }
 
     @Override
@@ -394,31 +384,18 @@ public class MutableElement implements Element, MutableNode {
     }
 
     public void setAttributeValueByName(final String attributeName, final String value) {
-        final Attribute attribute = getAttributeByName(attributeName);
+        final MutableAttribute attribute = getAttributeByName(attributeName);
         if (attribute != null)
-            setAttributeValue(attribute, value);
+            attribute.setValue(value);
         else if (value != null)
-            attributes.add(nodeFactory.createAttribute(attributeName, uri, this, value));
+            add(nodeFactory.createAttribute(attributeName, uri, this, value));
     }
 
     public boolean setAttributeValueByQuery(final String query, final String value) {
-        final Attribute attribute = selectAttribute(query);
+        final MutableAttribute attribute = selectAttribute(query);
         if (attribute != null)
-            setAttributeValue(attribute, value);
-        return false;
-    }
-
-    private static void setAttributeValue(final Attribute attribute, final String value) {
-        if (value != null && attribute instanceof MutableAttribute) {
-            final MutableAttribute mutableAttribute = (MutableAttribute) attribute;
-            mutableAttribute.setValue(value);
-        }
-        else if (value != null && !(attribute instanceof MutableAttribute))
-            throw new IllegalStateException("Attribute: " + attribute + " isn't mutable.");
-        else {
-            final MutableElement parent = attribute.getParent();
-            parent.attributes.remove(attribute);
-        }
+            attribute.setValue(value);
+        return attribute != null;
     }
 
     public void setElementByName(final String elementName, final Element element) {
@@ -426,7 +403,7 @@ public class MutableElement implements Element, MutableNode {
             throw new IllegalStateException(elementName + "!=" + element.getName());
         removeElementByName(elementName);
         if (element != null)
-            content.add(element);
+            add(element);
     }
 
     @Override
