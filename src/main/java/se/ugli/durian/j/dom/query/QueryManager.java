@@ -86,4 +86,8 @@ public final class QueryManager {
         return strings;
     }
 
+    public static boolean evaluteBoolean(final Element element, final String query) {
+        return QueryEngineFactory.create().evalateBoolean(element, query);
+    }
+
 }

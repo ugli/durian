@@ -1,6 +1,7 @@
 package se.ugli.durian.j.dom.node;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Element extends Content {
 
@@ -75,5 +76,9 @@ public interface Element extends Content {
     String selectText(String query);
 
     List<String> selectTexts(String query);
+
+    boolean evaluteBoolean(String query);
+
+    Map<String, String> getPrefixMapping();
 
 }

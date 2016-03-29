@@ -7,8 +7,8 @@ import se.ugli.durian.j.dom.node.Node;
 
 public interface QueryEngine {
 
-    public final static String SPI_RESOURCE_PATH = "/META-INF/services/se.ugli.durian.j.dom.query.engine";
-
     <T extends Node> List<T> selectNodes(Element element, String query) throws QueryException;
+
+    boolean evalateBoolean(Element element, String query) throws QueryException;
 
 }

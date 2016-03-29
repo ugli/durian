@@ -1,6 +1,8 @@
 package se.ugli.durian.j.dom.parser;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Stack;
 
 import org.xml.sax.Attributes;
@@ -18,6 +20,7 @@ import se.ugli.durian.j.dom.node.Text;
 class SaxHandler extends DefaultHandler {
 
     private final Stack<MutableElement> stack = new Stack<MutableElement>();
+    private final Map<String, String> prefixMapping = new LinkedHashMap<String, String>();
     private final NodeFactory nodeFactory;
     private final ErrorHandler errorHandler;
     Element root;
@@ -27,7 +30,16 @@ class SaxHandler extends DefaultHandler {
         this.errorHandler = errorHandler;
     }
 
-    @SuppressWarnings("unused")
+    @Override
+    public void startPrefixMapping(final String prefix, final String uri) {
+        prefixMapping.put(prefix, uri);
+    }
+
+    @Override
+    public void endDocument() {
+        root.getPrefixMapping().putAll(prefixMapping);
+    }
+
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes saxAttributes) {
         final MutableElement parent = stack.isEmpty() ? null : stack.peek();
@@ -42,7 +54,6 @@ class SaxHandler extends DefaultHandler {
             root = element;
     }
 
-    @SuppressWarnings("unused")
     @Override
     public void endElement(final String uri, final String localName, final String qName) {
         stack.pop();

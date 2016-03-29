@@ -3,8 +3,10 @@ package se.ugli.durian.j.dom.mutable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import se.ugli.durian.j.dom.node.Attribute;
@@ -19,6 +21,7 @@ import se.ugli.durian.j.dom.utils.ElementCloneCommand;
 
 public class MutableElement implements Element, MutableNode {
 
+    private final Map<String, String> prefixMapping = new LinkedHashMap<String, String>();
     private final Set<Attribute> attributes = new LinkedHashSet<Attribute>();
     private final List<Content> content = new ArrayList<Content>();
     private String name;
@@ -426,6 +429,11 @@ public class MutableElement implements Element, MutableNode {
             content.add(element);
     }
 
+    @Override
+    public boolean evaluteBoolean(final String query) {
+        return QueryManager.evaluteBoolean(this, query);
+    }
+
     public void setName(final String name) {
         this.name = name;
     }
@@ -463,6 +471,11 @@ public class MutableElement implements Element, MutableNode {
     @Override
     public boolean hasNodes() {
         return !attributes.isEmpty() && !content.isEmpty();
+    }
+
+    @Override
+    public Map<String, String> getPrefixMapping() {
+        return prefixMapping;
     }
 
     @Override
