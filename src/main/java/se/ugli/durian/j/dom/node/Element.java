@@ -1,7 +1,6 @@
 package se.ugli.durian.j.dom.node;
 
 import java.util.List;
-import java.util.Map;
 
 public interface Element extends Content {
 
@@ -79,6 +78,10 @@ public interface Element extends Content {
 
     boolean evaluteBoolean(String query);
 
-    Map<String, String> getPrefixMapping();
+    String qName();
+
+    Iterable<Prefixmapping> prefixmappings();
+
+    String toXml();
 
 }

@@ -1,33 +1,42 @@
 package se.ugli.durian.j.dom.serialize;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 public final class SerializerBuilder {
 
-    private final Map<String, String> prefixMapping = new LinkedHashMap<String, String>();
-    private int indentSize = 2;
+    private String xmlVersion = "1.0";
+    private String encoding = System.getProperty("file.encoding", "UTF-8");
+    private String tab = "  ";
+    private String lineSeparator = System.getProperty("line.separator");
 
     private SerializerBuilder() {
 
     }
 
-    public SerializerBuilder create() {
+    public static SerializerBuilder serializerBuilder() {
         return new SerializerBuilder();
     }
 
-    public SerializerBuilder prefixMapping(final String uri, final String prefix) {
-        prefixMapping.put(uri, prefix);
+    public SerializerBuilder xmlVersion(final String xmlVersion) {
+        this.xmlVersion = xmlVersion;
         return this;
     }
 
-    public SerializerBuilder indentSize(final int indentSize) {
-        this.indentSize = indentSize;
+    public SerializerBuilder encoding(final String encoding) {
+        this.encoding = encoding;
+        return this;
+    }
+
+    public SerializerBuilder tab(final String tab) {
+        this.tab = tab;
+        return this;
+    }
+
+    public SerializerBuilder lineSeparator(final String lineSeparator) {
+        this.lineSeparator = lineSeparator;
         return this;
     }
 
     public Serializer build() {
-        return Serializer.apply(prefixMapping, indentSize);
+        return new Serializer(xmlVersion, encoding, tab, lineSeparator);
     }
 
 }

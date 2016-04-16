@@ -8,4 +8,6 @@ public interface Attribute extends Node {
 
     String getValue();
 
+    String qName();
+
 }

@@ -8,18 +8,17 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import se.ugli.durian.j.dom.mutable.MutableElement;
-import se.ugli.durian.j.dom.node.Element;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import se.ugli.durian.j.dom.mutable.MutableElement;
+import se.ugli.durian.j.dom.node.Element;
 
 public class ParseSerializeTest {
 
     @Test
     public void xml2json() throws IOException {
-        final MutableElement element = se.ugli.durian.j.dom.parser.Parser.apply().parse(
-                getClass().getResourceAsStream("/person.xml"));
+        final MutableElement element = se.ugli.durian.j.dom.parser.Parser.apply().parse(getClass().getResourceAsStream("/person.xml"));
         element.addAttribute("xyz", null);
         final String actual = JsonSerializer.apply().serialize(element);
 
@@ -58,12 +57,11 @@ public class ParseSerializeTest {
         assertEquals("John Smith", person.getAttributeValue("name"));
         assertNull(person.getAttributeValue("xyz"));
 
-        final String actual = se.ugli.durian.j.dom.serialize.Serializer.apply().serialize(person);
+        final String actual = person.toXml();
 
-        final MutableElement element = se.ugli.durian.j.dom.parser.Parser.apply().parse(
-                getClass().getResourceAsStream("/person.xml"));
+        final MutableElement element = se.ugli.durian.j.dom.parser.Parser.apply().parse(getClass().getResourceAsStream("/person.xml"));
 
-        final String expected = se.ugli.durian.j.dom.serialize.Serializer.apply().serialize(element);
+        final String expected = element.toXml();
         assertEquals(expected, actual);
     }
 

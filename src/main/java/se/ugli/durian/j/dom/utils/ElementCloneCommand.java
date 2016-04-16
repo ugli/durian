@@ -33,7 +33,7 @@ public final class ElementCloneCommand {
 
     private static MutableElement cloneElement(final String elementName, final Element elementToClone, final Element parent,
             final NodeFactory nodeFactory) {
-        return nodeFactory.createElement(elementName, elementToClone.getUri(), parent);
+        return nodeFactory.createElement(elementName, elementToClone.getUri(), parent, elementToClone.prefixmappings());
     }
 
     private static List<Attribute> cloneAttributes(final Element elementToClone, final Element elementClone,

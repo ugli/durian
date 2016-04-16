@@ -1,8 +1,11 @@
 package se.ugli.durian.j.dom.parser;
 
+import static se.ugli.durian.j.dom.utils.Strings.nonEmptyOrNull;
+
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
 import org.xml.sax.Attributes;
@@ -15,12 +18,12 @@ import se.ugli.durian.j.dom.mutable.MutableElement;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
-import se.ugli.durian.j.dom.node.Text;
+import se.ugli.durian.j.dom.node.Prefixmapping;
 
 class SaxHandler extends DefaultHandler {
 
-    private final Stack<MutableElement> stack = new Stack<MutableElement>();
-    private final Map<String, String> prefixMapping = new LinkedHashMap<String, String>();
+    private final Stack<MutableElement> elementStack = new Stack<MutableElement>();
+    private final List<Prefixmapping> prefixMappings = new LinkedList<Prefixmapping>();
     private final NodeFactory nodeFactory;
     private final ErrorHandler errorHandler;
     Element root;
@@ -31,23 +34,21 @@ class SaxHandler extends DefaultHandler {
     }
 
     @Override
-    public void startPrefixMapping(final String prefix, final String uri) {
-        prefixMapping.put(prefix, uri);
+    public void startPrefixMapping(final String _prefix, final String _uri) {
+        final String uri = nonEmptyOrNull(_uri);
+        if (uri != null)
+            prefixMappings.add(new Prefixmapping(nonEmptyOrNull(_prefix), uri));
     }
 
     @Override
-    public void endDocument() {
-        root.getPrefixMapping().putAll(prefixMapping);
-    }
-
-    @Override
-    public void startElement(final String uri, final String localName, final String qName, final Attributes saxAttributes) {
-        final MutableElement parent = stack.isEmpty() ? null : stack.peek();
-        final String uri2 = uri == null || uri.trim().isEmpty() ? null : uri.trim();
-        final MutableElement element = nodeFactory.createElement(localName, uri2, parent);
+    public void startElement(final String _uri, final String localName, final String qName, final Attributes saxAttributes) {
+        final MutableElement parent = elementStack.isEmpty() ? null : elementStack.peek();
+        final String uri = nonEmptyOrNull(_uri);
+        final MutableElement element = nodeFactory.createElement(localName, uri, parent, new ArrayList<Prefixmapping>(prefixMappings));
+        prefixMappings.clear();
         for (final Attribute attribute : new AttributesFactory(nodeFactory, element, saxAttributes).create())
             element.add(attribute);
-        stack.push(element);
+        elementStack.push(element);
         if (parent != null)
             parent.add(element);
         else
@@ -56,18 +57,14 @@ class SaxHandler extends DefaultHandler {
 
     @Override
     public void endElement(final String uri, final String localName, final String qName) {
-        stack.pop();
+        elementStack.pop();
     }
 
     @Override
     public void characters(final char ch[], final int start, final int length) {
-        final String str = new String(Arrays.copyOfRange(ch, start, start + length));
-        final String trimedStr = str.trim();
-        if (trimedStr.length() > 0) {
-            final MutableElement element = stack.peek();
-            final Text text = nodeFactory.createText(element, trimedStr);
-            element.add(text);
-        }
+        final String str = nonEmptyOrNull(new String(Arrays.copyOfRange(ch, start, start + length)));
+        if (str != null)
+            elementStack.peek().addText(str);
     }
 
     @Override

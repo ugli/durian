@@ -1,12 +1,11 @@
 package se.ugli.durian.j.dom.mutable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import se.ugli.durian.j.dom.node.Attribute;
@@ -15,13 +14,14 @@ import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Node;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.NodeListener;
+import se.ugli.durian.j.dom.node.Prefixmapping;
 import se.ugli.durian.j.dom.node.Text;
 import se.ugli.durian.j.dom.query.QueryManager;
+import se.ugli.durian.j.dom.serialize.Serializer;
 import se.ugli.durian.j.dom.utils.ElementCloneCommand;
 
 public class MutableElement implements Element, MutableNode {
 
-    private final Map<String, String> prefixMapping = new LinkedHashMap<String, String>();
     private final Set<Attribute> attributes = new LinkedHashSet<Attribute>();
     private final List<Content> content = new ArrayList<Content>();
     private String name;
@@ -29,11 +29,14 @@ public class MutableElement implements Element, MutableNode {
     private String uri;
     private Element parent;
     private final List<NodeListener> nodeListeners = new ArrayList<NodeListener>();
+    private final Iterable<Prefixmapping> prefixmappings;
 
-    public MutableElement(final String name, final String uri, final NodeFactory nodeFactory) {
+    public MutableElement(final String name, final String uri, final NodeFactory nodeFactory,
+            final Iterable<Prefixmapping> prefixmappings) {
         this.name = name;
         this.uri = uri;
         this.nodeFactory = nodeFactory;
+        this.prefixmappings = prefixmappings;
         nodeListeners.add(new SetParentListener());
     }
 
@@ -116,14 +119,6 @@ public class MutableElement implements Element, MutableNode {
         return addAttribute(name, uri, value, nodeFactory);
     }
 
-    public <T extends Attribute> T addAttribute(final String name, final String value, final NodeFactory nodeFactory) {
-        return addAttribute(name, uri, value, nodeFactory);
-    }
-
-    public <T extends Attribute> T addAttribute(final String name, final String uri, final String value) {
-        return addAttribute(name, uri, value, nodeFactory);
-    }
-
     @SuppressWarnings("unchecked")
     public <T extends Attribute> T addAttribute(final String name, final String uri, final String value, final NodeFactory nodeFactory) {
         return (T) add(nodeFactory.createAttribute(name, uri, this, value));
@@ -133,17 +128,10 @@ public class MutableElement implements Element, MutableNode {
         return addElement(name, uri, nodeFactory);
     }
 
-    public <T extends Element> T addElement(final String name, final NodeFactory nodeFactory) {
-        return addElement(name, uri, nodeFactory);
-    }
-
-    public <T extends Element> T addElement(final String name, final String uri) {
-        return addElement(name, uri, nodeFactory);
-    }
-
     @SuppressWarnings("unchecked")
-    public <T extends Element> T addElement(final String name, final String uri, final NodeFactory nodeFactory) {
-        return (T) add(nodeFactory.createElement(name, uri, this));
+    public <T extends Element> T addElement(final String name, final String uri, final NodeFactory nodeFactory,
+            final Prefixmapping... prefixmappings) {
+        return (T) add(nodeFactory.createElement(name, uri, this, Arrays.asList(prefixmappings)));
     }
 
     public <T extends Text> T addText(final String value) {
@@ -451,13 +439,37 @@ public class MutableElement implements Element, MutableNode {
     }
 
     @Override
-    public Map<String, String> getPrefixMapping() {
-        return prefixMapping;
+    public String toString() {
+        return getClass().getSimpleName() + "[name=" + name + ", uri=" + uri + "]";
     }
 
     @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[name=" + name + ", uri=" + uri + "]";
+    public Iterable<Prefixmapping> prefixmappings() {
+        return prefixmappings;
+    }
+
+    @Override
+    public String qName() {
+        if (uri != null) {
+            final String prefix = prefix(uri, this);
+            if (prefix != null)
+                return prefix + ":" + name;
+        }
+        return name;
+    }
+
+    private String prefix(final String uri, final Element element) {
+        for (final Prefixmapping prefixmapping : element.prefixmappings())
+            if (uri.equals(prefixmapping.uri))
+                return prefixmapping.prefix;
+        if (element.getParent() != null)
+            return prefix(uri, element.getParent());
+        return null;
+    }
+
+    @Override
+    public String toXml() {
+        return Serializer.serialize(this);
     }
 
 }

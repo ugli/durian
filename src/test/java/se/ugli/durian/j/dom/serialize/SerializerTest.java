@@ -2,38 +2,52 @@ package se.ugli.durian.j.dom.serialize;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-import java.io.StringWriter;
-
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.xml.sax.SAXException;
 
+import se.ugli.commons.Resource;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.parser.Parser;
 
-@Ignore
 public class SerializerTest {
 
     @Test
-    public void test() throws SAXException, IOException, DocumentException {
-        final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
-        final String durianXml = Serializer.apply().serialize(element);
+    public void purchaseOrder() {
+        final String resource = "/PurchaseOrder.sch";
+        assertEquals(Resource.apply(resource).getString(), durianStr(resource));
+    }
 
-        final SAXReader saxReader = new SAXReader();
-        final Document document = saxReader.read(getClass().getResourceAsStream("/PurchaseOrder.sch"));
-        final StringWriter stringWriter = new StringWriter();
-        final OutputFormat outputFormat = OutputFormat.createPrettyPrint();
-        final XMLWriter xmlWriter = new XMLWriter(stringWriter, outputFormat);
-        xmlWriter.write(document);
-        final String dom4jXml = stringWriter.toString();
+    @Test
+    public void tables() {
+        final String resource = "/se/ugli/durian/j/dom/serialize/tables.xml";
+        assertEquals(Resource.apply(resource).getString(), durianStr(resource));
+    }
 
-        assertEquals(dom4jXml, durianXml);
+    @Test
+    public void tables2() {
+        final String resource = "/se/ugli/durian/j/dom/serialize/tables2.xml";
+        assertEquals(Resource.apply(resource).getString(), durianStr(resource));
+    }
+
+    @Test
+    public void bar1() {
+        final String resource = "/se/ugli/durian/j/dom/serialize/bar1.xml";
+        assertEquals(Resource.apply(resource).getString(), durianStr(resource));
+    }
+
+    @Test
+    public void bar2() {
+        final String resource = "/se/ugli/durian/j/dom/serialize/bar2.xml";
+        assertEquals(Resource.apply(resource).getString(), durianStr(resource));
+    }
+
+    @Test
+    public void bar3() {
+        final String resource = "/se/ugli/durian/j/dom/serialize/bar3.xml";
+        assertEquals(Resource.apply(resource).getString(), durianStr(resource));
+    }
+
+    private String durianStr(final String resource) {
+        return Parser.apply().<Element> parseResource(resource).toXml();
     }
 
 }

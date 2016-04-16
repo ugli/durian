@@ -1,163 +1,126 @@
 package se.ugli.durian.j.dom.serialize;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import static org.apache.commons.lang3.StringEscapeUtils.escapeXml11;
+import static se.ugli.durian.j.dom.serialize.SerializerBuilder.serializerBuilder;
 
-import org.apache.commons.lang3.StringEscapeUtils;
+import java.util.Collection;
+import java.util.List;
 
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
+import se.ugli.durian.j.dom.node.Prefixmapping;
 import se.ugli.durian.j.dom.node.Text;
 
 public class Serializer {
 
-    // TODO put in builder
-    private static final String NAMESPACE_PREFIX_PREFIX = "ns";
-
+    private static final char LT = '<';
+    private static final char GT = '>';
+    private static final char SLASH = '/';
+    private static final char SPACE = ' ';
+    private static final char COLON = ':';
+    private static final char QUOTE = '"';
+    private static final char EQ = '=';
+    private final String lineSeparator;
     private final String tab;
-    private final Map<String, String> prefixMapping;
-    private int prefixNumber = 0;
+    private final String xmlVersion;
+    private final String encoding;
+    private final StringBuilder xml = new StringBuilder();
 
-    private Serializer(final Map<String, String> prefixMapping, final int indentSize) {
-        this.prefixMapping = prefixMapping;
-        final StringBuilder tabBuilder = new StringBuilder();
-        for (int i = 0; i < indentSize; i++)
-            tabBuilder.append(" ");
-        tab = tabBuilder.toString();
+    Serializer(final String xmlVersion, final String encoding, final String tab, final String lineSeparator) {
+        this.xmlVersion = xmlVersion;
+        this.encoding = encoding;
+        this.tab = tab;
+        this.lineSeparator = lineSeparator;
     }
 
-    public static Serializer apply() {
-        return new Serializer(new LinkedHashMap<String, String>(), 2);
+    public static String serialize(final Element element) {
+        return serializerBuilder().build().serializeDocument(element);
     }
 
-    static Serializer apply(final Map<String, String> prefixMapping, final int indentSize) {
-        return new Serializer(prefixMapping, indentSize);
+    private String serializeDocument(final Element element) {
+        appendDeclaration();
+        appendElement(element, 0);
+        return xml.toString();
     }
 
-    public String serialize(final Element element) {
-        final StringBuilder stringBuffer = new StringBuilder();
-        // TODO handle encoding
-        stringBuffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        serialize(element, stringBuffer, 0, true);
-        return stringBuffer.toString();
+    private void appendDeclaration() {
+        xml.append("<?xml");
+        appendAttribute(xml, "version", xmlVersion);
+        appendAttribute(xml, "encoding", encoding);
+        xml.append("?>");
     }
 
-    private void serialize(final Element element, final StringBuilder stringBuffer, final int indentDepth, final boolean root) {
-        stringBuffer.append("\n");
-        appendWithTab("<", stringBuffer, indentDepth);
-        final String qName = getQName(element, root);
-        stringBuffer.append(qName);
-        if (root)
-            appendPrefixMapping(element, stringBuffer);
-        appendAttributes(element, stringBuffer);
-        if (!element.getContent().iterator().hasNext())
-            stringBuffer.append("/>");
+    private void appendElement(final Element element, final int indentDepth) {
+        final String qName = element.qName();
+        final List<Content> content = (List<Content>) element.getContent();
+        xml.append(lineSeparator);
+        appendCharWithTab(indentDepth, LT);
+        xml.append(qName);
+        appendPrefixmappings(element.prefixmappings());
+        appendAttributes(element.getAttributes());
+        if (content.isEmpty())
+            xml.append(SPACE).append(SLASH).append(GT);
         else {
-            stringBuffer.append(">");
-            appendContent(element, stringBuffer, indentDepth);
-            if (isSimpleTextNode(element))
-                stringBuffer.append("</");
+            xml.append(GT);
+            appendContent(content, indentDepth);
+            if (content.size() == 1 && content.get(0) instanceof Text)
+                xml.append(LT).append(SLASH);
             else {
-                stringBuffer.append("\n");
-                appendWithTab("</", stringBuffer, indentDepth);
+                xml.append(lineSeparator);
+                appendCharWithTab(indentDepth, LT);
+                xml.append(SLASH);
             }
-            stringBuffer.append(qName);
-            stringBuffer.append(">");
+            xml.append(qName).append(GT);
         }
     }
 
-    private boolean isSimpleTextNode(final Element element) {
-        final Iterator<Content> iterator = element.getContent().iterator();
-        if (iterator.hasNext())
-            return iterator.next() instanceof Text && !iterator.hasNext();
-        return false;
-    }
-
-    public Set<String> getUriSet(final Element e) {
-        final Set<String> result = new LinkedHashSet<String>();
-        if (e.getUri() != null)
-            result.add(e.getUri());
-        for (final Element element : e.getElements())
-            result.addAll(getUriSet(element));
-        return result;
-    }
-
-    private String getQName(final Element element, final boolean root) {
-        if (root) {
-            final String prefix = getPrefix(element);
-            if (prefix != null)
-                return prefix + ":" + element.getName();
-        }
-        return element.getName();
-    }
-
-    private String getPrefix(final Element element) {
-        return getPrefix(element.getUri());
-    }
-
-    private synchronized String getPrefix(final String uri) {
-        String prefix = prefixMapping.get(uri);
-        if (prefix == null) {
-            // TODO make block synchronized
-            prefix = NAMESPACE_PREFIX_PREFIX + prefixNumber++;
-            prefixMapping.put(uri, prefix);
-        }
-        return prefix;
-    }
-
-    private void appendWithTab(final String str, final StringBuilder stringBuffer, final int indentDepth) {
+    private void appendStringWithTab(final int indentDepth, final String str) {
         for (int step = 0; step < indentDepth; step++)
-            stringBuffer.append(tab);
-        stringBuffer.append(str);
+            xml.append(tab);
+        xml.append(str);
     }
 
-    private void appendPrefixMapping(final Element element, final StringBuilder stringBuffer) {
-        for (final String uri : new ArrayList<String>(getUriSet(element))) {
-            final String prefix = getPrefix(uri);
-            stringBuffer.append(" xmlns");
-            if (prefix != null) {
-                stringBuffer.append(":");
-                stringBuffer.append(prefix);
-            }
-            stringBuffer.append("=\"");
-            stringBuffer.append(uri);
-            stringBuffer.append("\"");
+    private void appendCharWithTab(final int indentDepth, final char ch) {
+        for (int step = 0; step < indentDepth; step++)
+            xml.append(tab);
+        xml.append(ch);
+    }
+
+    private void appendPrefixmappings(final Iterable<Prefixmapping> prefixmappings) {
+        for (final Prefixmapping prefixmapping : prefixmappings) {
+            xml.append(SPACE).append("xmlns");
+            if (prefixmapping.prefix != null)
+                xml.append(COLON).append(prefixmapping.prefix);
+            xml.append(EQ).append(QUOTE).append(prefixmapping.uri).append(QUOTE);
         }
     }
 
-    private void appendAttributes(final Element element, final StringBuilder stringBuffer) {
-        for (final Attribute attribute : element.getAttributes()) {
-            final String attributeValue = attribute.getValue();
-            if (attributeValue != null) {
-                final String attributeName = attribute.getName();
-                stringBuffer.append(" ");
-                // TODO handle qname !?
-                stringBuffer.append(attributeName);
-                stringBuffer.append("=\"");
-                stringBuffer.append(xmlEncode(attributeValue));
-                stringBuffer.append("\"");
-            }
-        }
+    private void appendAttributes(final Iterable<Attribute> attributes) {
+        for (final Attribute attribute : attributes)
+            appendAttribute(xml, attribute.qName(), attribute.getValue());
     }
 
-    private void appendContent(final Element element, final StringBuilder stringBuffer, final int indentDepth) {
-        for (final Content content : element.getContent())
+    private void appendAttribute(final StringBuilder xml, final String attributeName, final String attributeValue) {
+        if (attributeValue != null)
+            xml.append(SPACE).append(attributeName).append(EQ).append(QUOTE).append(escapeXml11(attributeValue)).append(QUOTE);
+    }
+
+    private void appendContent(final Collection<Content> contentList, final int indentDepth) {
+        for (final Content content : contentList)
             if (content instanceof Element)
-                serialize((Element) content, stringBuffer, indentDepth + 1, false);
+                appendElement((Element) content, indentDepth + 1);
             else if (content instanceof Text) {
                 final String textValue = ((Text) content).getValue();
-                stringBuffer.append(xmlEncode(textValue));
+                if (contentList.size() > 1) {
+                    xml.append(lineSeparator);
+                    appendStringWithTab(indentDepth + 1, escapeXml11(textValue));
+                }
+                else
+                    xml.append(escapeXml11(textValue));
             }
             else
                 throw new IllegalStateException(content.getClass().getName());
     }
 
-    private String xmlEncode(final String textValue) {
-        return StringEscapeUtils.escapeXml11(textValue);
-    }
 }

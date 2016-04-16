@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.parser.Parser;
-import se.ugli.durian.j.dom.serialize.Serializer;
 
 public class CloneTest {
 
@@ -15,8 +14,7 @@ public class CloneTest {
     public void shouldClone() {
         final Element element = Parser.apply().parseResource("/se/ugli/durian/j/dom/mutable/ddata.xml");
         final Element elementClone = element.cloneElement();
-        final Serializer serializer = Serializer.apply();
-        assertThat(serializer.serialize(element), is(serializer.serialize(elementClone)));
+        assertThat(element.toXml(), is(elementClone.toXml()));
     }
 
 }
