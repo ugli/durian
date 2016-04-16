@@ -17,6 +17,7 @@
     <xsd:complexContent>
       <xsd:extension base="Struct">
         <xsd:attribute name="includeEmptyValues" type="xsd:boolean" use="required" />
+        <xsd:attribute name="targetNamespace" type="xsd:string" use="optional" />
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
