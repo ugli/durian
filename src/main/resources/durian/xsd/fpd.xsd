@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://durian.io/fixedPositionData" targetNamespace="http://durian.io/fixedPositionData" elementFormDefault="qualified">
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://durian.io/fpd" targetNamespace="http://durian.io/fpd" elementFormDefault="qualified">
   <xsd:element name="def" type="RootStruct" />
   <xsd:complexType name="Definition" abstract="true">
     <xsd:attribute name="name" type="xsd:string" use="required" />
