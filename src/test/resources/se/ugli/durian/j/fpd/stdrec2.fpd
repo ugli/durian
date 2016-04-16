@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<def name="standardRecord" includeEmptyValues="false" xmlns="http://durian.io/fpd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://durian.io/fpd https://raw.githubusercontent.com/ugli/durian-java-dom/java6/src/main/resources/durian/xsd/fpd.xsd">
+  <def xsi:type="Struct" name="gemensamArea">
+    <def xsi:type="Field" name="systmid" length="3" />
+    <def xsi:type="Field" name="doktyp" length="5" />
+    <def xsi:type="Field" name="doknr" length="3" />
+    <def xsi:type="Field" name="avtalsid" length="30" />
+    <def xsi:type="Field" name="kundnr" length="9" />
+    <def xsi:type="Field" name="regtid" length="26" />
+    <def xsi:type="Field" name="clientid" length="20" />
+    <def xsi:type="Field" name="paketid" length="12" />
+    <def xsi:type="Field" name="filler1" length="10" />
+    <def xsi:type="Field" name="styrdatum" length="10" />
+    <def xsi:type="Field" name="userid" length="8" />
+    <def xsi:type="Field" name="filler2" length="10" />
+    <def xsi:type="Field" name="filler3" length="2" />
+    <def xsi:type="Field" name="antalUppdrag" length="7" />
+    <def xsi:type="Field" name="filler4" length="52" />
+  </def>
+  <def xsi:type="Struct" name="huvudFotInfo">
+    <def xsi:type="Field" name="bolagsid" length="4" />
+    <def xsi:type="Field" name="internetAdr" length="30" />
+    <def xsi:type="Field" name="testmark" length="1" />
+    <def xsi:type="Field" name="testmott" length="8" />
+    <def xsi:type="Field" name="testformat" length="10" />
+    <def xsi:type="Field" name="stoppSamkuv" length="1" />
+    <def xsi:type="Field" name="stoppOmKamrat" length="1" />
+  </def>
+  <def xsi:type="Struct" name="brevhuvudInfo">
+    <def xsi:type="Array" name="image" size="4" elementLength="6" />
+    <def xsi:type="Array" name="rubrik" size="12" elementLength="6" />
+    <def xsi:type="Field" name="rubvar03" length="25" />
+    <def xsi:type="Field" name="rubvar04" length="25" />
+    <def xsi:type="Field" name="rubvar05" length="60" />
+    <def xsi:type="Field" name="rubvar06" length="60" />
+    <def xsi:type="Field" name="rubvar07" length="60" />
+    <def xsi:type="Field" name="rubvar08" length="60" />
+    <def xsi:type="Field" name="rubvar09" length="60" />
+    <def xsi:type="Field" name="rubvar11" length="60" />
+    <def xsi:type="Field" name="rubvar12" length="60" />
+    <def xsi:type="Field" name="slaIKis" length="1" />
+    <def xsi:type="Field" name="namn" length="36" />
+    <def xsi:type="Field" name="adress" length="45" />
+    <def xsi:type="Field" name="postnr" length="6" />
+    <def xsi:type="Field" name="ortsadress" length="30" />
+    <def xsi:type="Field" name="coAdress" length="45" />
+    <def xsi:type="Field" name="landKod" length="3" />
+    <def xsi:type="Field" name="landNamn" length="30" />
+    <def xsi:type="Field" name="flUtmedia" length="45" />
+    <def xsi:type="Field" name="filler1" length="2" />
+    <def xsi:type="Field" name="altAdress" length="45" />
+    <def xsi:type="Field" name="altPostnr" length="6" />
+    <def xsi:type="Field" name="altOrtsadress" length="30" />
+    <def xsi:type="Field" name="altCoAdress" length="45" />
+    <def xsi:type="Field" name="altLandKod" length="3" />
+    <def xsi:type="Field" name="altLandNamn" length="30" />
+    <def xsi:type="Field" name="filler2" length="3" />
+    <def xsi:type="Field" name="fkNr" length="4" />
+    <def xsi:type="Field" name="slaIFk" length="1" />
+    <def xsi:type="Field" name="telRad1Flagga" length="1" />
+    <def xsi:type="Field" name="telRad2Flagga" length="1" />
+    <def xsi:type="Field" name="telRad3Flagga" length="1" />
+    <def xsi:type="Field" name="fkRefAdr" length="24" />
+    <def xsi:type="Field" name="fkRetPonr" length="6" />
+    <def xsi:type="Field" name="fkRetPadr" length="13" />
+    <def xsi:type="Field" name="fkBesAdr" length="27" />
+    <def xsi:type="Field" name="fkUtdAdr" length="24" />
+    <def xsi:type="Field" name="fkUtdPonr" length="6" />
+    <def xsi:type="Field" name="fkUtdPadr" length="13" />
+    <def xsi:type="Field" name="fkTel" length="21" />
+    <def xsi:type="Field" name="fkForsTel" length="21" />
+    <def xsi:type="Field" name="fkSkadTel" length="21" />
+    <def xsi:type="Field" name="fkFax" length="21" />
+    <def xsi:type="Field" name="handlaggarNamn" length="35" />
+    <def xsi:type="Field" name="handlaggarTel" length="25" />
+    <def xsi:type="Field" name="emailAdress" length="60" />
+  </def>
+  <def xsi:type="Struct" name="brevfotInfo">
+    <def xsi:type="Field" name="bankgironr" length="15" />
+    <def xsi:type="Field" name="postgironr" length="15" />
+    <def xsi:type="Field" name="bolagsnamn" length="60" />
+    <def xsi:type="Field" name="momsregnr" length="15" />
+  </def>
+  <def xsi:type="Array" name="fritexter" size="5" elementLength="6" />
+  <def xsi:type="Struct" name="inkortInfo">
+    <def xsi:type="Field" name="korttyp" length="2" />
+    <def xsi:type="Array" name="kortKod" size="12" elementLength="6" />
+    <def xsi:type="Array" name="kortVar" size="12" elementLength="25" />
+    <def xsi:type="Field" name="optnr" length="24" />
+    <def xsi:type="Field" name="optnrKup" length="70" />
+    <def xsi:type="Field" name="imgkort" length="6" />
+    <def xsi:type="Field" name="gironr1" length="15" />
+    <def xsi:type="Field" name="optgironr" length="10" />
+    <def xsi:type="Field" name="premiebelopp" length="10" />
+  </def>
+  <def xsi:type="Array" name="bilagor" size="4" elementLength="12" />
+</def>

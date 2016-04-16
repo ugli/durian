@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<standardRecord xmlns="http://ugli.se/stdRec">
+  <gemensamArea systmid="O24" doktyp="FBREV" doknr="001" avtalsid="GF 660-00000   KF0760561001" kundnr="ZDB647610" regtid="" clientid="" paketid="" filler1="" styrdatum="2015-08-10" userid="O24BY80" filler2="" filler3="" antalUppdrag="00000" filler4="" />
+  <huvudFotInfo bolagsid="2015" internetAdr="-08-109999" testmark="" testmott="" testformat="AMLI02" stoppSamkuv="" stoppOmKamrat="" />
+  <brevhuvudInfo rubvar03="2015-08-10" rubvar04="ZDB-64761-0" rubvar05="" rubvar06="" rubvar07="" rubvar08="" rubvar09="" rubvar11="" rubvar12="" slaIKis="" namn="Conny Svedberg" adress="St�ksh�jden 6" postnr="" ortsadress="17676 J�RF�LLA" coAdress="" landKod="" landNamn="" flUtmedia="" filler1="" altAdress="" altPostnr="" altOrtsadress="" altCoAdress="" altLandKod="" altLandNamn="" filler2="" fkNr="" slaIFk="" telRad1Flagga="" telRad2Flagga="J" telRad3Flagga="" fkRefAdr="" fkRetPonr="" fkRetPadr="" fkBesAdr="" fkUtdAdr="" fkUtdPonr="1066" fkUtdPadr="0 STOCKHOLM" fkTel="0771-960 960" fkForsTel="0771-950950" fkSkadTel="0771-961961" fkFax="" handlaggarNamn="" handlaggarTel="" emailAdress="">
+    <image>
+      <element index="1" value="" />
+      <element index="2" value="J" />
+      <element index="3" value="" />
+      <element index="4" value="PI" />
+    </image>
+    <rubrik>
+      <element index="1" value="CTO1" />
+      <element index="2" value="00" />
+      <element index="3" value="000700" />
+      <element index="4" value="002000" />
+      <element index="5" value="004000" />
+      <element index="6" value="0060" />
+      <element index="7" value="00" />
+      <element index="8" value="010000" />
+      <element index="9" value="012000" />
+      <element index="10" value="014000" />
+      <element index="11" value="0160" />
+      <element index="12" value="" />
+    </rubrik>
+  </brevhuvudInfo>
+  <brevfotInfo bankgironr="" postgironr="" bolagsnamn="" momsregnr="" />
+  <fritexter>
+    <element index="1" value="" />
+    <element index="2" value="" />
+    <element index="3" value="" />
+    <element index="4" value="" />
+    <element index="5" value="" />
+  </fritexter>
+  <inkortInfo korttyp="" optnr="" optnrKup="" imgkort="" gironr1="" optgironr="" premiebelopp="">
+    <kortKod>
+      <element index="1" value="" />
+      <element index="2" value="" />
+      <element index="3" value="" />
+      <element index="4" value="" />
+      <element index="5" value="" />
+      <element index="6" value="" />
+      <element index="7" value="" />
+      <element index="8" value="" />
+      <element index="9" value="" />
+      <element index="10" value="" />
+      <element index="11" value="" />
+      <element index="12" value="" />
+    </kortKod>
+    <kortVar>
+      <element index="1" value="" />
+      <element index="2" value="" />
+      <element index="3" value="" />
+      <element index="4" value="" />
+      <element index="5" value="" />
+      <element index="6" value="" />
+      <element index="7" value="" />
+      <element index="8" value="" />
+      <element index="9" value="" />
+      <element index="10" value="" />
+      <element index="11" value="" />
+      <element index="12" value="" />
+    </kortVar>
+  </inkortInfo>
+  <bilagor>
+    <element index="1" value="" />
+    <element index="2" value="" />
+    <element index="3" value="" />
+    <element index="4" value="" />
+  </bilagor>
+</standardRecord>
