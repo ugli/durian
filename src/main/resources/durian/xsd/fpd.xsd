@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://durian.io/fixedPositionData" targetNamespace="http://durian.io/fixedPositionData" elementFormDefault="qualified">
+  <xsd:element name="def" type="RootStruct" />
+  <xsd:complexType name="Definition" abstract="true">
+    <xsd:attribute name="name" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:complexType name="Struct">
+    <xsd:complexContent>
+      <xsd:extension base="Definition">
+        <xsd:sequence>
+          <xsd:element name="def" type="Definition" maxOccurs="unbounded" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="RootStruct">
+    <xsd:complexContent>
+      <xsd:extension base="Struct">
+        <xsd:attribute name="includeEmptyValues" type="xsd:boolean" use="required" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Array" mixed="false">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="Definition">
+        <xsd:attribute name="size" type="xsd:integer" use="required" />
+        <xsd:attribute name="elementLength" type="xsd:integer" use="required" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Field" mixed="false">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="Definition">
+        <xsd:attribute name="length" type="xsd:integer" use="required" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:schema>
