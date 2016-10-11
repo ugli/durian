@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import se.ugli.durian.j.dom.node.Attribute;
@@ -30,7 +33,7 @@ public class MutableElement implements Element, MutableNode {
     private String uri;
     private Element parent;
     private final List<NodeListener> nodeListeners = new ArrayList<NodeListener>();
-    private final Iterable<Prefixmapping> prefixmappings;
+    private final Map<String, String> prefixByUri = new LinkedHashMap<String, String>();
     private final String id = Id.create();
 
     @Override
@@ -43,7 +46,9 @@ public class MutableElement implements Element, MutableNode {
         this.name = name;
         this.uri = uri;
         this.nodeFactory = nodeFactory;
-        this.prefixmappings = prefixmappings;
+        for (final Prefixmapping prefixmapping : prefixmappings)
+            prefixByUri.put(prefixmapping.uri, prefixmapping.prefix);
+
         nodeListeners.add(new SetParentListener());
     }
 
@@ -446,7 +451,10 @@ public class MutableElement implements Element, MutableNode {
 
     @Override
     public Iterable<Prefixmapping> prefixmappings() {
-        return prefixmappings;
+        final List<Prefixmapping> prefixmappings = new ArrayList<Prefixmapping>();
+        for (final Entry<String, String> entry : prefixByUri.entrySet())
+            prefixmappings.add(new Prefixmapping(entry.getValue(), entry.getKey()));
+        return Collections.unmodifiableCollection(prefixmappings);
     }
 
     @Override
