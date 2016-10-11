@@ -23,7 +23,7 @@ public class AttributeIterator extends AxisIteratorImpl {
     @Override
     public NodeInfo next() {
         if (iter.hasNext())
-            return new AttributeNodeInfo(iter.next(), treeInfo);
+            return treeInfo.wrapper(iter.next());
         return null;
     }
 

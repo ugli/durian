@@ -1,33 +1,23 @@
 package se.ugli.durian.j.saxon;
 
-import net.sf.saxon.om.NodeInfo;
-import net.sf.saxon.om.TreeInfo;
 import net.sf.saxon.pattern.NodeTest;
 import net.sf.saxon.tree.iter.AxisIterator;
-import net.sf.saxon.tree.util.FastStringBuffer;
 import net.sf.saxon.tree.util.Navigator;
-import net.sf.saxon.tree.wrapper.AbstractNodeWrapper;
 import net.sf.saxon.type.Type;
 import se.ugli.durian.j.dom.node.Element;
 
-public class ElementNodeInfo extends AbstractNodeWrapper {
+public class ElementNodeInfo extends DurianNodeWrapper {
 
     private final Element element;
-    private final DurianTreeInfo treeInfo;
 
-    public ElementNodeInfo(final Element element, final DurianTreeInfo treeInfo) {
+    public ElementNodeInfo(final int index, final Element element, final DurianTreeInfo treeInfo) {
+        super(index, Type.ELEMENT, element, treeInfo);
         this.element = element;
-        this.treeInfo = treeInfo;
     }
 
     @Override
-    public TreeInfo getTreeInfo() {
-        return treeInfo;
-    }
-
-    @Override
-    public int getNodeKind() {
-        return Type.ELEMENT;
+    public String getLocalPart() {
+        return element.getName();
     }
 
     @Override
@@ -44,35 +34,8 @@ public class ElementNodeInfo extends AbstractNodeWrapper {
     }
 
     @Override
-    public NodeInfo getParent() {
-        if (element.getParent() != null)
-            return new ElementNodeInfo(element.getParent(), treeInfo);
-        return null;
-    }
-
-    @Override
-    public int compareOrder(final NodeInfo other) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String getLocalPart() {
-        return element.getName();
-    }
-
-    @Override
-    public void generateId(final FastStringBuffer buffer) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public CharSequence getStringValueCS() {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Object getUnderlyingNode() {
-        return element;
     }
 
     @Override

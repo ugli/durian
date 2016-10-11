@@ -7,7 +7,6 @@ import net.sf.saxon.tree.iter.AxisIterator;
 import net.sf.saxon.tree.iter.AxisIteratorImpl;
 import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
-import se.ugli.durian.j.dom.node.Text;
 
 public class ContentIterator extends AxisIteratorImpl {
 
@@ -24,10 +23,7 @@ public class ContentIterator extends AxisIteratorImpl {
     @Override
     public NodeInfo next() {
         if (iter.hasNext()) {
-            final Content content = iter.next();
-            if (content instanceof Element)
-                return new ElementNodeInfo((Element) content, treeInfo);
-            return new TextNodeInfo((Text) content, treeInfo);
+            return treeInfo.wrapper(iter.next());
         }
         return null;
     }

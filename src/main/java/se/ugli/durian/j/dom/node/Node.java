@@ -5,4 +5,6 @@ public interface Node {
     <T extends Element> T getParent();
 
     String getPath();
+
+    String id();
 }

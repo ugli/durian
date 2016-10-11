@@ -8,14 +8,13 @@ import net.sf.saxon.tree.iter.AxisIterator;
 import net.sf.saxon.tree.util.FastStringBuffer;
 import net.sf.saxon.tree.wrapper.AbstractNodeWrapper;
 import net.sf.saxon.type.Type;
-import se.ugli.durian.j.dom.node.Element;
 
 public class DocumentNodeInfo extends AbstractNodeWrapper {
 
     private final DurianTreeInfo treeInfo;
 
-    public DocumentNodeInfo(final Element root, final Configuration configuration) {
-        treeInfo = new DurianTreeInfo(root, configuration);
+    public DocumentNodeInfo(final DurianTreeInfo treeInfo) {
+        this.treeInfo = treeInfo;
     }
 
     @Override

@@ -19,6 +19,7 @@ import se.ugli.durian.j.dom.node.Text;
 import se.ugli.durian.j.dom.query.QueryManager;
 import se.ugli.durian.j.dom.serialize.Serializer;
 import se.ugli.durian.j.dom.utils.ElementCloneCommand;
+import se.ugli.durian.j.dom.utils.Id;
 
 public class MutableElement implements Element, MutableNode {
 
@@ -30,6 +31,12 @@ public class MutableElement implements Element, MutableNode {
     private Element parent;
     private final List<NodeListener> nodeListeners = new ArrayList<NodeListener>();
     private final Iterable<Prefixmapping> prefixmappings;
+    private final String id = Id.create();
+
+    @Override
+    public String id() {
+        return id;
+    }
 
     public MutableElement(final String name, final String uri, final NodeFactory nodeFactory,
             final Iterable<Prefixmapping> prefixmappings) {
@@ -102,13 +109,13 @@ public class MutableElement implements Element, MutableNode {
 
     public int removeAll(final Class<? extends Node> type) {
         int result = 0;
-        if (type.isAssignableFrom(Attribute.class))
-            for (final Attribute attribute : new ArrayList<Attribute>(attributes))
+        if (Attribute.class.isAssignableFrom(type))
+            for (final Attribute attribute : new ArrayList<Attribute>((Collection<Attribute>) getAttributes()))
                 if (type.isInstance(attribute))
                     if (remove(attribute))
                         result++;
-        if (type.isAssignableFrom(Content.class))
-            for (final Content content : new ArrayList<Content>(this.content))
+        if (Content.class.isAssignableFrom(type))
+            for (final Content content : new ArrayList<Content>((Collection<Content>) getContent()))
                 if (type.isInstance(content))
                     if (remove(content))
                         result++;

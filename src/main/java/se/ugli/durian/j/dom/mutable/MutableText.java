@@ -2,11 +2,18 @@ package se.ugli.durian.j.dom.mutable;
 
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Text;
+import se.ugli.durian.j.dom.utils.Id;
 
 public class MutableText implements Text, MutableNode {
 
     private Element parent;
     private final String value;
+    private final String id = Id.create();
+
+    @Override
+    public String id() {
+        return id;
+    }
 
     public MutableText(final String value) {
         this.value = value;

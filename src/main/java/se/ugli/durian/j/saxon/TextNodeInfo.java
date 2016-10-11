@@ -1,62 +1,33 @@
 package se.ugli.durian.j.saxon;
 
-import net.sf.saxon.om.NodeInfo;
-import net.sf.saxon.om.TreeInfo;
 import net.sf.saxon.pattern.NodeTest;
 import net.sf.saxon.tree.iter.AxisIterator;
-import net.sf.saxon.tree.util.FastStringBuffer;
-import net.sf.saxon.tree.wrapper.AbstractNodeWrapper;
+import net.sf.saxon.tree.iter.EmptyIterator;
 import net.sf.saxon.type.Type;
 import se.ugli.durian.j.dom.node.Text;
 
-public class TextNodeInfo extends AbstractNodeWrapper {
+public class TextNodeInfo extends DurianNodeWrapper {
 
     private final Text text;
-    private final DurianTreeInfo treeInfo;
 
-    public TextNodeInfo(final Text text, final DurianTreeInfo treeInfo) {
+    public TextNodeInfo(final int index, final Text text, final DurianTreeInfo treeInfo) {
+        super(index, Type.TEXT, text, treeInfo);
         this.text = text;
-        this.treeInfo = treeInfo;
-    }
-
-    @Override
-    public int getNodeKind() {
-        return Type.TEXT;
-    }
-
-    @Override
-    public TreeInfo getTreeInfo() {
-        return treeInfo;
-    }
-
-    @Override
-    public int compareOrder(final NodeInfo other) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getLocalPart() {
-        throw new UnsupportedOperationException();
+        return "";
     }
 
     @Override
     public String getURI() {
-        throw new UnsupportedOperationException();
+        return "";
     }
 
     @Override
     public String getPrefix() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public NodeInfo getParent() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void generateId(final FastStringBuffer buffer) {
-        throw new UnsupportedOperationException();
+        return "";
     }
 
     @Override
@@ -65,18 +36,13 @@ public class TextNodeInfo extends AbstractNodeWrapper {
     }
 
     @Override
-    public Object getUnderlyingNode() {
-        return text;
-    }
-
-    @Override
     protected AxisIterator iterateAttributes(final NodeTest nodeTest) {
-        throw new UnsupportedOperationException();
+        return EmptyIterator.OfNodes.THE_INSTANCE;
     }
 
     @Override
     protected AxisIterator iterateChildren(final NodeTest nodeTest) {
-        throw new UnsupportedOperationException();
+        return EmptyIterator.OfNodes.THE_INSTANCE;
     }
 
     @Override
