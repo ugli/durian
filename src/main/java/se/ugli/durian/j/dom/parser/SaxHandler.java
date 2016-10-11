@@ -1,5 +1,6 @@
 package se.ugli.durian.j.dom.parser;
 
+import static se.ugli.durian.j.dom.node.PrefixMapping.prefixMapping;
 import static se.ugli.durian.j.dom.utils.Strings.nonEmptyOrNull;
 
 import java.util.ArrayList;
@@ -18,12 +19,12 @@ import se.ugli.durian.j.dom.mutable.MutableElement;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
-import se.ugli.durian.j.dom.node.Prefixmapping;
+import se.ugli.durian.j.dom.node.PrefixMapping;
 
 class SaxHandler extends DefaultHandler {
 
     private final Stack<MutableElement> elementStack = new Stack<MutableElement>();
-    private final List<Prefixmapping> prefixMappings = new LinkedList<Prefixmapping>();
+    private final List<PrefixMapping> prefixMappings = new LinkedList<PrefixMapping>();
     private final NodeFactory nodeFactory;
     private final ErrorHandler errorHandler;
     Element root;
@@ -37,14 +38,14 @@ class SaxHandler extends DefaultHandler {
     public void startPrefixMapping(final String _prefix, final String _uri) {
         final String uri = nonEmptyOrNull(_uri);
         if (uri != null)
-            prefixMappings.add(new Prefixmapping(nonEmptyOrNull(_prefix), uri));
+            prefixMappings.add(prefixMapping(nonEmptyOrNull(_prefix), uri));
     }
 
     @Override
     public void startElement(final String _uri, final String localName, final String qName, final Attributes saxAttributes) {
         final MutableElement parent = elementStack.isEmpty() ? null : elementStack.peek();
         final String uri = nonEmptyOrNull(_uri);
-        final MutableElement element = nodeFactory.createElement(localName, uri, parent, new ArrayList<Prefixmapping>(prefixMappings));
+        final MutableElement element = nodeFactory.createElement(localName, uri, parent, new ArrayList<PrefixMapping>(prefixMappings));
         prefixMappings.clear();
         for (final Attribute attribute : new AttributesFactory(nodeFactory, element, saxAttributes).create())
             element.add(attribute);

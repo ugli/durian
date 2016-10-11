@@ -4,7 +4,7 @@ import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.AttributeCloner;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
-import se.ugli.durian.j.dom.node.Prefixmapping;
+import se.ugli.durian.j.dom.node.PrefixMapping;
 import se.ugli.durian.j.dom.utils.Id;
 
 public class MutableAttribute implements Attribute, MutableNode {
@@ -107,7 +107,7 @@ public class MutableAttribute implements Attribute, MutableNode {
     }
 
     private String prefix(final String uri, final Element element) {
-        for (final Prefixmapping prefixmapping : element.prefixmappings())
+        for (final PrefixMapping prefixmapping : element.prefixMappings())
             if (uri.equals(prefixmapping.uri))
                 return prefixmapping.prefix;
         if (element.getParent() != null)

@@ -1,5 +1,7 @@
 package se.ugli.durian.j.fpd;
 
+import static se.ugli.durian.j.dom.node.PrefixMapping.prefixMapping;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +9,7 @@ import se.ugli.durian.j.dom.mutable.MutableElement;
 import se.ugli.durian.j.dom.mutable.MutableNodeFactory;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Node;
-import se.ugli.durian.j.dom.node.Prefixmapping;
+import se.ugli.durian.j.dom.node.PrefixMapping;
 
 class Struct implements Definition {
 
@@ -38,9 +40,9 @@ class Struct implements Definition {
 
     @Override
     public Node createNode(final String data) {
-        final ArrayList<Prefixmapping> prefixmappings = new ArrayList<Prefixmapping>();
+        final ArrayList<PrefixMapping> prefixmappings = new ArrayList<PrefixMapping>();
         if (root && targetNamespace != null)
-            prefixmappings.add(new Prefixmapping(null, targetNamespace));
+            prefixmappings.add(prefixMapping(null, targetNamespace));
         final MutableElement element = new MutableElement(name, targetNamespace, new MutableNodeFactory(), prefixmappings);
         int beginIndex = 0;
         for (final Definition definition : definitions) {

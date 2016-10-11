@@ -3,7 +3,7 @@ package se.ugli.durian.j.dom.mutable;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
-import se.ugli.durian.j.dom.node.Prefixmapping;
+import se.ugli.durian.j.dom.node.PrefixMapping;
 import se.ugli.durian.j.dom.node.Text;
 
 public class MutableNodeFactory implements NodeFactory {
@@ -17,8 +17,8 @@ public class MutableNodeFactory implements NodeFactory {
     @SuppressWarnings({ "unchecked" })
     @Override
     public <T extends Element> T createElement(final String name, final String uri, final Element parent,
-            final Iterable<Prefixmapping> prefixmappings) {
-        return (T) new MutableElement(name, uri, this, prefixmappings);
+            final Iterable<PrefixMapping> prefixMappings) {
+        return (T) new MutableElement(name, uri, this, prefixMappings);
     }
 
     @SuppressWarnings({ "unchecked" })

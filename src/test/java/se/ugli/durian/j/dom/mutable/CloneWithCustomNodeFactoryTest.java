@@ -9,7 +9,7 @@ import org.junit.Test;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
-import se.ugli.durian.j.dom.node.Prefixmapping;
+import se.ugli.durian.j.dom.node.PrefixMapping;
 import se.ugli.durian.j.dom.parser.Parser;
 import se.ugli.durian.j.dom.parser.ParserBuilder;
 
@@ -18,7 +18,7 @@ public class CloneWithCustomNodeFactoryTest {
     class TitleElement extends MutableElement {
 
         public TitleElement(final String name, final String uri, final NodeFactory nodeFactory) {
-            super(name, uri, nodeFactory, new ArrayList<Prefixmapping>());
+            super(name, uri, nodeFactory, new ArrayList<PrefixMapping>());
         }
 
     }
@@ -36,7 +36,7 @@ public class CloneWithCustomNodeFactoryTest {
         @SuppressWarnings("unchecked")
         @Override
         public <T extends Element> T createElement(final String name, final String uri, final Element parent,
-                final Iterable<Prefixmapping> prefixmappings) {
+                final Iterable<PrefixMapping> prefixmappings) {
             if (parent != null && parent.getName().equals("schema") && name.equals("title"))
                 return (T) new TitleElement(name, uri, this);
             return super.createElement(name, uri, parent, prefixmappings);

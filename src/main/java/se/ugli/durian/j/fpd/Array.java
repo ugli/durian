@@ -6,7 +6,7 @@ import se.ugli.durian.j.dom.mutable.MutableElement;
 import se.ugli.durian.j.dom.mutable.MutableNodeFactory;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Node;
-import se.ugli.durian.j.dom.node.Prefixmapping;
+import se.ugli.durian.j.dom.node.PrefixMapping;
 
 class Array implements Definition {
 
@@ -26,7 +26,7 @@ class Array implements Definition {
 
     @Override
     public Node createNode(final String data) {
-        final MutableElement element = new MutableElement(name, targetNamespace, new MutableNodeFactory(), new ArrayList<Prefixmapping>());
+        final MutableElement element = new MutableElement(name, targetNamespace, new MutableNodeFactory(), new ArrayList<PrefixMapping>());
         int beginIndex = 0;
         for (int i = 0; i < size; i++) {
             final int endIndex = beginIndex + elementLength;

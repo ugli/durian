@@ -60,7 +60,7 @@ class MutableElementCloner implements ElementCloner {
 
     private static MutableElement createElement(final String elementName, final Element elementToClone, final Element parent,
             final NodeFactory nodeFactory) {
-        return nodeFactory.createElement(elementName, elementToClone.getUri(), parent, elementToClone.prefixmappings());
+        return nodeFactory.createElement(elementName, elementToClone.getUri(), parent, elementToClone.prefixMappings());
     }
 
     private static List<Attribute> cloneAttributes(final Element elementToClone, final Element elementClone,

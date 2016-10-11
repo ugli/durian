@@ -1,7 +1,10 @@
 package se.ugli.durian.j.dom.mutable;
 
+import static java.util.Arrays.asList;
+import static se.ugli.durian.j.dom.node.PrefixMapping.prefixMapping;
+import static se.ugli.durian.j.dom.utils.Strings.nonEmptyOrNull;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -18,7 +21,7 @@ import se.ugli.durian.j.dom.node.ElementCloner;
 import se.ugli.durian.j.dom.node.Node;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.NodeListener;
-import se.ugli.durian.j.dom.node.Prefixmapping;
+import se.ugli.durian.j.dom.node.PrefixMapping;
 import se.ugli.durian.j.dom.node.Text;
 import se.ugli.durian.j.dom.query.QueryManager;
 import se.ugli.durian.j.dom.serialize.Serializer;
@@ -36,19 +39,16 @@ public class MutableElement implements Element, MutableNode {
     private final Map<String, String> prefixByUri = new LinkedHashMap<String, String>();
     private final String id = Id.create();
 
-    @Override
-    public String id() {
-        return id;
-    }
-
     public MutableElement(final String name, final String uri, final NodeFactory nodeFactory,
-            final Iterable<Prefixmapping> prefixmappings) {
+            final Iterable<PrefixMapping> prefixMappings) {
         this.name = name;
         this.uri = uri;
         this.nodeFactory = nodeFactory;
-        for (final Prefixmapping prefixmapping : prefixmappings)
-            prefixByUri.put(prefixmapping.uri, prefixmapping.prefix);
-
+        if (uri != null)
+            prefixByUri.put(uri, null);
+        if (prefixMappings != null)
+            for (final PrefixMapping prefixmapping : prefixMappings)
+                prefixByUri.put(prefixmapping.uri, nonEmptyOrNull(prefixmapping.prefix));
         nodeListeners.add(new SetParentListener());
     }
 
@@ -64,6 +64,11 @@ public class MutableElement implements Element, MutableNode {
             ((MutableNode) node).setParent(null);
         }
 
+    }
+
+    @Override
+    public String id() {
+        return id;
     }
 
     @Override
@@ -152,8 +157,8 @@ public class MutableElement implements Element, MutableNode {
 
     @SuppressWarnings("unchecked")
     public <T extends Element> T addElement(final String name, final String uri, final NodeFactory nodeFactory,
-            final Prefixmapping... prefixmappings) {
-        return (T) add(nodeFactory.createElement(name, uri, this, Arrays.asList(prefixmappings)));
+            final PrefixMapping... prefixmappings) {
+        return (T) add(nodeFactory.createElement(name, uri, this, asList(prefixmappings)));
     }
 
     public <T extends Text> T addText(final String value) {
@@ -450,10 +455,10 @@ public class MutableElement implements Element, MutableNode {
     }
 
     @Override
-    public Iterable<Prefixmapping> prefixmappings() {
-        final List<Prefixmapping> prefixmappings = new ArrayList<Prefixmapping>();
+    public Iterable<PrefixMapping> prefixMappings() {
+        final List<PrefixMapping> prefixmappings = new ArrayList<PrefixMapping>();
         for (final Entry<String, String> entry : prefixByUri.entrySet())
-            prefixmappings.add(new Prefixmapping(entry.getValue(), entry.getKey()));
+            prefixmappings.add(prefixMapping(entry.getValue(), entry.getKey()));
         return Collections.unmodifiableCollection(prefixmappings);
     }
 
@@ -468,7 +473,7 @@ public class MutableElement implements Element, MutableNode {
     }
 
     private String prefix(final String uri, final Element element) {
-        for (final Prefixmapping prefixmapping : element.prefixmappings())
+        for (final PrefixMapping prefixmapping : element.prefixMappings())
             if (uri.equals(prefixmapping.uri))
                 return prefixmapping.prefix;
         if (element.getParent() != null)

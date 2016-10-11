@@ -19,7 +19,7 @@ import se.ugli.durian.j.dom.mutable.MutableElement;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
-import se.ugli.durian.j.dom.node.Prefixmapping;
+import se.ugli.durian.j.dom.node.PrefixMapping;
 
 public final class JsonParser {
 
@@ -106,12 +106,12 @@ public final class JsonParser {
         if (rootNode instanceof ObjectNode)
             return createElementFromObjectNode(rootElementName, (ObjectNode) rootNode, null);
         else if (rootNode instanceof ArrayNode) {
-            final MutableElement root = nodeFactory.createElement(rootElementName, uri, null, new ArrayList<Prefixmapping>(0));
+            final MutableElement root = nodeFactory.createElement(rootElementName, uri, null, new ArrayList<PrefixMapping>(0));
             appendArrayNode((ArrayNode) rootNode, rootArrayChildElementName, root);
             return root;
         }
         else if (rootNode instanceof ValueNode) {
-            final MutableElement root = nodeFactory.createElement(rootElementName, uri, null, new ArrayList<Prefixmapping>(0));
+            final MutableElement root = nodeFactory.createElement(rootElementName, uri, null, new ArrayList<PrefixMapping>(0));
             if (!(rootNode instanceof NullNode))
                 root.add(nodeFactory.createText(root, rootNode.asText()));
             return root;
@@ -121,7 +121,7 @@ public final class JsonParser {
     }
 
     private Element createElementFromObjectNode(final String elementName, final ObjectNode node, final Element parent) {
-        final MutableElement element = nodeFactory.createElement(elementName, uri, parent, new ArrayList<Prefixmapping>(0));
+        final MutableElement element = nodeFactory.createElement(elementName, uri, parent, new ArrayList<PrefixMapping>(0));
         for (final Iterator<String> i = node.fieldNames(); i.hasNext();) {
             final String fieldName = i.next();
             final JsonNode childNode = node.get(fieldName);

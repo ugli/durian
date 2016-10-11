@@ -74,7 +74,7 @@ public interface Element extends Content {
 
     String qName();
 
-    Iterable<Prefixmapping> prefixmappings();
+    Iterable<PrefixMapping> prefixMappings();
 
     String toXml();
 

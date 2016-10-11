@@ -16,7 +16,7 @@ import se.ugli.durian.j.dom.mutable.MutableAttribute;
 import se.ugli.durian.j.dom.mutable.MutableElement;
 import se.ugli.durian.j.dom.mutable.MutableNodeFactory;
 import se.ugli.durian.j.dom.node.NodeFactory;
-import se.ugli.durian.j.dom.node.Prefixmapping;
+import se.ugli.durian.j.dom.node.PrefixMapping;
 
 public class DocumentBuilder extends Builder {
 
@@ -42,7 +42,7 @@ public class DocumentBuilder extends Builder {
     public void startElement(final NodeName elemName, final SchemaType typeCode, final Location location, final int properties) {
         final MutableElement parent = elementStack.isEmpty() ? null : elementStack.peek();
         final String uri = nonEmptyOrNull(elemName.getURI());
-        final MutableElement element = new MutableElement(elemName.getLocalPart(), uri, nodeFactory, new ArrayList<Prefixmapping>());
+        final MutableElement element = new MutableElement(elemName.getLocalPart(), uri, nodeFactory, new ArrayList<PrefixMapping>());
         treeInfo.registerElement(element, index++);
         elementStack.push(element);
         if (parent != null)

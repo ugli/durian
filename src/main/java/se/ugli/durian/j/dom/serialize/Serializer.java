@@ -9,7 +9,7 @@ import java.util.List;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
-import se.ugli.durian.j.dom.node.Prefixmapping;
+import se.ugli.durian.j.dom.node.PrefixMapping;
 import se.ugli.durian.j.dom.node.Text;
 
 public class Serializer {
@@ -57,7 +57,7 @@ public class Serializer {
         xml.append(lineSeparator);
         appendCharWithTab(indentDepth, LT);
         xml.append(qName);
-        appendPrefixmappings(element.prefixmappings());
+        appendPrefixmappings(element.prefixMappings());
         appendAttributes(element.getAttributes());
         if (content.isEmpty())
             xml.append(SPACE).append(SLASH).append(GT);
@@ -87,8 +87,8 @@ public class Serializer {
         xml.append(ch);
     }
 
-    private void appendPrefixmappings(final Iterable<Prefixmapping> prefixmappings) {
-        for (final Prefixmapping prefixmapping : prefixmappings) {
+    private void appendPrefixmappings(final Iterable<PrefixMapping> prefixmappings) {
+        for (final PrefixMapping prefixmapping : prefixmappings) {
             xml.append(SPACE).append("xmlns");
             if (prefixmapping.prefix != null)
                 xml.append(COLON).append(prefixmapping.prefix);

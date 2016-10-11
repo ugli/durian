@@ -1,13 +1,17 @@
 package se.ugli.durian.j.dom.node;
 
-public class Prefixmapping {
+public class PrefixMapping {
 
     public final String prefix;
     public final String uri;
 
-    public Prefixmapping(final String prefix, final String uri) {
+    private PrefixMapping(final String prefix, final String uri) {
         this.prefix = prefix;
         this.uri = uri;
+    }
+
+    public static PrefixMapping prefixMapping(final String prefix, final String uri) {
+        return new PrefixMapping(prefix, uri);
     }
 
     @Override
@@ -27,7 +31,7 @@ public class Prefixmapping {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        final Prefixmapping other = (Prefixmapping) obj;
+        final PrefixMapping other = (PrefixMapping) obj;
         if (prefix == null) {
             if (other.prefix != null)
                 return false;
