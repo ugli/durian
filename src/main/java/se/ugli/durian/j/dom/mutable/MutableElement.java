@@ -380,8 +380,12 @@ public class MutableElement implements Element, MutableNode {
 
     public void setAttributeValueByName(final String attributeName, final String value) {
         final MutableAttribute attribute = getAttributeByName(attributeName);
-        if (attribute != null)
-            attribute.setValue(value);
+        if (attribute != null) {
+            if (value == null)
+                remove(attribute);
+            else
+                attribute.setValue(value);
+        }
         else if (value != null)
             add(nodeFactory.createAttribute(attributeName, uri, this, value));
     }
