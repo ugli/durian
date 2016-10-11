@@ -59,7 +59,7 @@ public class DocumentBuilder extends Builder {
     public void attribute(final NodeName attName, final SimpleType typeCode, final CharSequence value, final Location location,
             final int properties) {
         final String uri = nonEmptyOrNull(attName.getURI());
-        final MutableAttribute attribute = new MutableAttribute(attName.getLocalPart(), uri, value.toString());
+        final MutableAttribute attribute = new MutableAttribute(attName.getLocalPart(), uri, value.toString(), nodeFactory);
         elementStack.peek().add(attribute);
         treeInfo.registerAttribute(attribute, index++);
     }

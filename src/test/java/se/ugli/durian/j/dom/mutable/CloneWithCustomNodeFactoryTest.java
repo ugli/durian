@@ -25,8 +25,8 @@ public class CloneWithCustomNodeFactoryTest {
 
     class QueryBindingAttribute extends MutableAttribute {
 
-        public QueryBindingAttribute(final String name, final String uri, final String value) {
-            super(name, uri, value);
+        public QueryBindingAttribute(final String name, final String uri, final String value, final NodeFactory nodeFactory) {
+            super(name, uri, value, nodeFactory);
         }
 
     }
@@ -46,7 +46,7 @@ public class CloneWithCustomNodeFactoryTest {
         @Override
         public <T extends Attribute> T createAttribute(final String name, final String uri, final Element parent, final String value) {
             if (parent != null && parent.getName().equals("schema") && name.equals("queryBinding"))
-                return (T) new QueryBindingAttribute(name, uri, value);
+                return (T) new QueryBindingAttribute(name, uri, value, this);
             return super.createAttribute(name, uri, parent, value);
         }
     }
@@ -58,7 +58,7 @@ public class CloneWithCustomNodeFactoryTest {
         final Element schema = parser.parseResource("/PurchaseOrder.sch");
         assertTrue(schema.selectElement("//title") instanceof TitleElement);
         assertTrue(schema.selectAttribute("//@queryBinding") instanceof QueryBindingAttribute);
-        final Element schemaClone = schema.cloneElement();
+        final Element schemaClone = schema.clone().element();
         assertTrue(schemaClone.selectElement("//title") instanceof TitleElement);
         assertTrue(schemaClone.selectAttribute("//@queryBinding") instanceof QueryBindingAttribute);
     }

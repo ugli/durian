@@ -11,6 +11,7 @@ import java.util.Set;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
+import se.ugli.durian.j.dom.node.ElementCloner;
 import se.ugli.durian.j.dom.node.Node;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.NodeListener;
@@ -18,7 +19,6 @@ import se.ugli.durian.j.dom.node.Prefixmapping;
 import se.ugli.durian.j.dom.node.Text;
 import se.ugli.durian.j.dom.query.QueryManager;
 import se.ugli.durian.j.dom.serialize.Serializer;
-import se.ugli.durian.j.dom.utils.ElementCloneCommand;
 import se.ugli.durian.j.dom.utils.Id;
 
 public class MutableElement implements Element, MutableNode {
@@ -59,6 +59,16 @@ public class MutableElement implements Element, MutableNode {
             ((MutableNode) node).setParent(null);
         }
 
+    }
+
+    @Override
+    public ElementCloner clone() {
+        return new MutableElementCloner(this);
+    }
+
+    @Override
+    public NodeFactory nodeFactory() {
+        return nodeFactory;
     }
 
     public void addListener(final NodeListener listener) {
@@ -148,26 +158,6 @@ public class MutableElement implements Element, MutableNode {
     @SuppressWarnings("unchecked")
     public <T extends Text> T addText(final String value, final NodeFactory nodeFactory) {
         return (T) add(nodeFactory.createText(this, value));
-    }
-
-    @Override
-    public <T extends Element> T cloneElement() {
-        return ElementCloneCommand.execute(name, this, nodeFactory);
-    }
-
-    @Override
-    public <T extends Element> T cloneElement(final NodeFactory nodeFactory) {
-        return ElementCloneCommand.execute(name, this, nodeFactory);
-    }
-
-    @Override
-    public <T extends Element> T cloneElement(final String elementName) {
-        return ElementCloneCommand.execute(elementName, this, nodeFactory);
-    }
-
-    @Override
-    public <T extends Element> T cloneElement(final String elementName, final NodeFactory nodeFactory) {
-        return ElementCloneCommand.execute(elementName, this, nodeFactory);
     }
 
     @SuppressWarnings("unchecked")

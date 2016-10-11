@@ -4,13 +4,7 @@ import java.util.List;
 
 public interface Element extends Content {
 
-    <T extends Element> T cloneElement();
-
-    <T extends Element> T cloneElement(NodeFactory nodeFactory);
-
-    <T extends Element> T cloneElement(String elementName);
-
-    <T extends Element> T cloneElement(String elementName, NodeFactory nodeFactory);
+    ElementCloner clone();
 
     <T extends Attribute> T getAttributeByName(String attributeName);
 

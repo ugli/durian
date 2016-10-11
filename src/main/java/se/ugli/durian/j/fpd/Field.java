@@ -1,6 +1,7 @@
 package se.ugli.durian.j.fpd;
 
 import se.ugli.durian.j.dom.mutable.MutableAttribute;
+import se.ugli.durian.j.dom.mutable.MutableNodeFactory;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Node;
 
@@ -22,7 +23,7 @@ class Field implements Definition {
     public Node createNode(final String data) {
         final String value = data.trim();
         if (!value.isEmpty() || includeEmptyValues)
-            return new MutableAttribute(name, targetNamespace, value);
+            return new MutableAttribute(name, targetNamespace, value, new MutableNodeFactory());
         return null;
     }
 

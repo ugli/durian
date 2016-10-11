@@ -13,7 +13,7 @@ public class CloneTest {
     @Test
     public void shouldClone() {
         final Element element = Parser.apply().parseResource("/se/ugli/durian/j/dom/mutable/ddata.xml");
-        final Element elementClone = element.cloneElement();
+        final Element elementClone = element.clone().element();
         assertThat(element.toXml(), is(elementClone.toXml()));
     }
 

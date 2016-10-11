@@ -7,4 +7,6 @@ public interface Node {
     String getPath();
 
     String id();
+
+    NodeFactory nodeFactory();
 }

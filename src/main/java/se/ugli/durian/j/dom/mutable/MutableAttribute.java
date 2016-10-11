@@ -1,7 +1,9 @@
 package se.ugli.durian.j.dom.mutable;
 
 import se.ugli.durian.j.dom.node.Attribute;
+import se.ugli.durian.j.dom.node.AttributeCloner;
 import se.ugli.durian.j.dom.node.Element;
+import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Prefixmapping;
 import se.ugli.durian.j.dom.utils.Id;
 
@@ -12,16 +14,28 @@ public class MutableAttribute implements Attribute, MutableNode {
     private final String uri;
     private String value;
     private final String id = Id.create();
+    private final NodeFactory nodeFactory;
 
     @Override
     public String id() {
         return id;
     }
 
-    public MutableAttribute(final String name, final String uri, final String value) {
+    public MutableAttribute(final String name, final String uri, final String value, final NodeFactory nodeFactory) {
         this.name = name;
         this.uri = uri;
         this.value = value;
+        this.nodeFactory = nodeFactory;
+    }
+
+    @Override
+    public NodeFactory nodeFactory() {
+        return nodeFactory;
+    }
+
+    @Override
+    public AttributeCloner clone() {
+        return new MutableAttributeCloner(this, nodeFactory);
     }
 
     @Override

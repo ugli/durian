@@ -10,4 +10,6 @@ public interface Attribute extends Node {
 
     String qName();
 
+    AttributeCloner clone();
+
 }
