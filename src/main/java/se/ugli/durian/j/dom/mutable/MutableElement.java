@@ -44,8 +44,6 @@ public class MutableElement implements Element, MutableNode {
         this.name = name;
         this.uri = uri;
         this.nodeFactory = nodeFactory;
-        if (uri != null)
-            prefixByUri.put(uri, null);
         if (prefixMappings != null)
             for (final PrefixMapping prefixmapping : prefixMappings)
                 prefixByUri.put(prefixmapping.uri, nonEmptyOrNull(prefixmapping.prefix));
@@ -421,6 +419,10 @@ public class MutableElement implements Element, MutableNode {
 
     public void setUri(final String uri) {
         this.uri = uri;
+    }
+
+    public void addPrefixMapping(final String prefix, final String uri) {
+        prefixByUri.put(uri, prefix);
     }
 
     @Override

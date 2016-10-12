@@ -72,9 +72,6 @@ public class MutableElementTest {
 
         assertThat(Iterables.size(element.prefixMappings()), is(1));
         assertThat(Iterables.get(element.prefixMappings(), 0), is(prefixMapping("c", "b")));
-
-        System.out.println(element.toXml());
-        System.out.println(Durian.createElement("dd", "abc").toXml());
     }
 
 }

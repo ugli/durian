@@ -4,7 +4,9 @@ import static org.apache.commons.lang3.StringEscapeUtils.escapeXml11;
 import static se.ugli.durian.j.dom.serialize.SerializerBuilder.serializerBuilder;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
@@ -26,6 +28,7 @@ public class Serializer {
     private final String xmlVersion;
     private final String encoding;
     private final StringBuilder xml = new StringBuilder();
+    private final Map<String, String> prefixByUri = new LinkedHashMap<String, String>();
 
     Serializer(final String xmlVersion, final String encoding, final String tab, final String lineSeparator) {
         this.xmlVersion = xmlVersion;
@@ -57,7 +60,7 @@ public class Serializer {
         xml.append(lineSeparator);
         appendCharWithTab(indentDepth, LT);
         xml.append(qName);
-        appendPrefixmappings(element.prefixMappings());
+        appendPrefixmappings(element);
         appendAttributes(element.getAttributes());
         if (content.isEmpty())
             xml.append(SPACE).append(SLASH).append(GT);
@@ -87,13 +90,24 @@ public class Serializer {
         xml.append(ch);
     }
 
-    private void appendPrefixmappings(final Iterable<PrefixMapping> prefixmappings) {
-        for (final PrefixMapping prefixmapping : prefixmappings) {
-            xml.append(SPACE).append("xmlns");
-            if (prefixmapping.prefix != null)
-                xml.append(COLON).append(prefixmapping.prefix);
-            xml.append(EQ).append(QUOTE).append(prefixmapping.uri).append(QUOTE);
+    private void appendPrefixmappings(final Element element) {
+        for (final PrefixMapping prefixMapping : element.prefixMappings()) {
+            prefixByUri.put(prefixMapping.uri, prefixMapping.prefix);
+            appendPrefixMappping(prefixMapping);
         }
+        final String uri = element.getUri();
+        if (uri != null && !prefixByUri.containsKey(uri)) {
+            final PrefixMapping prefixMapping = PrefixMapping.prefixMapping(null, element.getUri());
+            prefixByUri.put(prefixMapping.uri, prefixMapping.prefix);
+            appendPrefixMappping(prefixMapping);
+        }
+    }
+
+    private void appendPrefixMappping(final PrefixMapping prefixmapping) {
+        xml.append(SPACE).append("xmlns");
+        if (prefixmapping.prefix != null)
+            xml.append(COLON).append(prefixmapping.prefix);
+        xml.append(EQ).append(QUOTE).append(prefixmapping.uri).append(QUOTE);
     }
 
     private void appendAttributes(final Iterable<Attribute> attributes) {
