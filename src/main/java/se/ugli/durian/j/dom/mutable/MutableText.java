@@ -3,7 +3,7 @@ package se.ugli.durian.j.dom.mutable;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
-import se.ugli.durian.j.dom.node.TextCloner;
+import se.ugli.durian.j.dom.node.TextCloneApi;
 import se.ugli.durian.j.dom.utils.Id;
 
 public class MutableText implements Text, MutableNode {
@@ -24,8 +24,8 @@ public class MutableText implements Text, MutableNode {
     }
 
     @Override
-    public TextCloner clone() {
-        return new MutableTextCloner(this);
+    public TextCloneApi clone() {
+        return new MutableTextCloneApiImpl(this);
     }
 
     @Override

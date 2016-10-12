@@ -4,5 +4,5 @@ public interface Text extends Content {
 
     String getValue();
 
-    TextCloner clone();
+    TextCloneApi clone();
 }

@@ -6,17 +6,17 @@ import java.util.List;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
-import se.ugli.durian.j.dom.node.ElementCloner;
+import se.ugli.durian.j.dom.node.ElementCloneApi;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 
-class MutableElementCloner implements ElementCloner {
+class MutableElementCloneApiImpl implements ElementCloneApi {
 
     private final MutableElement element;
     private final NodeFactory nodeFactory;
     private final String elementName;
 
-    public MutableElementCloner(final MutableElement element) {
+    public MutableElementCloneApiImpl(final MutableElement element) {
         this.element = element;
         this.nodeFactory = element.nodeFactory();
         this.elementName = element.getName();

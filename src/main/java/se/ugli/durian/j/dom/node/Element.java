@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface Element extends Content {
 
-    ElementCloner clone();
+    ElementCloneApi clone();
 
     <T extends Attribute> T getAttributeByName(String attributeName);
 

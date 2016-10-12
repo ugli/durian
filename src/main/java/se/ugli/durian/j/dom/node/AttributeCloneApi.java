@@ -1,6 +1,6 @@
 package se.ugli.durian.j.dom.node;
 
-public interface AttributeCloner {
+public interface AttributeCloneApi {
 
     <T extends Attribute> T attribute();
 

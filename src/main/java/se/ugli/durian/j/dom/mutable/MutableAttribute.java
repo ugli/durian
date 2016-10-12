@@ -1,7 +1,7 @@
 package se.ugli.durian.j.dom.mutable;
 
 import se.ugli.durian.j.dom.node.Attribute;
-import se.ugli.durian.j.dom.node.AttributeCloner;
+import se.ugli.durian.j.dom.node.AttributeCloneApi;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.PrefixMapping;
@@ -34,8 +34,8 @@ public class MutableAttribute implements Attribute, MutableNode {
     }
 
     @Override
-    public AttributeCloner clone() {
-        return new MutableAttributeCloner(this, nodeFactory);
+    public AttributeCloneApi clone() {
+        return new MutableAttributeApiImpl(this, nodeFactory);
     }
 
     @Override

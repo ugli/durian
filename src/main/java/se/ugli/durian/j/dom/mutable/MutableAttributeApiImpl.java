@@ -1,11 +1,11 @@
 package se.ugli.durian.j.dom.mutable;
 
 import se.ugli.durian.j.dom.node.Attribute;
-import se.ugli.durian.j.dom.node.AttributeCloner;
+import se.ugli.durian.j.dom.node.AttributeCloneApi;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 
-class MutableAttributeCloner implements AttributeCloner {
+class MutableAttributeApiImpl implements AttributeCloneApi {
 
     private final Element parent;
     private final NodeFactory nodeFactory;
@@ -13,7 +13,7 @@ class MutableAttributeCloner implements AttributeCloner {
     private final String uri;
     private final String value;
 
-    public MutableAttributeCloner(final MutableAttribute attribute, final NodeFactory nodeFactory) {
+    public MutableAttributeApiImpl(final MutableAttribute attribute, final NodeFactory nodeFactory) {
         this.parent = null;
         this.name = attribute.getName();
         this.uri = attribute.getUri();

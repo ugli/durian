@@ -17,7 +17,7 @@ import java.util.Set;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
-import se.ugli.durian.j.dom.node.ElementCloner;
+import se.ugli.durian.j.dom.node.ElementCloneApi;
 import se.ugli.durian.j.dom.node.Node;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.NodeListener;
@@ -70,8 +70,8 @@ public class MutableElement implements Element, MutableNode {
     }
 
     @Override
-    public ElementCloner clone() {
-        return new MutableElementCloner(this);
+    public ElementCloneApi clone() {
+        return new MutableElementCloneApiImpl(this);
     }
 
     @Override

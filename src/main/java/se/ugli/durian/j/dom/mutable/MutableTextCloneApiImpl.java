@@ -3,15 +3,15 @@ package se.ugli.durian.j.dom.mutable;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
-import se.ugli.durian.j.dom.node.TextCloner;
+import se.ugli.durian.j.dom.node.TextCloneApi;
 
-public class MutableTextCloner implements TextCloner {
+public class MutableTextCloneApiImpl implements TextCloneApi {
 
     private final String value;
     private final NodeFactory nodeFactory;
     private final Element parent;
 
-    public MutableTextCloner(final MutableText mutableText) {
+    public MutableTextCloneApiImpl(final MutableText mutableText) {
         this.parent = null;
         this.value = mutableText.getValue();
         this.nodeFactory = mutableText.nodeFactory();
