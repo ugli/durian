@@ -2,7 +2,6 @@ package se.ugli.durian.j.dom.mutable;
 
 import static java.util.Arrays.asList;
 import static se.ugli.durian.j.dom.node.PrefixMapping.prefixMapping;
-import static se.ugli.durian.j.dom.utils.Strings.nonEmptyOrNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 
 import se.ugli.durian.j.dom.node.Attribute;
@@ -45,7 +45,7 @@ public class MutableElement implements Element, MutableNode {
         this.nodeFactory = nodeFactory;
         if (prefixMappings != null)
             for (final PrefixMapping prefixmapping : prefixMappings)
-                prefixByUri.put(prefixmapping.uri, nonEmptyOrNull(prefixmapping.prefix));
+                prefixByUri.put(prefixmapping.uri, prefixmapping.prefix.orElse(null));
         nodeListeners.add(new SetParentListener());
     }
 
@@ -286,8 +286,8 @@ public class MutableElement implements Element, MutableNode {
     }
 
     @Override
-    public String getUri() {
-        return uri;
+    public Optional<String> getUri() {
+        return Optional.ofNullable(uri);
     }
 
     public boolean removeElementByName(final String elementName) {
@@ -377,20 +377,20 @@ public class MutableElement implements Element, MutableNode {
     @Override
     public String qName() {
         if (uri != null) {
-            final String prefix = prefix(uri, this);
-            if (prefix != null)
-                return prefix + ":" + name;
+            final Optional<String> prefix = prefix(uri, this);
+            if (prefix.isPresent())
+                return prefix.get() + ":" + name;
         }
         return name;
     }
 
-    private String prefix(final String uri, final Element element) {
+    private Optional<String> prefix(final String uri, final Element element) {
         for (final PrefixMapping prefixmapping : element.prefixMappings())
             if (uri.equals(prefixmapping.uri))
                 return prefixmapping.prefix;
         if (element.getParent() != null)
             return prefix(uri, element.getParent());
-        return null;
+        return Optional.empty();
     }
 
     @Override

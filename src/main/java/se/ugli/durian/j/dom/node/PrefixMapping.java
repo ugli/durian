@@ -1,17 +1,24 @@
 package se.ugli.durian.j.dom.node;
 
+import static java.util.Objects.requireNonNull;
+import static java.util.Optional.ofNullable;
+import static se.ugli.durian.j.dom.utils.Strings.nonEmptyOrNull;
+
+import java.util.Optional;
+
 public class PrefixMapping {
 
-    public final String prefix;
+    public final Optional<String> prefix;
     public final String uri;
 
-    private PrefixMapping(final String prefix, final String uri) {
+    private PrefixMapping(final Optional<String> prefix, final String uri) {
         this.prefix = prefix;
         this.uri = uri;
     }
 
     public static PrefixMapping prefixMapping(final String prefix, final String uri) {
-        return new PrefixMapping(prefix, uri);
+        requireNonNull(nonEmptyOrNull(uri), "Prefix uri can not null or empty");
+        return new PrefixMapping(ofNullable(nonEmptyOrNull(prefix)), uri);
     }
 
     @Override

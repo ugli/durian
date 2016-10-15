@@ -1,10 +1,12 @@
 package se.ugli.durian.j.dom.node;
 
+import java.util.Optional;
+
 public interface Attribute extends Node {
 
     String getName();
 
-    String getUri();
+    Optional<String> getUri();
 
     String getValue();
 

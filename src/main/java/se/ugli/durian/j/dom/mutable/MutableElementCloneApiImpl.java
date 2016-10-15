@@ -60,7 +60,7 @@ class MutableElementCloneApiImpl implements ElementCloneApi {
 
     private static MutableElement createElement(final String elementName, final Element elementToClone, final Element parent,
             final NodeFactory nodeFactory) {
-        return nodeFactory.createElement(elementName, elementToClone.getUri(), parent, elementToClone.prefixMappings());
+        return nodeFactory.createElement(elementName, elementToClone.getUri().orElse(null), parent, elementToClone.prefixMappings());
     }
 
     private static List<Attribute> cloneAttributes(final Element elementToClone, final Element elementClone,

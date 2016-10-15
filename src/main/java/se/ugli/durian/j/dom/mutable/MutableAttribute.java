@@ -1,5 +1,7 @@
 package se.ugli.durian.j.dom.mutable;
 
+import java.util.Optional;
+
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.AttributeCloneApi;
 import se.ugli.durian.j.dom.node.Element;
@@ -75,8 +77,8 @@ public class MutableAttribute implements Attribute, MutableNode {
     }
 
     @Override
-    public String getUri() {
-        return uri;
+    public Optional<String> getUri() {
+        return Optional.of(uri);
     }
 
     @Override
@@ -106,21 +108,21 @@ public class MutableAttribute implements Attribute, MutableNode {
         return "MutableAttribute [name=" + name + ", uri=" + uri + ", value=" + value + "]";
     }
 
-    private String prefix(final String uri, final Element element) {
+    private Optional<String> prefix(final String uri, final Element element) {
         for (final PrefixMapping prefixmapping : element.prefixMappings())
             if (uri.equals(prefixmapping.uri))
                 return prefixmapping.prefix;
         if (element.getParent() != null)
             return prefix(uri, element.getParent());
-        return null;
+        return Optional.empty();
     }
 
     @Override
     public String qName() {
         if (uri != null && parent != null) {
-            final String prefix = prefix(uri, parent);
-            if (prefix != null)
-                return prefix + ":" + name;
+            final Optional<String> prefix = prefix(uri, parent);
+            if (prefix.isPresent())
+                return prefix.get() + ":" + name;
         }
         return name;
     }

@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
@@ -92,21 +93,21 @@ public class Serializer {
 
     private void appendPrefixmappings(final Element element) {
         for (final PrefixMapping prefixMapping : element.prefixMappings()) {
-            prefixByUri.put(prefixMapping.uri, prefixMapping.prefix);
+            prefixByUri.put(prefixMapping.uri, prefixMapping.prefix.orElse(null));
             appendPrefixMappping(prefixMapping);
         }
-        final String uri = element.getUri();
-        if (uri != null && !prefixByUri.containsKey(uri)) {
-            final PrefixMapping prefixMapping = PrefixMapping.prefixMapping(null, element.getUri());
-            prefixByUri.put(prefixMapping.uri, prefixMapping.prefix);
+        final Optional<String> uri = element.getUri();
+        if (uri.isPresent() && !prefixByUri.containsKey(uri.get())) {
+            final PrefixMapping prefixMapping = PrefixMapping.prefixMapping(null, uri.get());
+            prefixByUri.put(prefixMapping.uri, prefixMapping.prefix.orElse(null));
             appendPrefixMappping(prefixMapping);
         }
     }
 
     private void appendPrefixMappping(final PrefixMapping prefixmapping) {
         xml.append(SPACE).append("xmlns");
-        if (prefixmapping.prefix != null)
-            xml.append(COLON).append(prefixmapping.prefix);
+        if (prefixmapping.prefix.isPresent())
+            xml.append(COLON).append(prefixmapping.prefix.get());
         xml.append(EQ).append(QUOTE).append(prefixmapping.uri).append(QUOTE);
     }
 

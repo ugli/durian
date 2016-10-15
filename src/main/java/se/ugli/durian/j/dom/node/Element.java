@@ -1,5 +1,7 @@
 package se.ugli.durian.j.dom.node;
 
+import java.util.Optional;
+
 public interface Element extends Content {
 
     ElementCloneApi clone();
@@ -38,7 +40,7 @@ public interface Element extends Content {
 
     boolean hasNodes();
 
-    String getUri();
+    Optional<String> getUri();
 
     String qName();
 
