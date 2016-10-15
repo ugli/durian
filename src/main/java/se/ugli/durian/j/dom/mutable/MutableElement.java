@@ -23,7 +23,6 @@ import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.NodeListener;
 import se.ugli.durian.j.dom.node.PrefixMapping;
 import se.ugli.durian.j.dom.node.Text;
-import se.ugli.durian.j.dom.query.QueryManager;
 import se.ugli.durian.j.dom.serialize.Serializer;
 import se.ugli.durian.j.dom.utils.Id;
 
@@ -72,6 +71,11 @@ public class MutableElement implements Element, MutableNode {
     @Override
     public ElementCloneApi clone() {
         return new MutableElementCloneApiImpl(this);
+    }
+
+    @Override
+    public MutableQuertApi select() {
+        return new MutableQuertApiImpl(this);
     }
 
     @Override
@@ -286,94 +290,12 @@ public class MutableElement implements Element, MutableNode {
         return uri;
     }
 
-    public int removeByQuery(final String query) {
-        return removeAll(selectNodes(query));
-    }
-
     public boolean removeElementByName(final String elementName) {
         return remove(getElementByName(elementName));
     }
 
     public int removeElementsByName(final String elementName) {
         return removeAll(getElementsByName(elementName));
-    }
-
-    @Override
-    public <T extends Attribute> T selectAttribute(final String query) {
-        return QueryManager.selectNode(this, query);
-    }
-
-    @Override
-    public <T extends Attribute> T selectAttributeClone(final String query) {
-        return QueryManager.selectNodeClone(this, query, nodeFactory);
-    }
-
-    @Override
-    public <T extends Attribute> T selectAttributeClone(final String query, final NodeFactory nodeFactory) {
-        return QueryManager.selectNodeClone(this, query, nodeFactory);
-    }
-
-    @Override
-    public <T extends Attribute> T selectAttributeClone(final String query, final NodeFactory nodeFactory, final String attributeName) {
-        return QueryManager.selectNodeClone(this, query, nodeFactory, attributeName);
-    }
-
-    @Override
-    public <T extends Attribute> List<T> selectAttributes(final String query) {
-        return QueryManager.selectNodes(this, query);
-    }
-
-    @Override
-    public String selectAttributeValue(final String query) {
-        final Attribute attribute = QueryManager.selectNode(this, query);
-        if (attribute != null)
-            return attribute.getValue();
-        return null;
-    }
-
-    @Override
-    public <T extends Element> T selectElement(final String query) {
-        return QueryManager.selectNode(this, query);
-    }
-
-    @Override
-    public <T extends Element> T selectElementClone(final String query) {
-        return QueryManager.selectNodeClone(this, query, nodeFactory);
-    }
-
-    @Override
-    public <T extends Element> T selectElementClone(final String query, final NodeFactory nodeFactory) {
-        return QueryManager.selectNodeClone(this, query, nodeFactory);
-    }
-
-    @Override
-    public <T extends Element> T selectElementClone(final String query, final NodeFactory nodeFactory, final String elementName) {
-        return QueryManager.selectNodeClone(this, query, nodeFactory, elementName);
-    }
-
-    @Override
-    public <T extends Element> List<T> selectElements(final String query) {
-        return QueryManager.selectNodes(this, query);
-    }
-
-    @Override
-    public <T extends Node> T selectNode(final String query) {
-        return QueryManager.selectNode(this, query);
-    }
-
-    @Override
-    public <T extends Node> List<T> selectNodes(final String query) {
-        return QueryManager.selectNodes(this, query);
-    }
-
-    @Override
-    public String selectText(final String query) {
-        return QueryManager.selectText(this, query);
-    }
-
-    @Override
-    public List<String> selectTexts(final String query) {
-        return QueryManager.selectTexts(this, query);
     }
 
     public void setAttributeValueByName(final String attributeName, final String value) {
@@ -388,24 +310,12 @@ public class MutableElement implements Element, MutableNode {
             add(nodeFactory.createAttribute(attributeName, uri, this, value));
     }
 
-    public boolean setAttributeValueByQuery(final String query, final String value) {
-        final MutableAttribute attribute = selectAttribute(query);
-        if (attribute != null)
-            attribute.setValue(value);
-        return attribute != null;
-    }
-
     public void setElementByName(final String elementName, final Element element) {
         if (element != null && !element.getName().equals(elementName))
             throw new IllegalStateException(elementName + "!=" + element.getName());
         removeElementByName(elementName);
         if (element != null)
             add(element);
-    }
-
-    @Override
-    public boolean evaluteBoolean(final String query) {
-        return QueryManager.evaluteBoolean(this, query);
     }
 
     public void setName(final String name) {

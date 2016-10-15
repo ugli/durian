@@ -14,18 +14,18 @@ public class SelectAttributeValueTest {
     @Test
     public void queryBinding() {
         final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
-        assertEquals("xpath2", element.selectAttributeValue("/schema/@queryBinding"));
+        assertEquals("xpath2", element.select().attributeValue("/schema/@queryBinding"));
     }
 
     @Test
     public void notFound() {
         final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
-        assertNull(element.selectAttributeValue("/schema/@queryBindings"));
+        assertNull(element.select().attributeValue("/schema/@queryBindings"));
     }
 
     @Test(expected = QueryException.class)
     public void boom() {
         final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
-        assertNull(element.selectAttributeValue("//@test"));
+        assertNull(element.select().attributeValue("//@test"));
     }
 }

@@ -56,11 +56,11 @@ public class CloneWithCustomNodeFactoryTest {
 
         final Parser parser = ParserBuilder.apply().nodeFactory(new TestNodeFactory()).build();
         final Element schema = parser.parseResource("/PurchaseOrder.sch");
-        assertTrue(schema.selectElement("//title") instanceof TitleElement);
-        assertTrue(schema.selectAttribute("//@queryBinding") instanceof QueryBindingAttribute);
+        assertTrue(schema.select().element("//title") instanceof TitleElement);
+        assertTrue(schema.select().attribute("//@queryBinding") instanceof QueryBindingAttribute);
         final Element schemaClone = schema.clone().element();
-        assertTrue(schemaClone.selectElement("//title") instanceof TitleElement);
-        assertTrue(schemaClone.selectAttribute("//@queryBinding") instanceof QueryBindingAttribute);
+        assertTrue(schemaClone.select().element("//title") instanceof TitleElement);
+        assertTrue(schemaClone.select().attribute("//@queryBinding") instanceof QueryBindingAttribute);
     }
 
 }
