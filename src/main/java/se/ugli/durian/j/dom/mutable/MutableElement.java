@@ -32,7 +32,7 @@ public class MutableElement implements Element, MutableNode {
     private final List<Content> content = new ArrayList<Content>();
     private String name;
     private final NodeFactory nodeFactory;
-    private String uri;
+    private Optional<String> uri;
     private Element parent;
     private final List<NodeListener> nodeListeners = new ArrayList<NodeListener>();
     private final Map<String, String> prefixByUri = new LinkedHashMap<String, String>();
@@ -41,7 +41,7 @@ public class MutableElement implements Element, MutableNode {
     public MutableElement(final String name, final String uri, final NodeFactory nodeFactory,
             final Iterable<PrefixMapping> prefixMappings) {
         this.name = name;
-        this.uri = uri;
+        this.uri = Optional.ofNullable(uri);
         this.nodeFactory = nodeFactory;
         if (prefixMappings != null)
             for (final PrefixMapping prefixmapping : prefixMappings)
@@ -145,7 +145,7 @@ public class MutableElement implements Element, MutableNode {
     }
 
     public <T extends Attribute> T addAttribute(final String name, final String value) {
-        return addAttribute(name, uri, value, nodeFactory);
+        return addAttribute(name, uri.orElse(null), value, nodeFactory);
     }
 
     @SuppressWarnings("unchecked")
@@ -154,7 +154,7 @@ public class MutableElement implements Element, MutableNode {
     }
 
     public <T extends Element> T addElement(final String name) {
-        return addElement(name, uri, nodeFactory);
+        return addElement(name, uri.orElse(null), nodeFactory);
     }
 
     @SuppressWarnings("unchecked")
@@ -287,7 +287,7 @@ public class MutableElement implements Element, MutableNode {
 
     @Override
     public Optional<String> getUri() {
-        return Optional.ofNullable(uri);
+        return uri;
     }
 
     public boolean removeElementByName(final String elementName) {
@@ -307,7 +307,7 @@ public class MutableElement implements Element, MutableNode {
                 attribute.setValue(value);
         }
         else if (value != null)
-            add(nodeFactory.createAttribute(attributeName, uri, this, value));
+            add(nodeFactory.createAttribute(attributeName, uri.orElse(null), this, value));
     }
 
     public void setElementByName(final String elementName, final Element element) {
@@ -328,7 +328,7 @@ public class MutableElement implements Element, MutableNode {
     }
 
     public void setUri(final String uri) {
-        this.uri = uri;
+        this.uri = Optional.ofNullable(uri);
     }
 
     public void addPrefixMapping(final String prefix, final String uri) {
@@ -376,8 +376,8 @@ public class MutableElement implements Element, MutableNode {
 
     @Override
     public String qName() {
-        if (uri != null) {
-            final Optional<String> prefix = prefix(uri, this);
+        if (uri.isPresent()) {
+            final Optional<String> prefix = prefix(uri.get(), this);
             if (prefix.isPresent())
                 return prefix.get() + ":" + name;
         }

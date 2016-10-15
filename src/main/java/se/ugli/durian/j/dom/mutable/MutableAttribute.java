@@ -13,7 +13,7 @@ public class MutableAttribute implements Attribute, MutableNode {
 
     private final String name;
     private Element parent;
-    private final String uri;
+    private final Optional<String> uri;
     private String value;
     private final String id = Id.create();
     private final NodeFactory nodeFactory;
@@ -25,7 +25,7 @@ public class MutableAttribute implements Attribute, MutableNode {
 
     public MutableAttribute(final String name, final String uri, final String value, final NodeFactory nodeFactory) {
         this.name = name;
-        this.uri = uri;
+        this.uri = Optional.ofNullable(uri);
         this.value = value;
         this.nodeFactory = nodeFactory;
     }
@@ -78,7 +78,7 @@ public class MutableAttribute implements Attribute, MutableNode {
 
     @Override
     public Optional<String> getUri() {
-        return Optional.of(uri);
+        return uri;
     }
 
     @Override
@@ -119,8 +119,8 @@ public class MutableAttribute implements Attribute, MutableNode {
 
     @Override
     public String qName() {
-        if (uri != null && parent != null) {
-            final Optional<String> prefix = prefix(uri, parent);
+        if (uri.isPresent() && parent != null) {
+            final Optional<String> prefix = prefix(uri.get(), parent);
             if (prefix.isPresent())
                 return prefix.get() + ":" + name;
         }
