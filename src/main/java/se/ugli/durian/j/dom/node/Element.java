@@ -8,7 +8,7 @@ public interface Element extends Content {
 
     QueryApi select();
 
-    <T extends Attribute> T getAttributeByName(String attributeName);
+    <T extends Attribute> Optional<T> getAttributeByName(String attributeName);
 
     <T extends Attribute> Iterable<T> getAttributes();
 

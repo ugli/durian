@@ -2,7 +2,6 @@ package se.ugli.durian.j.dom.mutable;
 
 import static com.google.common.collect.Iterables.size;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static se.ugli.durian.j.dom.node.PrefixMapping.prefixMapping;
 
@@ -27,7 +26,7 @@ public class MutableElementTest {
     @Test
     public void shouldShouldSetAttributeByNameIfNotExists() {
         final MutableElement element = Durian.createElement("test");
-        assertThat(element.getAttributeByName("a"), nullValue());
+        assertThat(element.getAttributeByName("a").isPresent(), is(false));
         element.setAttributeValueByName("a", "b");
         assertThat(element.getAttributeValue("a"), is("b"));
     }
@@ -47,7 +46,7 @@ public class MutableElementTest {
         element.addAttribute("a", "b");
         assertThat(element.getAttributeValue("a"), is("b"));
         element.setAttributeValueByName("a", null);
-        assertThat(element.getAttributeByName("a"), nullValue());
+        assertThat(element.getAttributeByName("a").isPresent(), is(false));
     }
 
     @Test

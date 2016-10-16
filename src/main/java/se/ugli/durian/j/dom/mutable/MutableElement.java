@@ -174,11 +174,11 @@ public class MutableElement implements Element, MutableNode {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends Attribute> T getAttributeByName(final String attributeName) {
+    public <T extends Attribute> Optional<T> getAttributeByName(final String attributeName) {
         for (final Attribute attribute : attributes)
             if (attribute.getName().equals(attributeName))
-                return (T) attribute;
-        return null;
+                return (Optional<T>) Optional.of(attribute);
+        return Optional.empty();
     }
 
     @SuppressWarnings("unchecked")
@@ -189,9 +189,9 @@ public class MutableElement implements Element, MutableNode {
 
     @Override
     public String getAttributeValue(final String attributeName) {
-        final Attribute attribute = getAttributeByName(attributeName);
-        if (attribute != null)
-            return attribute.getValue();
+        final Optional<Attribute> attribute = getAttributeByName(attributeName);
+        if (attribute.isPresent())
+            return attribute.get().getValue();
         return null;
     }
 
@@ -299,13 +299,12 @@ public class MutableElement implements Element, MutableNode {
     }
 
     public void setAttributeValueByName(final String attributeName, final String value) {
-        final MutableAttribute attribute = getAttributeByName(attributeName);
-        if (attribute != null) {
+        final Optional<MutableAttribute> attributeOpt = getAttributeByName(attributeName);
+        if (attributeOpt.isPresent())
             if (value == null)
-                remove(attribute);
+                remove(attributeOpt.get());
             else
-                attribute.setValue(value);
-        }
+                attributeOpt.get().setValue(value);
         else if (value != null)
             add(nodeFactory.createAttribute(attributeName, uri.orElse(null), this, value));
     }
