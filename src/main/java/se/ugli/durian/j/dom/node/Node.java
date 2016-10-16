@@ -1,8 +1,10 @@
 package se.ugli.durian.j.dom.node;
 
+import java.util.Optional;
+
 public interface Node {
 
-    <T extends Element> T getParent();
+    <T extends Element> Optional<T> getParent();
 
     String getPath();
 

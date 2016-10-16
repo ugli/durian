@@ -12,7 +12,7 @@ import se.ugli.durian.j.dom.utils.Id;
 public class MutableAttribute implements Attribute, MutableNode {
 
     private final String name;
-    private Element parent;
+    private Optional<Element> parent = Optional.empty();
     private final Optional<String> uri;
     private String value;
     private final String id = Id.create();
@@ -65,15 +65,16 @@ public class MutableAttribute implements Attribute, MutableNode {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends Element> T getParent() {
-        return (T) parent;
+    public <T extends Element> Optional<T> getParent() {
+        return (Optional<T>) parent;
     }
 
     @Override
     public String getPath() {
-        if (parent != null)
-            return parent.getPath() + "/@" + name;
-        return null;
+        final String selfPath = "/@" + name;
+        if (parent.isPresent())
+            return parent.get().getPath() + selfPath;
+        return selfPath;
     }
 
     @Override
@@ -100,7 +101,7 @@ public class MutableAttribute implements Attribute, MutableNode {
 
     @Override
     public void setParent(final Element parent) {
-        this.parent = parent;
+        this.parent = Optional.ofNullable(parent);
     }
 
     @Override
@@ -112,15 +113,15 @@ public class MutableAttribute implements Attribute, MutableNode {
         for (final PrefixMapping prefixmapping : element.prefixMappings())
             if (uri.equals(prefixmapping.uri))
                 return prefixmapping.prefix;
-        if (element.getParent() != null)
-            return prefix(uri, element.getParent());
+        if (element.getParent().isPresent())
+            return prefix(uri, element.getParent().get());
         return Optional.empty();
     }
 
     @Override
     public String qName() {
-        if (uri.isPresent() && parent != null) {
-            final Optional<String> prefix = prefix(uri.get(), parent);
+        if (uri.isPresent() && parent.isPresent()) {
+            final Optional<String> prefix = prefix(uri.get(), parent.get());
             if (prefix.isPresent())
                 return prefix.get() + ":" + name;
         }

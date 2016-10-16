@@ -35,7 +35,7 @@ public class QueryEngineTest {
         final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
         final List<Element> nodes = element.select().elements("//rule");
         final Element firstRule = nodes.get(0);
-        final Element firstPattern = firstRule.getParent();
+        final Element firstPattern = firstRule.getParent().get();
         final List<? extends Node> assertNodes = firstPattern.select().nodes("rule/assert");
         assertEquals(5, assertNodes.size());
     }

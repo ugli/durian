@@ -38,9 +38,9 @@ class DurianNavigator implements Navigator {
     }
 
     private Element getRoot(final Element element) {
-        if (element.getParent() == null)
-            return element;
-        return getRoot(element.getParent());
+        if (element.getParent().isPresent())
+            return getRoot(element.getParent().get());
+        return element;
     }
 
     @Override
@@ -178,8 +178,8 @@ class DurianNavigator implements Navigator {
     public Iterator<Element> getParentAxisIterator(final Object contextNode) {
         if (contextNode instanceof Element) {
             final Element element = (Element) contextNode;
-            if (element.getParent() != null)
-                return Collections.singletonList(element.getParent()).iterator();
+            if (element.getParent().isPresent())
+                return Collections.singletonList(element.getParent().get()).iterator();
         }
         return new ArrayList<Element>().iterator();
     }
@@ -251,7 +251,7 @@ class DurianNavigator implements Navigator {
     @Override
     public Object getParentNode(final Object contextNode) throws UnsupportedAxisException {
         final Node node = (Node) contextNode;
-        return node.getParent();
+        return node.getParent().orElse(null);
     }
 
     @Override

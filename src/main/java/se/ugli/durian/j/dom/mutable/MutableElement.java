@@ -33,7 +33,7 @@ public class MutableElement implements Element, MutableNode {
     private String name;
     private final NodeFactory nodeFactory;
     private Optional<String> uri;
-    private Element parent;
+    private Optional<Element> parent = Optional.empty();
     private final List<NodeListener> nodeListeners = new ArrayList<NodeListener>();
     private final Map<String, String> prefixByUri = new LinkedHashMap<String, String>();
     private final String id = Id.create();
@@ -249,16 +249,16 @@ public class MutableElement implements Element, MutableNode {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends Element> T getParent() {
-        return (T) parent;
+    public <T extends Element> Optional<T> getParent() {
+        return (Optional<T>) parent;
     }
 
     @Override
     public String getPath() {
-        final String elementPath = "/" + name;
-        if (parent == null)
-            return elementPath;
-        return parent.getPath() + elementPath;
+        final String selfPath = "/" + name;
+        if (parent.isPresent())
+            return parent.get().getPath() + selfPath;
+        return selfPath;
     }
 
     @Override
@@ -324,7 +324,7 @@ public class MutableElement implements Element, MutableNode {
 
     @Override
     public void setParent(final Element parent) {
-        this.parent = parent;
+        this.parent = Optional.ofNullable(parent);
     }
 
     public void setUri(final String uri) {
@@ -388,8 +388,8 @@ public class MutableElement implements Element, MutableNode {
         for (final PrefixMapping prefixmapping : element.prefixMappings())
             if (uri.equals(prefixmapping.uri))
                 return prefixmapping.prefix;
-        if (element.getParent() != null)
-            return prefix(uri, element.getParent());
+        if (element.getParent().isPresent())
+            return prefix(uri, element.getParent().get());
         return Optional.empty();
     }
 
