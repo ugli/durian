@@ -13,7 +13,7 @@ public class ElementImplTest {
     @Test
     public void elementText() {
         final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
-        assertEquals("Schema for Purchase Order Example", element.getElementText("title"));
+        assertEquals("Schema for Purchase Order Example", element.getElementText("title").get());
     }
 
     @Test

@@ -1,8 +1,8 @@
 package se.ugli.durian.j.json.jackson;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 
@@ -36,7 +36,7 @@ public class ParseSerializeTest {
         final Element person = JsonParser.apply().parse(getClass().getResourceAsStream("/person.json"));
         assertNotNull(person);
         assertEquals("root", person.getName());
-        assertEquals("John Smith", person.getAttributeValue("name"));
+        assertEquals("John Smith", person.getAttributeValue("name").get());
 
         final String actual = JsonSerializer.apply().serialize(person);
 
@@ -54,8 +54,8 @@ public class ParseSerializeTest {
                 .parse(getClass().getResourceAsStream("/person.json"));
         assertNotNull(person);
         assertEquals("person", person.getName());
-        assertEquals("John Smith", person.getAttributeValue("name"));
-        assertNull(person.getAttributeValue("xyz"));
+        assertEquals("John Smith", person.getAttributeValue("name").get());
+        assertFalse(person.getAttributeValue("xyz").isPresent());
 
         final String actual = person.toXml();
 

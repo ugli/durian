@@ -14,11 +14,11 @@ public interface Element extends Content {
 
     boolean hasAttributes();
 
-    String getAttributeValue(String attributeName);
+    Optional<String> getAttributeValue(String attributeName);
 
     Iterable<Content> getContent();
 
-    <T extends Element> T getElementByName(String elementName);
+    <T extends Element> Optional<T> getElementByName(String elementName);
 
     <T extends Element> Iterable<T> getElements();
 
@@ -26,7 +26,7 @@ public interface Element extends Content {
 
     <T extends Element> Iterable<T> getElementsByName(String elementName);
 
-    String getElementText(final String elementName);
+    Optional<String> getElementText(final String elementName);
 
     String getName();
 

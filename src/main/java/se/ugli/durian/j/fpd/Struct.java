@@ -25,7 +25,7 @@ class Struct implements Definition {
     private final int numOfChars;
 
     private Struct(final Element element, final String targetNamespace, final boolean includeEmptyValues, final boolean root) {
-        name = element.getAttributeValue("name");
+        name = element.getAttributeValue("name").get();
         this.targetNamespace = targetNamespace;
         this.includeEmptyValues = includeEmptyValues;
         this.root = root;
@@ -71,7 +71,7 @@ class Struct implements Definition {
     }
 
     private Definition definition(final Element element) {
-        final String type = element.getAttributeValue("type");
+        final String type = element.getAttributeValue("type").get();
         if ("Struct".equals(type))
             return new Struct(element, targetNamespace, includeEmptyValues, false);
         if ("Array".equals(type))

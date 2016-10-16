@@ -188,11 +188,11 @@ public class MutableElement implements Element, MutableNode {
     }
 
     @Override
-    public String getAttributeValue(final String attributeName) {
+    public Optional<String> getAttributeValue(final String attributeName) {
         final Optional<Attribute> attribute = getAttributeByName(attributeName);
         if (attribute.isPresent())
-            return attribute.get().getValue();
-        return null;
+            return Optional.ofNullable(attribute.get().getValue());
+        return Optional.empty();
     }
 
     @Override
@@ -202,12 +202,12 @@ public class MutableElement implements Element, MutableNode {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends Element> T getElementByName(final String elementName) {
+    public <T extends Element> Optional<T> getElementByName(final String elementName) {
         final List<Element> elementsByName = getElementsByName(elementName);
         if (elementsByName.isEmpty())
-            return null;
+            return Optional.empty();
         else if (elementsByName.size() == 1)
-            return (T) elementsByName.get(0);
+            return (Optional<T>) Optional.of(elementsByName.get(0));
         throw new IllegalStateException("There is more than one element with name: " + elementName);
     }
 
@@ -231,15 +231,15 @@ public class MutableElement implements Element, MutableNode {
     }
 
     @Override
-    public String getElementText(final String elementName) {
-        final Element element = getElementByName(elementName);
-        if (element != null && element.getTexts().iterator().hasNext()) {
+    public Optional<String> getElementText(final String elementName) {
+        final Optional<Element> element = getElementByName(elementName);
+        if (element.isPresent() && element.get().hasTexts()) {
             final StringBuilder textBuilder = new StringBuilder();
-            for (final Text text : element.getTexts())
+            for (final Text text : element.get().getTexts())
                 textBuilder.append(text.getValue());
-            return textBuilder.toString();
+            return Optional.of(textBuilder.toString());
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
@@ -291,7 +291,10 @@ public class MutableElement implements Element, MutableNode {
     }
 
     public boolean removeElementByName(final String elementName) {
-        return remove(getElementByName(elementName));
+        final Optional<Element> element = getElementByName(elementName);
+        if (element.isPresent())
+            return remove(element.get());
+        return false;
     }
 
     public int removeElementsByName(final String elementName) {

@@ -21,8 +21,8 @@ public class FpdParser {
     private FpdParser(final byte[] definition) {
         validator.validate(definition);
         final Element element = Parser.apply().parse(definition);
-        final boolean includeEmptyValues = Boolean.parseBoolean(element.getAttributeValue("includeEmptyValues"));
-        targetNamespace = element.getAttributeValue("targetNamespace");
+        final boolean includeEmptyValues = Boolean.parseBoolean(element.getAttributeValue("includeEmptyValues").get());
+        targetNamespace = element.getAttributeValue("targetNamespace").orElse(null);
         struct = Struct.apply(element, targetNamespace, includeEmptyValues);
     }
 

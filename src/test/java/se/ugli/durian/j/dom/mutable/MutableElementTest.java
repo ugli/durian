@@ -28,23 +28,23 @@ public class MutableElementTest {
         final MutableElement element = Durian.createElement("test");
         assertThat(element.getAttributeByName("a").isPresent(), is(false));
         element.setAttributeValueByName("a", "b");
-        assertThat(element.getAttributeValue("a"), is("b"));
+        assertThat(element.getAttributeValue("a").get(), is("b"));
     }
 
     @Test
     public void shouldShouldSetAttributeByNameIfExists() {
         final MutableElement element = Durian.createElement("test");
         element.addAttribute("a", "b");
-        assertThat(element.getAttributeValue("a"), is("b"));
+        assertThat(element.getAttributeValue("a").get(), is("b"));
         element.setAttributeValueByName("a", "c");
-        assertThat(element.getAttributeValue("a"), is("c"));
+        assertThat(element.getAttributeValue("a").get(), is("c"));
     }
 
     @Test
     public void shouldShouldRemveAttributeByNameIfValueIsNull() {
         final MutableElement element = Durian.createElement("test");
         element.addAttribute("a", "b");
-        assertThat(element.getAttributeValue("a"), is("b"));
+        assertThat(element.getAttributeValue("a").get(), is("b"));
         element.setAttributeValueByName("a", null);
         assertThat(element.getAttributeByName("a").isPresent(), is(false));
     }
