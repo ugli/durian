@@ -43,7 +43,7 @@ public class QueryEngineTest {
     @Test
     public void ruleContexts() {
         final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
-        final Attribute attribute0 = element.select().attribute("//@queryBinding");
+        final Attribute attribute0 = element.select().attribute("//@queryBinding").get();
         assertEquals("xpath2", attribute0.getValue());
 
     }
@@ -51,7 +51,7 @@ public class QueryEngineTest {
     @Test
     public void titleText() {
         final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
-        final String text = element.select().text("/schema/title/text()");
+        final String text = element.select().text("/schema/title/text()").get();
         assertEquals("Schema for Purchase Order Example", text);
 
     }

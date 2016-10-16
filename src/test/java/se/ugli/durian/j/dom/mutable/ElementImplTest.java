@@ -3,6 +3,8 @@ package se.ugli.durian.j.dom.mutable;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import java.util.Optional;
+
 import org.junit.Test;
 
 import se.ugli.durian.j.dom.node.Element;
@@ -19,9 +21,9 @@ public class ElementImplTest {
     @Test
     public void selectClone() {
         final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
-        final Element elementClone = element.select().element("/schema/title").clone().element();
+        final Optional<Element> elementClone = element.select().element("/schema/title").map(e -> e.clone().element());
         assertNotEquals(elementClone, element.getElements().iterator().next());
-        assertEquals("Schema for Purchase Order Example", elementClone.getTexts().iterator().next().getValue());
+        assertEquals("Schema for Purchase Order Example", elementClone.get().getTexts().iterator().next().getValue());
     }
 
 }

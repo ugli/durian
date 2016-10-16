@@ -1,6 +1,7 @@
 package se.ugli.durian.j.dom.mutable;
 
 import java.util.List;
+import java.util.Optional;
 
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
@@ -16,7 +17,7 @@ public class MutableQuertApiImpl implements MutableQuertApi {
     }
 
     @Override
-    public <T extends Attribute> T attribute(final String query) {
+    public <T extends Attribute> Optional<T> attribute(final String query) {
         return QueryManager.selectNode(mutableElement, query);
     }
 
@@ -26,15 +27,12 @@ public class MutableQuertApiImpl implements MutableQuertApi {
     }
 
     @Override
-    public String attributeValue(final String query) {
-        final Attribute attribute = QueryManager.selectNode(mutableElement, query);
-        if (attribute != null)
-            return attribute.getValue();
-        return null;
+    public Optional<String> attributeValue(final String query) {
+        return QueryManager.selectNode(mutableElement, query).map(n -> (Attribute) n).map(Attribute::getValue);
     }
 
     @Override
-    public <T extends Element> T element(final String query) {
+    public <T extends Element> Optional<T> element(final String query) {
         return QueryManager.selectNode(mutableElement, query);
     }
 
@@ -44,7 +42,7 @@ public class MutableQuertApiImpl implements MutableQuertApi {
     }
 
     @Override
-    public <T extends Node> T node(final String query) {
+    public <T extends Node> Optional<T> node(final String query) {
         return QueryManager.selectNode(mutableElement, query);
     }
 
@@ -54,7 +52,7 @@ public class MutableQuertApiImpl implements MutableQuertApi {
     }
 
     @Override
-    public String text(final String query) {
+    public Optional<String> text(final String query) {
         return QueryManager.selectText(mutableElement, query);
     }
 
@@ -77,10 +75,10 @@ public class MutableQuertApiImpl implements MutableQuertApi {
 
     @Override
     public boolean setAttributeValueByQuery(final String query, final String value) {
-        final MutableAttribute attribute = attribute(query);
-        if (attribute != null)
-            attribute.setValue(value);
-        return attribute != null;
+        final Optional<MutableAttribute> attributeOpt = attribute(query);
+        if (attributeOpt.isPresent())
+            attributeOpt.get().setValue(value);
+        return attributeOpt.isPresent();
     }
 
 }

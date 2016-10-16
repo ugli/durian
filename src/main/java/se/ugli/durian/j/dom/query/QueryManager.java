@@ -2,6 +2,7 @@ package se.ugli.durian.j.dom.query;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Node;
@@ -13,12 +14,12 @@ public final class QueryManager {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends Node> T selectNode(final Element element, final String query) {
+    public static <T extends Node> Optional<T> selectNode(final Element element, final String query) {
         final List<? extends Node> nodes = selectNodes(element, query);
         if (nodes.isEmpty())
-            return null;
+            return Optional.empty();
         else if (nodes.size() == 1)
-            return (T) nodes.get(0);
+            return (Optional<T>) Optional.of(nodes.get(0));
         throw new QueryException("Result contains " + nodes.size() + " nodes.");
     }
 
@@ -26,11 +27,8 @@ public final class QueryManager {
         return QueryEngineFactory.create().selectNodes(element, query);
     }
 
-    public static String selectText(final Element element, final String path) {
-        final Text text = selectNode(element, path);
-        if (text != null)
-            return text.getValue();
-        return null;
+    public static Optional<String> selectText(final Element element, final String path) {
+        return selectNode(element, path).map(n -> (Text) n).map(Text::getValue);
     }
 
     public static List<String> selectTexts(final Element element, final String path) {
