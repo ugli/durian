@@ -30,13 +30,14 @@ public class MutableElement implements Element, MutableNode {
 
     private final Set<Attribute> attributes = new LinkedHashSet<Attribute>();
     private final List<Content> content = new ArrayList<Content>();
+    private final List<NodeListener> nodeListeners = new ArrayList<NodeListener>();
+    private final Map<String, String> prefixByUri = new LinkedHashMap<String, String>();
+    private final String id = Id.create();
+
     private String name;
     private final NodeFactory nodeFactory;
     private Optional<String> uri;
     private Optional<Element> parent = Optional.empty();
-    private final List<NodeListener> nodeListeners = new ArrayList<NodeListener>();
-    private final Map<String, String> prefixByUri = new LinkedHashMap<String, String>();
-    private final String id = Id.create();
 
     public MutableElement(final String name, final String uri, final NodeFactory nodeFactory,
             final Iterable<PrefixMapping> prefixMappings) {
@@ -378,12 +379,7 @@ public class MutableElement implements Element, MutableNode {
 
     @Override
     public String qName() {
-        if (uri.isPresent()) {
-            final Optional<String> prefix = prefix(uri.get(), this);
-            if (prefix.isPresent())
-                return prefix.get() + ":" + name;
-        }
-        return name;
+        return uri.flatMap(u -> prefix(u, this)).map(p -> p + ":" + name).orElse(name);
     }
 
     private Optional<String> prefix(final String uri, final Element element) {
