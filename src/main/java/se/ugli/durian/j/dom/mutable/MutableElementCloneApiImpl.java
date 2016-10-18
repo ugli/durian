@@ -58,15 +58,13 @@ class MutableElementCloneApiImpl implements ElementCloneApi {
     }
 
     private final MutableElement element;
-
     private final NodeFactory nodeFactory;
-
     private final String elementName;
 
     public MutableElementCloneApiImpl(final MutableElement element) {
         this.element = element;
-        this.nodeFactory = element.nodeFactory();
-        this.elementName = element.name();
+        nodeFactory = element.nodeFactory();
+        elementName = element.name();
     }
 
     @Override
@@ -86,6 +84,26 @@ class MutableElementCloneApiImpl implements ElementCloneApi {
 
     @Override
     public Element element(final String elementName, final NodeFactory nodeFactory) {
+        return cloneElement(elementName, element, nodeFactory);
+    }
+
+    @Override
+    public Element element(final Element parent) {
+        return cloneElement(elementName, element, nodeFactory);
+    }
+
+    @Override
+    public Element element(final Element parent, final NodeFactory nodeFactory) {
+        return cloneElement(elementName, element, nodeFactory);
+    }
+
+    @Override
+    public Element element(final Element parent, final String elementName) {
+        return cloneElement(elementName, element, nodeFactory);
+    }
+
+    @Override
+    public Element element(final Element parent, final String elementName, final NodeFactory nodeFactory) {
         return cloneElement(elementName, element, nodeFactory);
     }
 
