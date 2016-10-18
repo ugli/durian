@@ -17,10 +17,12 @@ class MutableElementCloneApiImpl implements ElementCloneApi {
             final NodeFactory nodeFactory) {
         return elementToClone.attributes().map(a -> a.clone().attribute(elementClone, nodeFactory)).collect(toList());
     }
+
     private static Content cloneChildElement(final Element elementToClone, final Element parent, final NodeFactory nodeFactory) {
         final String elementName = elementToClone.name();
         return cloneElement(elementName, elementToClone, parent, nodeFactory);
     }
+
     private static Content cloneContent(final Content contentToClone, final Element parent, final NodeFactory nodeFactory) {
         if (contentToClone instanceof Text) {
             final Text textToClone = contentToClone.as(Text.class);

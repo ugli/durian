@@ -43,11 +43,11 @@ public class MutableElement implements Element, MutableNode {
         }
 
     }
-    
-    private final Set<Attribute> attributes = new LinkedHashSet<Attribute>();
-    private final List<Content> content = new ArrayList<Content>();
-    private final List<NodeListener> nodeListeners = new ArrayList<NodeListener>();
-    private final Map<String, String> prefixByUri = new LinkedHashMap<String, String>();
+
+    private final Set<Attribute> attributes = new LinkedHashSet<>();
+    private final List<Content> content = new ArrayList<>();
+    private final List<NodeListener> nodeListeners = new ArrayList<>();
+    private final Map<String, String> prefixByUri = new LinkedHashMap<>();
 
     private final String id = Id.create();
     private String name;
@@ -98,11 +98,10 @@ public class MutableElement implements Element, MutableNode {
         return addElement(name, uri.orElse(null), nodeFactory);
     }
 
-    public Element addElement(final String name, final String uri, final NodeFactory nodeFactory,
-            final PrefixMapping... prefixmappings) {
-        Element element = nodeFactory.createElement(name, uri, this, asList(prefixmappings));
+    public Element addElement(final String name, final String uri, final NodeFactory nodeFactory, final PrefixMapping... prefixmappings) {
+        final Element element = nodeFactory.createElement(name, uri, this, asList(prefixmappings));
         add(element);
-		return element;
+        return element;
     }
 
     public void addListener(final NodeListener listener) {
@@ -118,9 +117,9 @@ public class MutableElement implements Element, MutableNode {
     }
 
     public Text addText(final String value, final NodeFactory nodeFactory) {
-    	Text text = nodeFactory.createText(this, value);
-         add(text);
-         return text;
+        final Text text = nodeFactory.createText(this, value);
+        add(text);
+        return text;
     }
 
     @Override
@@ -254,7 +253,7 @@ public class MutableElement implements Element, MutableNode {
 
     @Override
     public Stream<PrefixMapping> prefixMappings() {
-        final List<PrefixMapping> prefixmappings = new ArrayList<PrefixMapping>();
+        final List<PrefixMapping> prefixmappings = new ArrayList<>();
         for (final Entry<String, String> entry : prefixByUri.entrySet())
             prefixmappings.add(prefixMapping(entry.getValue(), entry.getKey()));
         return prefixmappings.stream();
@@ -358,10 +357,10 @@ public class MutableElement implements Element, MutableNode {
     public void setParent(final Element parent) {
         this.parent = Optional.ofNullable(parent);
     }
-    
-    public void setText(String text) {
-    	removeAll(Text.class);
-    	addText(text);
+
+    public void setText(final String text) {
+        removeAll(Text.class);
+        addText(text);
     }
 
     public void setUri(final String uri) {
@@ -386,6 +385,18 @@ public class MutableElement implements Element, MutableNode {
     @Override
     public Optional<String> uri() {
         return uri;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj instanceof Element)
+            return id.equals(((Element) obj).id());
+        return false;
     }
 
 }

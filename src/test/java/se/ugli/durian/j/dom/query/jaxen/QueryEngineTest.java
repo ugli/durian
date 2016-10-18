@@ -1,8 +1,10 @@
 package se.ugli.durian.j.dom.query.jaxen;
 
 import static java.util.stream.Collectors.toList;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -59,9 +61,21 @@ public class QueryEngineTest {
     @Test
     public void evalateBoolean() {
         final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
-        assertTrue(element.select().evaluteBoolean("/schema/@queryBinding='xpath2'"));
-        assertFalse(element.select().evaluteBoolean("/schema/@queryBinding='xpath3'"));
-        assertFalse(element.select().evaluteBoolean("/schema/@queryBindings='xpath'"));
+        assertTrue(element.select().boolValue("/schema/@queryBinding='xpath2'"));
+        assertFalse(element.select().boolValue("/schema/@queryBinding='xpath3'"));
+        assertFalse(element.select().boolValue("/schema/@queryBindings='xpath'"));
+    }
+
+    @Test
+    public void evalateLong() {
+        final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
+        assertThat(element.select().longValue("count(//assert)"), is(19L));
+    }
+
+    @Test
+    public void evalateDouble() {
+        final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
+        assertThat(element.select().doubleValue("count(//assert)"), is(19D));
     }
 
 }

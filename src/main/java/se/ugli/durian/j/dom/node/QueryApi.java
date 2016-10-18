@@ -11,11 +11,17 @@ public interface QueryApi {
 
     Optional<String> attributeValue(String query);
 
+    Stream<String> attributeValues(String query);
+
+    boolean boolValue(String query);
+
+    double doubleValue(String query);
+
     Optional<Element> element(String query);
 
     Stream<Element> elements(String query);
 
-    boolean evaluteBoolean(String query);
+    long longValue(String query);
 
     Optional<Node> node(String query);
 

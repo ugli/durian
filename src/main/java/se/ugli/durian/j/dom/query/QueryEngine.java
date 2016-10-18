@@ -11,4 +11,8 @@ public interface QueryEngine {
 
     boolean evalateBoolean(Element element, String query) throws QueryException;
 
+    long evaluteLong(Element element, String query);
+
+    double evaluteDouble(Element element, String query);
+
 }

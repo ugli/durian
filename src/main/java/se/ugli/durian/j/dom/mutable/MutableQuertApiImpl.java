@@ -42,7 +42,7 @@ public class MutableQuertApiImpl implements MutableQuertApi {
     }
 
     @Override
-    public boolean evaluteBoolean(final String query) {
+    public boolean boolValue(final String query) {
         return QueryManager.evaluteBoolean(mutableElement, query);
     }
 
@@ -57,21 +57,6 @@ public class MutableQuertApiImpl implements MutableQuertApi {
     }
 
     @Override
-    public int removeByQuery(final String query) {
-        return mutableElement.removeAll(nodes(query));
-    }
-
-    @Override
-    public boolean setAttributeValueByQuery(final String query, final String value) {
-        final Optional<MutableAttribute> attributeOpt = attribute(query).map(a -> a.as(MutableAttribute.class));
-        if (attributeOpt.isPresent())
-            attributeOpt.get().setValue(value);
-        return attributeOpt.isPresent();
-    }
-
-    // Mutable
-
-    @Override
     public Optional<String> text(final String query) {
         return QueryManager.selectText(mutableElement, query);
     }
@@ -79,6 +64,34 @@ public class MutableQuertApiImpl implements MutableQuertApi {
     @Override
     public Stream<String> texts(final String query) {
         return QueryManager.selectTexts(mutableElement, query);
+    }
+
+    // Mutable
+    @Override
+    public int setAttributeValues(final String query, final String value) {
+        return (int) attributes(query).map(a -> a.as(MutableAttribute.class)).peek(a -> a.setValue(value)).count();
+    }
+
+    @Override
+    public int remove(final String query) {
+        return (int) nodes(query).filter(n -> n.parent().isPresent()).filter(n -> n.parent().get() instanceof MutableElement).peek(n -> {
+            n.parent().get().as(MutableElement.class).remove(n);
+        }).count();
+    }
+
+    @Override
+    public long longValue(final String query) {
+        return QueryManager.evaluteLong(mutableElement, query);
+    }
+
+    @Override
+    public double doubleValue(final String query) {
+        return QueryManager.evaluteDouble(mutableElement, query);
+    }
+
+    @Override
+    public Stream<String> attributeValues(final String query) {
+        return attributes(query).map(Attribute::value);
     }
 
 }

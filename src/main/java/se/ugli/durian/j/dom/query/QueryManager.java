@@ -32,4 +32,12 @@ public final class QueryManager {
         return QueryEngineFactory.create().evalateBoolean(element, query);
     }
 
+    public static long evaluteLong(final Element element, final String query) {
+        return QueryEngineFactory.create().evaluteLong(element, query);
+    }
+
+    public static double evaluteDouble(final Element element, final String query) {
+        return QueryEngineFactory.create().evaluteDouble(element, query);
+    }
+
 }
