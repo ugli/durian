@@ -125,11 +125,12 @@ public class MutableElement implements Element, MutableNode {
     }
 
     public int removeAll(final Stream<? extends Node> nodes) {
-        int result = 0;
-        for (final Node node : nodes.collect(toList()))
+        final AtomicInteger result = new AtomicInteger(0);
+        nodes.forEach(node -> {
             if (remove(node))
-                result++;
-        return result;
+                result.incrementAndGet();
+        });
+        return result.get();
     }
 
     public int removeAll(final Class<? extends Node> type) {
