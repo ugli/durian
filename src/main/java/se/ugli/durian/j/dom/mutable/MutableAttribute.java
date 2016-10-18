@@ -37,7 +37,7 @@ public class MutableAttribute implements Attribute, MutableNode {
 
     @Override
     public AttributeCloneApi clone() {
-        return new MutableAttributeApiImpl(this, nodeFactory);
+        return new MutableAttributeCloneApiImpl(this, nodeFactory);
     }
 
     @Override
@@ -63,10 +63,9 @@ public class MutableAttribute implements Attribute, MutableNode {
         return name;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <T extends Element> Optional<T> getParent() {
-        return (Optional<T>) parent;
+    public Optional<Element> getParent() {
+        return parent;
     }
 
     @Override

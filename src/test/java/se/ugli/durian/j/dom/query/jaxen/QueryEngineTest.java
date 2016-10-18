@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import se.ugli.durian.j.dom.mutable.MutableElement;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Node;
@@ -26,7 +25,7 @@ public class QueryEngineTest {
     @Test
     public void getChildAxisIteratorPath() {
         final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
-        final List<MutableElement> nodes = element.select().elements("//rule");
+        final List<Element> nodes = element.select().elements("//rule");
         assertEquals(9, nodes.size());
     }
 

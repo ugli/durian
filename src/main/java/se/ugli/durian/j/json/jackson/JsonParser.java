@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.ValueNode;
 
 import se.ugli.durian.j.dom.mutable.MutableElement;
-import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.PrefixMapping;
@@ -106,12 +105,14 @@ public final class JsonParser {
         if (rootNode instanceof ObjectNode)
             return createElementFromObjectNode(rootElementName, (ObjectNode) rootNode, null);
         else if (rootNode instanceof ArrayNode) {
-            final MutableElement root = nodeFactory.createElement(rootElementName, uri, null, new ArrayList<PrefixMapping>(0));
+            final MutableElement root = nodeFactory.createElement(rootElementName, uri, null, new ArrayList<PrefixMapping>(0))
+                    .as(MutableElement.class);
             appendArrayNode((ArrayNode) rootNode, rootArrayChildElementName, root);
             return root;
         }
         else if (rootNode instanceof ValueNode) {
-            final MutableElement root = nodeFactory.createElement(rootElementName, uri, null, new ArrayList<PrefixMapping>(0));
+            final MutableElement root = nodeFactory.createElement(rootElementName, uri, null, new ArrayList<PrefixMapping>(0))
+                    .as(MutableElement.class);
             if (!(rootNode instanceof NullNode))
                 root.add(nodeFactory.createText(root, rootNode.asText()));
             return root;
@@ -121,7 +122,8 @@ public final class JsonParser {
     }
 
     private Element createElementFromObjectNode(final String elementName, final ObjectNode node, final Element parent) {
-        final MutableElement element = nodeFactory.createElement(elementName, uri, parent, new ArrayList<PrefixMapping>(0));
+        final MutableElement element = nodeFactory.createElement(elementName, uri, parent, new ArrayList<PrefixMapping>(0))
+                .as(MutableElement.class);
         for (final Iterator<String> i = node.fieldNames(); i.hasNext();) {
             final String fieldName = i.next();
             final JsonNode childNode = node.get(fieldName);
@@ -143,7 +145,7 @@ public final class JsonParser {
 
     private void appendValueNode(final ValueNode valueNode, final String fieldName, final MutableElement parent) {
         final String atttibuteValue = valueNode instanceof NullNode ? null : valueNode.asText();
-        parent.add(nodeFactory.<Attribute> createAttribute(fieldName, uri, parent, atttibuteValue));
+        parent.add(nodeFactory.createAttribute(fieldName, uri, parent, atttibuteValue));
     }
 
     private void appendArrayNode(final ArrayNode arrayNode, final String elementName, final MutableElement _parent) {

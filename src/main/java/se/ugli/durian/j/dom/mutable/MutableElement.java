@@ -97,7 +97,7 @@ public class MutableElement implements Element, MutableNode {
             if (node instanceof Content)
                 content.add((Content) node);
             else if (node instanceof Attribute)
-                attributes.add((Attribute) node);
+                attributes.add(node.as(Attribute.class));
             for (final NodeListener listener : nodeListeners)
                 listener.nodeAdded(node);
         }
@@ -145,13 +145,14 @@ public class MutableElement implements Element, MutableNode {
         return result;
     }
 
-    public <T extends Attribute> T addAttribute(final String name, final String value) {
+    public Attribute addAttribute(final String name, final String value) {
         return addAttribute(name, uri.orElse(null), value, nodeFactory);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends Attribute> T addAttribute(final String name, final String uri, final String value, final NodeFactory nodeFactory) {
-        return (T) add(nodeFactory.createAttribute(name, uri, this, value));
+    public Attribute addAttribute(final String name, final String uri, final String value, final NodeFactory nodeFactory) {
+        final Attribute attribute = nodeFactory.createAttribute(name, uri, this, value);
+        add(attribute);
+        return attribute;
     }
 
     public <T extends Element> T addElement(final String name) {
@@ -173,19 +174,17 @@ public class MutableElement implements Element, MutableNode {
         return (T) add(nodeFactory.createText(this, value));
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <T extends Attribute> Optional<T> getAttributeByName(final String attributeName) {
+    public Optional<Attribute> getAttributeByName(final String attributeName) {
         for (final Attribute attribute : attributes)
             if (attribute.getName().equals(attributeName))
-                return (Optional<T>) Optional.of(attribute);
+                return Optional.of(attribute);
         return Optional.empty();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <T extends Attribute> Iterable<T> getAttributes() {
-        return (Iterable<T>) Collections.unmodifiableSet(attributes);
+    public Iterable<Attribute> getAttributes() {
+        return Collections.unmodifiableSet(attributes);
     }
 
     @Override
@@ -201,31 +200,29 @@ public class MutableElement implements Element, MutableNode {
         return content;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <T extends Element> Optional<T> getElementByName(final String elementName) {
+    public Optional<Element> getElementByName(final String elementName) {
         final List<Element> elementsByName = getElementsByName(elementName);
         if (elementsByName.isEmpty())
             return Optional.empty();
         else if (elementsByName.size() == 1)
-            return (Optional<T>) Optional.of(elementsByName.get(0));
+            return Optional.of(elementsByName.get(0));
         throw new IllegalStateException("There is more than one element with name: " + elementName);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public <T extends Element> Iterable<T> getElements() {
-        final List result = new ArrayList<Element>();
+    public Iterable<Element> getElements() {
+        final List<Element> result = new ArrayList<Element>();
         for (final Content c : content)
             if (c instanceof Element)
-                result.add(c);
+                result.add(c.as(Element.class));
         return Collections.unmodifiableList(result);
     }
 
     @Override
-    public <T extends Element> List<T> getElementsByName(final String elementName) {
-        final List<T> result = new ArrayList<T>();
-        for (final T element : this.<T> getElements())
+    public List<Element> getElementsByName(final String elementName) {
+        final List<Element> result = new ArrayList<Element>();
+        for (final Element element : this.getElements())
             if (element.getName().equals(elementName))
                 result.add(element);
         return Collections.unmodifiableList(result);
@@ -248,10 +245,9 @@ public class MutableElement implements Element, MutableNode {
         return name;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <T extends Element> Optional<T> getParent() {
-        return (Optional<T>) parent;
+    public Optional<Element> getParent() {
+        return parent;
     }
 
     @Override
@@ -276,13 +272,12 @@ public class MutableElement implements Element, MutableNode {
         return name + "/" + childPath;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public <T extends Text> Iterable<T> getTexts() {
-        final List result = new ArrayList<Text>();
+    public Iterable<Text> getTexts() {
+        final List<Text> result = new ArrayList<Text>();
         for (final Content c : content)
             if (c instanceof Text)
-                result.add(c);
+                result.add(c.as(Text.class));
         return Collections.unmodifiableList(result);
     }
 
@@ -303,7 +298,7 @@ public class MutableElement implements Element, MutableNode {
     }
 
     public void setAttributeValueByName(final String attributeName, final String value) {
-        final Optional<MutableAttribute> attributeOpt = getAttributeByName(attributeName);
+        final Optional<MutableAttribute> attributeOpt = getAttributeByName(attributeName).map(a -> a.as(MutableAttribute.class));
         if (attributeOpt.isPresent())
             if (value == null)
                 remove(attributeOpt.get());

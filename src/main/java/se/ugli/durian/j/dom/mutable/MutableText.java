@@ -35,10 +35,9 @@ public class MutableText implements Text, MutableNode {
         return nodeFactory;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <T extends Element> Optional<T> getParent() {
-        return (Optional<T>) parent;
+    public Optional<Element> getParent() {
+        return parent;
     }
 
     @Override

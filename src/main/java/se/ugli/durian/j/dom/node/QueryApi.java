@@ -5,19 +5,19 @@ import java.util.Optional;
 
 public interface QueryApi {
 
-    <T extends Attribute> Optional<T> attribute(String query);
+    Optional<Attribute> attribute(String query);
 
-    <T extends Attribute> List<T> attributes(String query);
+    List<Attribute> attributes(String query);
 
     Optional<String> attributeValue(String query);
 
-    <T extends Element> Optional<T> element(String query);
+    Optional<Element> element(String query);
 
-    <T extends Element> List<T> elements(String query);
+    List<Element> elements(String query);
 
-    <T extends Node> Optional<T> node(String query);
+    Optional<Node> node(String query);
 
-    <T extends Node> List<T> nodes(String query);
+    List<Node> nodes(String query);
 
     Optional<String> text(String query);
 

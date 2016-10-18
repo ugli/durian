@@ -8,9 +8,9 @@ public interface Element extends Content {
 
     QueryApi select();
 
-    <T extends Attribute> Optional<T> getAttributeByName(String attributeName);
+    Optional<Attribute> getAttributeByName(String attributeName);
 
-    <T extends Attribute> Iterable<T> getAttributes();
+    Iterable<Attribute> getAttributes();
 
     boolean hasAttributes();
 
@@ -18,13 +18,13 @@ public interface Element extends Content {
 
     Iterable<Content> getContent();
 
-    <T extends Element> Optional<T> getElementByName(String elementName);
+    Optional<Element> getElementByName(String elementName);
 
-    <T extends Element> Iterable<T> getElements();
+    Iterable<Element> getElements();
 
     boolean hasElements();
 
-    <T extends Element> Iterable<T> getElementsByName(String elementName);
+    Iterable<Element> getElementsByName(String elementName);
 
     Optional<String> getElementText(final String elementName);
 
@@ -34,7 +34,7 @@ public interface Element extends Content {
 
     String getRelativePath(String childPath);
 
-    <T extends Text> Iterable<T> getTexts();
+    Iterable<Text> getTexts();
 
     boolean hasTexts();
 

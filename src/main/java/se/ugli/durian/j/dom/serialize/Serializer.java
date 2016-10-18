@@ -124,9 +124,9 @@ public class Serializer {
     private void appendContent(final Collection<Content> contentList, final int indentDepth) {
         for (final Content content : contentList)
             if (content instanceof Element)
-                appendElement((Element) content, indentDepth + 1);
+                appendElement(content.as(Element.class), indentDepth + 1);
             else if (content instanceof Text) {
-                final String textValue = ((Text) content).getValue();
+                final String textValue = content.as(Text.class).getValue();
                 if (contentList.size() > 1) {
                     xml.append(lineSeparator);
                     appendStringWithTab(indentDepth + 1, escapeXml11(textValue));

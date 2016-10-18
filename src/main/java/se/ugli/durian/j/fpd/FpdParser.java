@@ -27,7 +27,7 @@ public class FpdParser {
     }
 
     public Element parse(final String data) {
-        return (Element) struct.createNode(data);
+        return struct.createNode(data).as(Element.class);
     }
 
 }

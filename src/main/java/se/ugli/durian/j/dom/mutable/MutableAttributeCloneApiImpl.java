@@ -5,7 +5,7 @@ import se.ugli.durian.j.dom.node.AttributeCloneApi;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 
-class MutableAttributeApiImpl implements AttributeCloneApi {
+class MutableAttributeCloneApiImpl implements AttributeCloneApi {
 
     private final Element parent;
     private final NodeFactory nodeFactory;
@@ -13,7 +13,7 @@ class MutableAttributeApiImpl implements AttributeCloneApi {
     private final String uri;
     private final String value;
 
-    public MutableAttributeApiImpl(final MutableAttribute attribute, final NodeFactory nodeFactory) {
+    public MutableAttributeCloneApiImpl(final MutableAttribute attribute, final NodeFactory nodeFactory) {
         this.parent = null;
         this.name = attribute.getName();
         this.uri = attribute.getUri().orElse(null);
@@ -22,42 +22,42 @@ class MutableAttributeApiImpl implements AttributeCloneApi {
     }
 
     @Override
-    public <T extends Attribute> T attribute() {
+    public Attribute attribute() {
         return nodeFactory.createAttribute(name, uri, parent, value);
     }
 
     @Override
-    public <T extends Attribute> T attribute(final Element parent) {
+    public Attribute attribute(final Element parent) {
         return nodeFactory.createAttribute(name, uri, parent, value);
     }
 
     @Override
-    public <T extends Attribute> T attribute(final NodeFactory nodeFactory) {
+    public Attribute attribute(final NodeFactory nodeFactory) {
         return nodeFactory.createAttribute(name, uri, parent, value);
     }
 
     @Override
-    public <T extends Attribute> T attribute(final Element parent, final NodeFactory nodeFactory) {
+    public Attribute attribute(final Element parent, final NodeFactory nodeFactory) {
         return nodeFactory.createAttribute(name, uri, parent, value);
     }
 
     @Override
-    public <T extends Attribute> T attribute(final String attributeName) {
+    public Attribute attribute(final String attributeName) {
         return nodeFactory.createAttribute(name, uri, parent, value);
     }
 
     @Override
-    public <T extends Attribute> T attribute(final Element parent, final String attributeName) {
+    public Attribute attribute(final Element parent, final String attributeName) {
         return nodeFactory.createAttribute(name, uri, parent, value);
     }
 
     @Override
-    public <T extends Attribute> T attribute(final String attributeName, final NodeFactory nodeFactory) {
+    public Attribute attribute(final String attributeName, final NodeFactory nodeFactory) {
         return nodeFactory.createAttribute(name, uri, parent, value);
     }
 
     @Override
-    public <T extends Attribute> T attribute(final Element parent, final String attributeName, final NodeFactory nodeFactory) {
+    public Attribute attribute(final Element parent, final String attributeName, final NodeFactory nodeFactory) {
         return nodeFactory.createAttribute(name, uri, parent, value);
     }
 

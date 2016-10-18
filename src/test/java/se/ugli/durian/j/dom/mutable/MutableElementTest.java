@@ -16,7 +16,7 @@ public class MutableElementTest {
 
     @Test
     public void shouldRemoveText() {
-        final MutableElement element = Durian.createElement("test");
+        final MutableElement element = Durian.createElement("test").as(MutableElement.class);
         element.addText("hej");
         assertThat(size(element.getTexts()), is(1));
         element.removeAll(Text.class);
@@ -25,7 +25,7 @@ public class MutableElementTest {
 
     @Test
     public void shouldShouldSetAttributeByNameIfNotExists() {
-        final MutableElement element = Durian.createElement("test");
+        final MutableElement element = Durian.createElement("test").as(MutableElement.class);
         assertThat(element.getAttributeByName("a").isPresent(), is(false));
         element.setAttributeValueByName("a", "b");
         assertThat(element.getAttributeValue("a").get(), is("b"));
@@ -33,7 +33,7 @@ public class MutableElementTest {
 
     @Test
     public void shouldShouldSetAttributeByNameIfExists() {
-        final MutableElement element = Durian.createElement("test");
+        final MutableElement element = Durian.createElement("test").as(MutableElement.class);
         element.addAttribute("a", "b");
         assertThat(element.getAttributeValue("a").get(), is("b"));
         element.setAttributeValueByName("a", "c");
@@ -42,7 +42,7 @@ public class MutableElementTest {
 
     @Test
     public void shouldShouldRemveAttributeByNameIfValueIsNull() {
-        final MutableElement element = Durian.createElement("test");
+        final MutableElement element = Durian.createElement("test").as(MutableElement.class);
         element.addAttribute("a", "b");
         assertThat(element.getAttributeValue("a").get(), is("b"));
         element.setAttributeValueByName("a", null);
@@ -51,14 +51,15 @@ public class MutableElementTest {
 
     @Test
     public void shouldNotContainAnyPrefixMappings() {
-        final MutableElement element = Durian.createElement("test");
+        final MutableElement element = Durian.createElement("test").as(MutableElement.class);
 
         assertThat(Iterables.isEmpty(element.prefixMappings()), is(true));
     }
 
     @Test
     public void shouldNotContainTwoMappings() {
-        final MutableElement element = Durian.createElement("test", prefixMapping("a", "b"), prefixMapping("c", "d"));
+        final MutableElement element = Durian.createElement("test", prefixMapping("a", "b"), prefixMapping("c", "d"))
+                .as(MutableElement.class);
 
         assertThat(Iterables.size(element.prefixMappings()), is(2));
         assertThat(Iterables.get(element.prefixMappings(), 0), is(prefixMapping("a", "b")));
@@ -67,7 +68,8 @@ public class MutableElementTest {
 
     @Test
     public void shouldNotContainOneMappings() {
-        final MutableElement element = Durian.createElement("test", "b", prefixMapping("a", "b"), prefixMapping("c", "b"));
+        final MutableElement element = Durian.createElement("test", "b", prefixMapping("a", "b"), prefixMapping("c", "b"))
+                .as(MutableElement.class);
 
         assertThat(Iterables.size(element.prefixMappings()), is(1));
         assertThat(Iterables.get(element.prefixMappings(), 0), is(prefixMapping("c", "b")));

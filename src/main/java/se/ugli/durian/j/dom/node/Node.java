@@ -4,11 +4,17 @@ import java.util.Optional;
 
 public interface Node {
 
-    <T extends Element> Optional<T> getParent();
+    Optional<Element> getParent();
 
     String getPath();
 
     String id();
 
     NodeFactory nodeFactory();
+
+    @SuppressWarnings("unchecked")
+    default <T extends Node> T as(final Class<T> clazz) {
+        return (T) this;
+    }
+
 }

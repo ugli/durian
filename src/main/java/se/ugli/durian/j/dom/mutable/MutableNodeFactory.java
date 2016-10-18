@@ -1,30 +1,25 @@
 package se.ugli.durian.j.dom.mutable;
 
-import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.PrefixMapping;
-import se.ugli.durian.j.dom.node.Text;
 
 public class MutableNodeFactory implements NodeFactory {
 
-    @SuppressWarnings({ "unchecked" })
     @Override
-    public <T extends Attribute> T createAttribute(final String name, final String uri, final Element parent, final String value) {
-        return (T) new MutableAttribute(name, uri, value, this);
+    public MutableAttribute createAttribute(final String name, final String uri, final Element parent, final String value) {
+        return new MutableAttribute(name, uri, value, this);
     }
 
-    @SuppressWarnings({ "unchecked" })
     @Override
-    public <T extends Element> T createElement(final String name, final String uri, final Element parent,
+    public MutableElement createElement(final String name, final String uri, final Element parent,
             final Iterable<PrefixMapping> prefixMappings) {
-        return (T) new MutableElement(name, uri, this, prefixMappings);
+        return new MutableElement(name, uri, this, prefixMappings);
     }
 
-    @SuppressWarnings({ "unchecked" })
     @Override
-    public <T extends Text> T createText(final Element element, final String value) {
-        return (T) new MutableText(value, this);
+    public MutableText createText(final Element element, final String value) {
+        return new MutableText(value, this);
     }
 
 }

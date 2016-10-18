@@ -1,5 +1,7 @@
 package se.ugli.durian.j.dom.mutable;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -17,37 +19,37 @@ public class MutableQuertApiImpl implements MutableQuertApi {
     }
 
     @Override
-    public <T extends Attribute> Optional<T> attribute(final String query) {
-        return QueryManager.selectNode(mutableElement, query);
+    public Optional<Attribute> attribute(final String query) {
+        return QueryManager.selectNode(mutableElement, query).map(n -> n.as(Attribute.class));
     }
 
     @Override
-    public <T extends Attribute> List<T> attributes(final String query) {
-        return QueryManager.selectNodes(mutableElement, query);
+    public List<Attribute> attributes(final String query) {
+        return QueryManager.selectNodes(mutableElement, query).stream().map(n -> n.as(Attribute.class)).collect(toList());
     }
 
     @Override
     public Optional<String> attributeValue(final String query) {
-        return QueryManager.selectNode(mutableElement, query).map(n -> (Attribute) n).map(Attribute::getValue);
+        return QueryManager.selectNode(mutableElement, query).map(n -> n.as(Attribute.class)).map(Attribute::getValue);
     }
 
     @Override
-    public <T extends Element> Optional<T> element(final String query) {
+    public Optional<Element> element(final String query) {
+        return QueryManager.selectNode(mutableElement, query).map(n -> n.as(Element.class));
+    }
+
+    @Override
+    public List<Element> elements(final String query) {
+        return QueryManager.selectNodes(mutableElement, query).stream().map(n -> n.as(Element.class)).collect(toList());
+    }
+
+    @Override
+    public Optional<Node> node(final String query) {
         return QueryManager.selectNode(mutableElement, query);
     }
 
     @Override
-    public <T extends Element> List<T> elements(final String query) {
-        return QueryManager.selectNodes(mutableElement, query);
-    }
-
-    @Override
-    public <T extends Node> Optional<T> node(final String query) {
-        return QueryManager.selectNode(mutableElement, query);
-    }
-
-    @Override
-    public <T extends Node> List<T> nodes(final String query) {
+    public List<Node> nodes(final String query) {
         return QueryManager.selectNodes(mutableElement, query);
     }
 
@@ -75,7 +77,7 @@ public class MutableQuertApiImpl implements MutableQuertApi {
 
     @Override
     public boolean setAttributeValueByQuery(final String query, final String value) {
-        final Optional<MutableAttribute> attributeOpt = attribute(query);
+        final Optional<MutableAttribute> attributeOpt = attribute(query).map(a -> a.as(MutableAttribute.class));
         if (attributeOpt.isPresent())
             attributeOpt.get().setValue(value);
         return attributeOpt.isPresent();

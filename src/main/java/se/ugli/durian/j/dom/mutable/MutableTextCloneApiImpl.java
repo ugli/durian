@@ -18,22 +18,22 @@ public class MutableTextCloneApiImpl implements TextCloneApi {
     }
 
     @Override
-    public <T extends Text> T text() {
+    public Text text() {
         return nodeFactory.createText(parent, value);
     }
 
     @Override
-    public <T extends Text> T text(final Element parent) {
+    public Text text(final Element parent) {
         return nodeFactory.createText(parent, value);
     }
 
     @Override
-    public <T extends Text> T text(final NodeFactory nodeFactory) {
+    public Text text(final NodeFactory nodeFactory) {
         return nodeFactory.createText(parent, value);
     }
 
     @Override
-    public <T extends Text> T text(final Element parent, final NodeFactory nodeFactory) {
+    public Text text(final Element parent, final NodeFactory nodeFactory) {
         return nodeFactory.createText(parent, value);
     }
 
