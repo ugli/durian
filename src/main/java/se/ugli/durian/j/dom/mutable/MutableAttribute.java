@@ -20,21 +20,11 @@ public class MutableAttribute implements Attribute, MutableNode {
     private final String id = Id.create();
     private final NodeFactory nodeFactory;
 
-    @Override
-    public String id() {
-        return id;
-    }
-
     public MutableAttribute(final String name, final String uri, final String value, final NodeFactory nodeFactory) {
         this.name = name;
         this.uri = Optional.ofNullable(uri);
         this.value = value;
         this.nodeFactory = nodeFactory;
-    }
-
-    @Override
-    public NodeFactory nodeFactory() {
-        return nodeFactory;
     }
 
     @Override
@@ -61,8 +51,26 @@ public class MutableAttribute implements Attribute, MutableNode {
     }
 
     @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (name == null ? 0 : name.hashCode());
+        return result;
+    }
+
+    @Override
+    public String id() {
+        return id;
+    }
+
+    @Override
     public String name() {
         return name;
+    }
+
+    @Override
+    public NodeFactory nodeFactory() {
+        return nodeFactory;
     }
 
     @Override
@@ -76,38 +84,6 @@ public class MutableAttribute implements Attribute, MutableNode {
         if (parent.isPresent())
             return parent.get().path() + selfPath;
         return selfPath;
-    }
-
-    @Override
-    public Optional<String> uri() {
-        return uri;
-    }
-
-    @Override
-    public String value() {
-        return value;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (name == null ? 0 : name.hashCode());
-        return result;
-    }
-
-    public void setValue(final String value) {
-        this.value = value;
-    }
-
-    @Override
-    public void setParent(final Element parent) {
-        this.parent = Optional.ofNullable(parent);
-    }
-
-    @Override
-    public String toString() {
-        return "MutableAttribute [name=" + name + ", uri=" + uri + ", value=" + value + "]";
     }
 
     private Optional<String> prefix(final String uri, final Element element) {
@@ -127,6 +103,30 @@ public class MutableAttribute implements Attribute, MutableNode {
                 return prefix.get() + ":" + name;
         }
         return name;
+    }
+
+    @Override
+    public void setParent(final Element parent) {
+        this.parent = Optional.ofNullable(parent);
+    }
+
+    public void setValue(final String value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "MutableAttribute [name=" + name + ", uri=" + uri + ", value=" + value + "]";
+    }
+
+    @Override
+    public Optional<String> uri() {
+        return uri;
+    }
+
+    @Override
+    public String value() {
+        return value;
     }
 
 }

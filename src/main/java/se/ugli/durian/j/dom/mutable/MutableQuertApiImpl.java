@@ -42,6 +42,11 @@ public class MutableQuertApiImpl implements MutableQuertApi {
     }
 
     @Override
+    public boolean evaluteBoolean(final String query) {
+        return QueryManager.evaluteBoolean(mutableElement, query);
+    }
+
+    @Override
     public Optional<Node> node(final String query) {
         return QueryManager.selectNode(mutableElement, query);
     }
@@ -50,23 +55,6 @@ public class MutableQuertApiImpl implements MutableQuertApi {
     public Stream<Node> nodes(final String query) {
         return QueryManager.selectNodes(mutableElement, query);
     }
-
-    @Override
-    public Optional<String> text(final String query) {
-        return QueryManager.selectText(mutableElement, query);
-    }
-
-    @Override
-    public Stream<String> texts(final String query) {
-        return QueryManager.selectTexts(mutableElement, query);
-    }
-
-    @Override
-    public boolean evaluteBoolean(final String query) {
-        return QueryManager.evaluteBoolean(mutableElement, query);
-    }
-
-    // Mutable
 
     @Override
     public int removeByQuery(final String query) {
@@ -79,6 +67,18 @@ public class MutableQuertApiImpl implements MutableQuertApi {
         if (attributeOpt.isPresent())
             attributeOpt.get().setValue(value);
         return attributeOpt.isPresent();
+    }
+
+    // Mutable
+
+    @Override
+    public Optional<String> text(final String query) {
+        return QueryManager.selectText(mutableElement, query);
+    }
+
+    @Override
+    public Stream<String> texts(final String query) {
+        return QueryManager.selectTexts(mutableElement, query);
     }
 
 }

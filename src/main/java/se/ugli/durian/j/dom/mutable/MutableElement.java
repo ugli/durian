@@ -30,28 +30,6 @@ import se.ugli.durian.j.dom.utils.Id;
 
 public class MutableElement implements Element, MutableNode {
 
-    private final Set<Attribute> attributes = new LinkedHashSet<Attribute>();
-    private final List<Content> content = new ArrayList<Content>();
-    private final List<NodeListener> nodeListeners = new ArrayList<NodeListener>();
-    private final Map<String, String> prefixByUri = new LinkedHashMap<String, String>();
-    private final String id = Id.create();
-
-    private String name;
-    private final NodeFactory nodeFactory;
-    private Optional<String> uri;
-    private Optional<Element> parent = Optional.empty();
-
-    public MutableElement(final String name, final String uri, final NodeFactory nodeFactory,
-            final Iterable<PrefixMapping> prefixMappings) {
-        this.name = name;
-        this.uri = Optional.ofNullable(uri);
-        this.nodeFactory = nodeFactory;
-        if (prefixMappings != null)
-            for (final PrefixMapping prefixmapping : prefixMappings)
-                prefixByUri.put(prefixmapping.uri, prefixmapping.prefix.orElse(null));
-        nodeListeners.add(new SetParentListener());
-    }
-
     private class SetParentListener implements NodeListener {
 
         @Override
@@ -65,33 +43,28 @@ public class MutableElement implements Element, MutableNode {
         }
 
     }
+    
+    private final Set<Attribute> attributes = new LinkedHashSet<Attribute>();
+    private final List<Content> content = new ArrayList<Content>();
+    private final List<NodeListener> nodeListeners = new ArrayList<NodeListener>();
+    private final Map<String, String> prefixByUri = new LinkedHashMap<String, String>();
 
-    @Override
-    public String id() {
-        return id;
-    }
+    private final String id = Id.create();
+    private String name;
+    private final NodeFactory nodeFactory;
+    private Optional<String> uri;
 
-    @Override
-    public ElementCloneApi clone() {
-        return new MutableElementCloneApiImpl(this);
-    }
+    private Optional<Element> parent = Optional.empty();
 
-    @Override
-    public MutableQuertApi select() {
-        return new MutableQuertApiImpl(this);
-    }
-
-    @Override
-    public NodeFactory nodeFactory() {
-        return nodeFactory;
-    }
-
-    public void addListener(final NodeListener listener) {
-        nodeListeners.add(listener);
-    }
-
-    public void removeListener(final NodeListener listener) {
-        nodeListeners.add(listener);
+    public MutableElement(final String name, final String uri, final NodeFactory nodeFactory,
+            final Iterable<PrefixMapping> prefixMappings) {
+        this.name = name;
+        this.uri = Optional.ofNullable(uri);
+        this.nodeFactory = nodeFactory;
+        if (prefixMappings != null)
+            for (final PrefixMapping prefixmapping : prefixMappings)
+                prefixByUri.put(prefixmapping.uri, prefixmapping.prefix.orElse(null));
+        nodeListeners.add(new SetParentListener());
     }
 
     public Node add(final Node node) {
@@ -111,45 +84,6 @@ public class MutableElement implements Element, MutableNode {
             add(node);
     }
 
-    public boolean remove(final Node node) {
-        boolean result = false;
-        if (node != null) {
-            if (node instanceof Content)
-                result = content.remove(node);
-            if (node instanceof Attribute)
-                result = attributes.remove(node);
-            for (final NodeListener listener : nodeListeners)
-                listener.nodeAdded(node);
-        }
-        return result;
-    }
-
-    public int removeAll(final Stream<? extends Node> nodes) {
-        final AtomicInteger result = new AtomicInteger(0);
-        nodes.forEach(node -> {
-            if (remove(node))
-                result.incrementAndGet();
-        });
-        return result.get();
-    }
-
-    public int removeAll(final Class<? extends Node> type) {
-        final AtomicInteger result = new AtomicInteger(0);
-        if (Attribute.class.isAssignableFrom(type))
-            attributes().forEach(attribute -> {
-                if (type.isInstance(attribute))
-                    if (remove(attribute))
-                        result.incrementAndGet();
-            });
-        if (Content.class.isAssignableFrom(type))
-            content().forEach(content -> {
-                if (type.isInstance(content))
-                    if (remove(content))
-                        result.incrementAndGet();
-            });
-        return result.get();
-    }
-
     public Attribute addAttribute(final String name, final String value) {
         return addAttribute(name, uri.orElse(null), value, nodeFactory);
     }
@@ -160,23 +94,33 @@ public class MutableElement implements Element, MutableNode {
         return attribute;
     }
 
-    public <T extends Element> T addElement(final String name) {
+    public Element addElement(final String name) {
         return addElement(name, uri.orElse(null), nodeFactory);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends Element> T addElement(final String name, final String uri, final NodeFactory nodeFactory,
+    public Element addElement(final String name, final String uri, final NodeFactory nodeFactory,
             final PrefixMapping... prefixmappings) {
-        return (T) add(nodeFactory.createElement(name, uri, this, asList(prefixmappings)));
+        Element element = nodeFactory.createElement(name, uri, this, asList(prefixmappings));
+        add(element);
+		return element;
     }
 
-    public <T extends Text> T addText(final String value) {
+    public void addListener(final NodeListener listener) {
+        nodeListeners.add(listener);
+    }
+
+    public void addPrefixMapping(final String prefix, final String uri) {
+        prefixByUri.put(uri, prefix);
+    }
+
+    public Text addText(final String value) {
         return addText(value, nodeFactory);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends Text> T addText(final String value, final NodeFactory nodeFactory) {
-        return (T) add(nodeFactory.createText(this, value));
+    public Text addText(final String value, final NodeFactory nodeFactory) {
+    	Text text = nodeFactory.createText(this, value);
+         add(text);
+         return text;
     }
 
     @Override
@@ -198,6 +142,11 @@ public class MutableElement implements Element, MutableNode {
         if (attribute.isPresent())
             return Optional.ofNullable(attribute.get().value());
         return Optional.empty();
+    }
+
+    @Override
+    public ElementCloneApi clone() {
+        return new MutableElementCloneApiImpl(this);
     }
 
     @Override
@@ -234,8 +183,44 @@ public class MutableElement implements Element, MutableNode {
     }
 
     @Override
+    public boolean hasAttributes() {
+        return !attributes.isEmpty();
+    }
+
+    @Override
+    public boolean hasElements() {
+        for (final Content content : this.content)
+            if (content instanceof Element)
+                return true;
+        return false;
+    }
+
+    @Override
+    public boolean hasNodes() {
+        return !attributes.isEmpty() && !content.isEmpty();
+    }
+
+    @Override
+    public boolean hasTexts() {
+        for (final Content content : this.content)
+            if (content instanceof Text)
+                return true;
+        return false;
+    }
+
+    @Override
+    public String id() {
+        return id;
+    }
+
+    @Override
     public String name() {
         return name;
+    }
+
+    @Override
+    public NodeFactory nodeFactory() {
+        return nodeFactory;
     }
 
     @Override
@@ -258,6 +243,28 @@ public class MutableElement implements Element, MutableNode {
         return path() + "/" + childPath;
     }
 
+    private Optional<String> prefix(final String uri, final Element element) {
+        for (final PrefixMapping prefixmapping : element.prefixMappings().collect(toList()))
+            if (uri.equals(prefixmapping.uri))
+                return prefixmapping.prefix;
+        if (element.parent().isPresent())
+            return prefix(uri, element.parent().get());
+        return Optional.empty();
+    }
+
+    @Override
+    public Stream<PrefixMapping> prefixMappings() {
+        final List<PrefixMapping> prefixmappings = new ArrayList<PrefixMapping>();
+        for (final Entry<String, String> entry : prefixByUri.entrySet())
+            prefixmappings.add(prefixMapping(entry.getValue(), entry.getKey()));
+        return prefixmappings.stream();
+    }
+
+    @Override
+    public String qName() {
+        return uri.flatMap(u -> prefix(u, this)).map(p -> p + ":" + name).orElse(name);
+    }
+
     @Override
     public String relativePath(final String childPath) {
         if (childPath.startsWith("/"))
@@ -265,14 +272,43 @@ public class MutableElement implements Element, MutableNode {
         return name + "/" + childPath;
     }
 
-    @Override
-    public Stream<Text> texts() {
-        return new ArrayList<>(content).stream().filter(c -> c instanceof Text).map(c -> c.as(Text.class));
+    public boolean remove(final Node node) {
+        boolean result = false;
+        if (node != null) {
+            if (node instanceof Content)
+                result = content.remove(node);
+            if (node instanceof Attribute)
+                result = attributes.remove(node);
+            for (final NodeListener listener : nodeListeners)
+                listener.nodeAdded(node);
+        }
+        return result;
     }
 
-    @Override
-    public Optional<String> uri() {
-        return uri;
+    public int removeAll(final Class<? extends Node> type) {
+        final AtomicInteger result = new AtomicInteger(0);
+        if (Attribute.class.isAssignableFrom(type))
+            attributes().forEach(attribute -> {
+                if (type.isInstance(attribute))
+                    if (remove(attribute))
+                        result.incrementAndGet();
+            });
+        if (Content.class.isAssignableFrom(type))
+            content().forEach(content -> {
+                if (type.isInstance(content))
+                    if (remove(content))
+                        result.incrementAndGet();
+            });
+        return result.get();
+    }
+
+    public int removeAll(final Stream<? extends Node> nodes) {
+        final AtomicInteger result = new AtomicInteger(0);
+        nodes.forEach(node -> {
+            if (remove(node))
+                result.incrementAndGet();
+        });
+        return result.get();
     }
 
     public boolean removeElementByName(final String elementName) {
@@ -284,6 +320,15 @@ public class MutableElement implements Element, MutableNode {
 
     public int removeElementsByName(final String elementName) {
         return removeAll(elements(elementName));
+    }
+
+    public void removeListener(final NodeListener listener) {
+        nodeListeners.add(listener);
+    }
+
+    @Override
+    public MutableQuertApi select() {
+        return new MutableQuertApiImpl(this);
     }
 
     public void setAttributeValueByName(final String attributeName, final String value) {
@@ -313,39 +358,19 @@ public class MutableElement implements Element, MutableNode {
     public void setParent(final Element parent) {
         this.parent = Optional.ofNullable(parent);
     }
+    
+    public void setText(String text) {
+    	removeAll(Text.class);
+    	addText(text);
+    }
 
     public void setUri(final String uri) {
         this.uri = Optional.ofNullable(uri);
     }
 
-    public void addPrefixMapping(final String prefix, final String uri) {
-        prefixByUri.put(uri, prefix);
-    }
-
     @Override
-    public boolean hasAttributes() {
-        return !attributes.isEmpty();
-    }
-
-    @Override
-    public boolean hasElements() {
-        for (final Content content : this.content)
-            if (content instanceof Element)
-                return true;
-        return false;
-    }
-
-    @Override
-    public boolean hasTexts() {
-        for (final Content content : this.content)
-            if (content instanceof Text)
-                return true;
-        return false;
-    }
-
-    @Override
-    public boolean hasNodes() {
-        return !attributes.isEmpty() && !content.isEmpty();
+    public Stream<Text> texts() {
+        return new ArrayList<>(content).stream().filter(c -> c instanceof Text).map(c -> c.as(Text.class));
     }
 
     @Override
@@ -354,30 +379,13 @@ public class MutableElement implements Element, MutableNode {
     }
 
     @Override
-    public Stream<PrefixMapping> prefixMappings() {
-        final List<PrefixMapping> prefixmappings = new ArrayList<PrefixMapping>();
-        for (final Entry<String, String> entry : prefixByUri.entrySet())
-            prefixmappings.add(prefixMapping(entry.getValue(), entry.getKey()));
-        return prefixmappings.stream();
-    }
-
-    @Override
-    public String qName() {
-        return uri.flatMap(u -> prefix(u, this)).map(p -> p + ":" + name).orElse(name);
-    }
-
-    private Optional<String> prefix(final String uri, final Element element) {
-        for (final PrefixMapping prefixmapping : element.prefixMappings().collect(toList()))
-            if (uri.equals(prefixmapping.uri))
-                return prefixmapping.prefix;
-        if (element.parent().isPresent())
-            return prefix(uri, element.parent().get());
-        return Optional.empty();
-    }
-
-    @Override
     public String toXml() {
         return Serializer.serialize(this);
+    }
+
+    @Override
+    public Optional<String> uri() {
+        return uri;
     }
 
 }

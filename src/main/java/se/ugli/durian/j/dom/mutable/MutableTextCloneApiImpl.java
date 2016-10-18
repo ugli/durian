@@ -28,12 +28,12 @@ public class MutableTextCloneApiImpl implements TextCloneApi {
     }
 
     @Override
-    public Text text(final NodeFactory nodeFactory) {
+    public Text text(final Element parent, final NodeFactory nodeFactory) {
         return nodeFactory.createText(parent, value);
     }
 
     @Override
-    public Text text(final Element parent, final NodeFactory nodeFactory) {
+    public Text text(final NodeFactory nodeFactory) {
         return nodeFactory.createText(parent, value);
     }
 

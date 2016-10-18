@@ -32,17 +32,7 @@ class MutableAttributeCloneApiImpl implements AttributeCloneApi {
     }
 
     @Override
-    public Attribute attribute(final NodeFactory nodeFactory) {
-        return nodeFactory.createAttribute(name, uri, parent, value);
-    }
-
-    @Override
     public Attribute attribute(final Element parent, final NodeFactory nodeFactory) {
-        return nodeFactory.createAttribute(name, uri, parent, value);
-    }
-
-    @Override
-    public Attribute attribute(final String attributeName) {
         return nodeFactory.createAttribute(name, uri, parent, value);
     }
 
@@ -52,12 +42,22 @@ class MutableAttributeCloneApiImpl implements AttributeCloneApi {
     }
 
     @Override
-    public Attribute attribute(final String attributeName, final NodeFactory nodeFactory) {
+    public Attribute attribute(final Element parent, final String attributeName, final NodeFactory nodeFactory) {
         return nodeFactory.createAttribute(name, uri, parent, value);
     }
 
     @Override
-    public Attribute attribute(final Element parent, final String attributeName, final NodeFactory nodeFactory) {
+    public Attribute attribute(final NodeFactory nodeFactory) {
+        return nodeFactory.createAttribute(name, uri, parent, value);
+    }
+
+    @Override
+    public Attribute attribute(final String attributeName) {
+        return nodeFactory.createAttribute(name, uri, parent, value);
+    }
+
+    @Override
+    public Attribute attribute(final String attributeName, final NodeFactory nodeFactory) {
         return nodeFactory.createAttribute(name, uri, parent, value);
     }
 

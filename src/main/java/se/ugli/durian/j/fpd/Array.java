@@ -32,7 +32,7 @@ class Array implements Definition {
             final int endIndex = beginIndex + elementLength;
             final String value = data.substring(beginIndex, endIndex).trim();
             if (!value.isEmpty() || includeEmptyValues) {
-                final MutableElement e = element.addElement("element");
+                final MutableElement e = element.addElement("element").as(MutableElement.class);
                 e.addAttribute("index", String.valueOf(i + 1));
                 e.addAttribute("value", value);
             }

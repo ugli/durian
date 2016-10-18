@@ -15,11 +15,6 @@ public class MutableText implements Text, MutableNode {
     private final String id = Id.create();
     private final NodeFactory nodeFactory;
 
-    @Override
-    public String id() {
-        return id;
-    }
-
     public MutableText(final String value, final NodeFactory nodeFactory) {
         this.value = value;
         this.nodeFactory = nodeFactory;
@@ -28,6 +23,11 @@ public class MutableText implements Text, MutableNode {
     @Override
     public TextCloneApi clone() {
         return new MutableTextCloneApiImpl(this);
+    }
+
+    @Override
+    public String id() {
+        return id;
     }
 
     @Override
@@ -49,11 +49,6 @@ public class MutableText implements Text, MutableNode {
     }
 
     @Override
-    public String value() {
-        return value;
-    }
-
-    @Override
     public void setParent(final Element parent) {
         this.parent = Optional.ofNullable(parent);
     }
@@ -61,6 +56,11 @@ public class MutableText implements Text, MutableNode {
     @Override
     public String toString() {
         return "MutableText [value=" + value + "]";
+    }
+
+    @Override
+    public String value() {
+        return value;
     }
 
 }
