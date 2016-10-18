@@ -38,15 +38,15 @@ class DurianNavigator implements Navigator {
     }
 
     private Element getRoot(final Element element) {
-        if (element.getParent().isPresent())
-            return getRoot(element.getParent().get());
+        if (element.parent().isPresent())
+            return getRoot(element.parent().get());
         return element;
     }
 
     @Override
     public String getAttributeName(final Object attr) {
         final Attribute attribute = (Attribute) attr;
-        return attribute.getName();
+        return attribute.name();
     }
 
     @Override
@@ -62,7 +62,7 @@ class DurianNavigator implements Navigator {
     @Override
     public String getAttributeStringValue(final Object attr) {
         final Attribute attribute = (Attribute) attr;
-        return attribute.getValue();
+        return attribute.value();
     }
 
     @Override
@@ -73,7 +73,7 @@ class DurianNavigator implements Navigator {
     @Override
     public String getElementName(final Object object) {
         final Element element = (Element) object;
-        return element.getName();
+        return element.name();
     }
 
     @Override
@@ -90,8 +90,9 @@ class DurianNavigator implements Navigator {
     public String getElementStringValue(final Object object) {
         final Element element = (Element) object;
         final StringBuilder stringBuilder = new StringBuilder();
-        for (final Text text : element.getTexts())
-            stringBuilder.append(text.getValue());
+        element.texts().forEach(text -> {
+            stringBuilder.append(text.value());
+        });
         return stringBuilder.toString();
     }
 
@@ -108,7 +109,7 @@ class DurianNavigator implements Navigator {
     @Override
     public String getTextStringValue(final Object text) {
         final Text textObject = (Text) text;
-        return textObject.getValue();
+        return textObject.value();
     }
 
     @Override
@@ -161,7 +162,7 @@ class DurianNavigator implements Navigator {
         }
         else if (contextNode instanceof Element) {
             final Element element = (Element) contextNode;
-            return element.getContent().iterator();
+            return element.content().iterator();
         }
         else if (contextNode instanceof Text)
             return new ArrayList<Content>().iterator();
@@ -178,8 +179,8 @@ class DurianNavigator implements Navigator {
     public Iterator<Element> getParentAxisIterator(final Object contextNode) {
         if (contextNode instanceof Element) {
             final Element element = (Element) contextNode;
-            if (element.getParent().isPresent())
-                return Collections.singletonList(element.getParent().get()).iterator();
+            if (element.parent().isPresent())
+                return Collections.singletonList(element.parent().get()).iterator();
         }
         return new ArrayList<Element>().iterator();
     }
@@ -213,7 +214,7 @@ class DurianNavigator implements Navigator {
     public Iterator<Attribute> getAttributeAxisIterator(final Object contextNode) {
         if (contextNode instanceof Element) {
             final Element element = (Element) contextNode;
-            return element.getAttributes().iterator();
+            return element.attributes().iterator();
         }
         return new ArrayList<Attribute>().iterator();
     }
@@ -251,7 +252,7 @@ class DurianNavigator implements Navigator {
     @Override
     public Object getParentNode(final Object contextNode) throws UnsupportedAxisException {
         final Node node = (Node) contextNode;
-        return node.getParent().orElse(null);
+        return node.parent().orElse(null);
     }
 
     @Override

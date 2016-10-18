@@ -15,15 +15,15 @@ public class ElementImplTest {
     @Test
     public void elementText() {
         final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
-        assertEquals("Schema for Purchase Order Example", element.getElementText("title").get());
+        assertEquals("Schema for Purchase Order Example", element.elementText("title").get());
     }
 
     @Test
     public void selectClone() {
         final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
         final Optional<Element> elementClone = element.select().element("/schema/title").map(e -> e.clone().element());
-        assertNotEquals(elementClone, element.getElements().iterator().next());
-        assertEquals("Schema for Purchase Order Example", elementClone.get().getTexts().iterator().next().getValue());
+        assertNotEquals(elementClone, element.elements().iterator().next());
+        assertEquals("Schema for Purchase Order Example", elementClone.get().texts().iterator().next().value());
     }
 
 }

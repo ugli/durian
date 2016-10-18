@@ -8,12 +8,12 @@ public class ByValueFieldValueFactory implements FieldValueFactory {
 
     @Override
     public Object create(final Attribute attribute) {
-        return create(attribute.getValue());
+        return create(attribute.value());
     }
 
     @Override
     public Object create(final Text text) {
-        return create(text.getValue());
+        return create(text.value());
     }
 
     private Object create(final String value) {

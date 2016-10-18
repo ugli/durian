@@ -13,7 +13,7 @@ public class MutableTextCloneApiImpl implements TextCloneApi {
 
     public MutableTextCloneApiImpl(final MutableText mutableText) {
         this.parent = null;
-        this.value = mutableText.getValue();
+        this.value = mutableText.value();
         this.nodeFactory = mutableText.nodeFactory();
     }
 

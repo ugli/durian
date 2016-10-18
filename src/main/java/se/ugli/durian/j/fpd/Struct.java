@@ -4,6 +4,7 @@ import static se.ugli.durian.j.dom.node.PrefixMapping.prefixMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import se.ugli.durian.j.dom.mutable.MutableElement;
 import se.ugli.durian.j.dom.mutable.MutableNodeFactory;
@@ -25,17 +26,17 @@ class Struct implements Definition {
     private final int numOfChars;
 
     private Struct(final Element element, final String targetNamespace, final boolean includeEmptyValues, final boolean root) {
-        name = element.getAttributeValue("name").get();
+        name = element.attributeValue("name").get();
         this.targetNamespace = targetNamespace;
         this.includeEmptyValues = includeEmptyValues;
         this.root = root;
-        int _numOfChars = 0;
-        for (final Element e : element.getElements()) {
+        final AtomicInteger _numOfChars = new AtomicInteger(0);
+        element.elements().forEach(e -> {
             final Definition definition = definition(e);
             definitions.add(definition);
-            _numOfChars += definition.numOfChars();
-        }
-        numOfChars = _numOfChars;
+            _numOfChars.addAndGet(definition.numOfChars());
+        });
+        numOfChars = _numOfChars.get();
     }
 
     @Override
@@ -71,7 +72,7 @@ class Struct implements Definition {
     }
 
     private Definition definition(final Element element) {
-        final String type = element.getAttributeValue("type").get();
+        final String type = element.attributeValue("type").get();
         if ("Struct".equals(type))
             return new Struct(element, targetNamespace, includeEmptyValues, false);
         if ("Array".equals(type))

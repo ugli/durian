@@ -1,13 +1,16 @@
 package se.ugli.durian.j.dom.mutable;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+
+import java.util.Optional;
 
 import org.junit.Test;
 
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.parser.Parser;
-import se.ugli.durian.j.dom.query.QueryException;
 
 public class SelectAttributeValueTest {
 
@@ -23,9 +26,10 @@ public class SelectAttributeValueTest {
         assertFalse(element.select().attributeValue("/schema/@queryBindings").isPresent());
     }
 
-    @Test(expected = QueryException.class)
-    public void boom() {
+    @Test
+    public void shouldSelectFirstAttribute() {
         final Element element = Parser.apply().parseResource("/PurchaseOrder.sch");
-        element.select().attributeValue("//@test");
+        final Optional<String> attributeValue = element.select().attributeValue("//@test");
+        assertThat(attributeValue.get(), is("parent::*/street"));
     }
 }

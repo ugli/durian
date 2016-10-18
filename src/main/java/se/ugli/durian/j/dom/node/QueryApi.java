@@ -1,28 +1,28 @@
 package se.ugli.durian.j.dom.node;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public interface QueryApi {
 
     Optional<Attribute> attribute(String query);
 
-    List<Attribute> attributes(String query);
+    Stream<Attribute> attributes(String query);
 
     Optional<String> attributeValue(String query);
 
     Optional<Element> element(String query);
 
-    List<Element> elements(String query);
+    Stream<Element> elements(String query);
+
+    boolean evaluteBoolean(String query);
 
     Optional<Node> node(String query);
 
-    List<Node> nodes(String query);
+    Stream<Node> nodes(String query);
 
     Optional<String> text(String query);
 
-    List<String> texts(String query);
-
-    boolean evaluteBoolean(String query);
+    Stream<String> texts(String query);
 
 }

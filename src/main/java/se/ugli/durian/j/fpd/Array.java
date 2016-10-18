@@ -17,9 +17,9 @@ class Array implements Definition {
     private final boolean includeEmptyValues;
 
     Array(final Element element, final String targetNamespace, final boolean includeEmptyValues) {
-        name = element.getAttributeValue("name").get();
-        size = Integer.parseInt(element.getAttributeValue("size").get());
-        elementLength = Integer.parseInt(element.getAttributeValue("elementLength").get());
+        name = element.attributeValue("name").get();
+        size = Integer.parseInt(element.attributeValue("size").get());
+        elementLength = Integer.parseInt(element.attributeValue("elementLength").get());
         this.targetNamespace = targetNamespace;
         this.includeEmptyValues = includeEmptyValues;
     }

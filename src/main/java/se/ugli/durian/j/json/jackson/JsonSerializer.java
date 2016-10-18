@@ -7,15 +7,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import se.ugli.durian.j.dom.node.Attribute;
-import se.ugli.durian.j.dom.node.Element;
-import se.ugli.durian.j.dom.node.Text;
-import se.ugli.durian.j.json.jackson.fieldvaluefactories.ByValueFieldValueFactory;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import se.ugli.durian.j.dom.node.Attribute;
+import se.ugli.durian.j.dom.node.Element;
+import se.ugli.durian.j.json.jackson.fieldvaluefactories.ByValueFieldValueFactory;
 
 public final class JsonSerializer {
 
@@ -47,28 +46,24 @@ public final class JsonSerializer {
     }
 
     private JsonNode createJsonNode(final Element element) {
-        if (element instanceof JsonArrayElement) {
+        if (element instanceof JsonArrayElement)
             return createArrayFromArrayElement(element);
-        }
         else {
             final ObjectNode objectNode = objectMapper.createObjectNode();
-            for (final Attribute attribute : element.getAttributes()) {
+            element.attributes().forEach(attribute -> {
                 putAttribute(objectNode, attribute);
-            }
+            });
             final Map<String, List<Element>> childElementNameMap = createElementNameMap(element);
             for (final String fieldName : childElementNameMap.keySet()) {
                 final List<Element> childElementByName = childElementNameMap.get(fieldName);
-                if (childElementByName.isEmpty()) {
+                if (childElementByName.isEmpty())
                     throw new IllegalStateException();
-                }
-                else if (childElementByName.size() == 1) {
+                else if (childElementByName.size() == 1)
                     objectNode.set(fieldName, createJsonNode(childElementByName.get(0)));
-                }
                 else {
                     final ArrayNode arrayNode = objectNode.arrayNode();
-                    for (final Element arrayElement : childElementByName) {
+                    for (final Element arrayElement : childElementByName)
                         arrayNode.add(createJsonNode(arrayElement));
-                    }
                     objectNode.set(fieldName, arrayNode);
                 }
             }
@@ -78,70 +73,57 @@ public final class JsonSerializer {
 
     private Map<String, List<Element>> createElementNameMap(final Element element) {
         final Map<String, List<Element>> map = new LinkedHashMap<String, List<Element>>();
-        for (final Element childElement : element.getElements()) {
+        element.elements().forEach(childElement -> {
             final String fieldName;
-            if (childElement instanceof JsonArrayElement) {
+            if (childElement instanceof JsonArrayElement)
                 fieldName = ((JsonArrayElement) childElement).arrayName;
-            }
-            else {
-                fieldName = childElement.getName();
-            }
+            else
+                fieldName = childElement.name();
             List<Element> list;
-            if (map.containsKey(fieldName)) {
+            if (map.containsKey(fieldName))
                 list = map.get(fieldName);
-            }
             else {
                 list = new ArrayList<Element>();
                 map.put(fieldName, list);
             }
             list.add(childElement);
-        }
+        });
         return map;
     }
 
     private void putAttribute(final ObjectNode objectNode, final Attribute attribute) {
-        final String fieldName = attribute.getName();
+        final String fieldName = attribute.name();
         final Object value = fieldValueFactory.create(attribute);
-        if (value == null) {
+        if (value == null)
             objectNode.putNull(fieldName);
-        }
-        else if (value instanceof Boolean) {
+        else if (value instanceof Boolean)
             objectNode.put(fieldName, (Boolean) value);
-        }
-        else if (value instanceof Long) {
+        else if (value instanceof Long)
             objectNode.put(fieldName, (Long) value);
-        }
-        else if (value instanceof Double) {
+        else if (value instanceof Double)
             objectNode.put(fieldName, (Double) value);
-        }
-        else {
+        else
             objectNode.put(fieldName, value.toString());
-        }
     }
 
     private JsonNode createArrayFromArrayElement(final Element element) {
         final ArrayNode arrayNode = objectMapper.createArrayNode();
-        for (final Element childElement : element.getElements()) {
+        element.elements().forEach(childElement -> {
             arrayNode.add(createJsonNode(childElement));
-        }
-        for (final Text text : element.getTexts()) {
+        });
+        element.texts().forEach(text -> {
             final Object textValue = fieldValueFactory.create(text);
-            if (textValue == null) {
+            if (textValue == null)
                 arrayNode.addNull();
-            }
-            else if (textValue instanceof Boolean) {
+            else if (textValue instanceof Boolean)
                 arrayNode.add((Boolean) textValue);
-            }
-            else if (textValue instanceof Long) {
+            else if (textValue instanceof Long)
                 arrayNode.add((Long) textValue);
-            }
-            else if (textValue instanceof Double) {
+            else if (textValue instanceof Double)
                 arrayNode.add((Double) textValue);
-            }
-            else {
+            else
                 arrayNode.add(textValue.toString());
-            }
-        }
+        });
         return arrayNode;
     }
 

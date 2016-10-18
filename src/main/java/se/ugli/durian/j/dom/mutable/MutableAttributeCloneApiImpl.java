@@ -15,9 +15,9 @@ class MutableAttributeCloneApiImpl implements AttributeCloneApi {
 
     public MutableAttributeCloneApiImpl(final MutableAttribute attribute, final NodeFactory nodeFactory) {
         this.parent = null;
-        this.name = attribute.getName();
-        this.uri = attribute.getUri().orElse(null);
-        this.value = attribute.getValue();
+        this.name = attribute.name();
+        this.uri = attribute.uri().orElse(null);
+        this.value = attribute.value();
         this.nodeFactory = nodeFactory;
     }
 

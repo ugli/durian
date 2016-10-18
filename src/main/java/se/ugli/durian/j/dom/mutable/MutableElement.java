@@ -1,11 +1,11 @@
 package se.ugli.durian.j.dom.mutable;
 
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 import static se.ugli.durian.j.dom.node.PrefixMapping.prefixMapping;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
@@ -122,27 +124,29 @@ public class MutableElement implements Element, MutableNode {
         return result;
     }
 
-    public int removeAll(final Collection<? extends Node> nodes) {
+    public int removeAll(final Stream<? extends Node> nodes) {
         int result = 0;
-        for (final Node node : nodes)
+        for (final Node node : nodes.collect(toList()))
             if (remove(node))
                 result++;
         return result;
     }
 
     public int removeAll(final Class<? extends Node> type) {
-        int result = 0;
+        final AtomicInteger result = new AtomicInteger(0);
         if (Attribute.class.isAssignableFrom(type))
-            for (final Attribute attribute : new ArrayList<Attribute>((Collection<Attribute>) getAttributes()))
+            attributes().forEach(attribute -> {
                 if (type.isInstance(attribute))
                     if (remove(attribute))
-                        result++;
+                        result.incrementAndGet();
+            });
         if (Content.class.isAssignableFrom(type))
-            for (final Content content : new ArrayList<Content>((Collection<Content>) getContent()))
+            content().forEach(content -> {
                 if (type.isInstance(content))
                     if (remove(content))
-                        result++;
-        return result;
+                        result.incrementAndGet();
+            });
+        return result.get();
     }
 
     public Attribute addAttribute(final String name, final String value) {
@@ -175,130 +179,114 @@ public class MutableElement implements Element, MutableNode {
     }
 
     @Override
-    public Optional<Attribute> getAttributeByName(final String attributeName) {
+    public Optional<Attribute> attribute(final String attributeName) {
         for (final Attribute attribute : attributes)
-            if (attribute.getName().equals(attributeName))
+            if (attribute.name().equals(attributeName))
                 return Optional.of(attribute);
         return Optional.empty();
     }
 
     @Override
-    public Iterable<Attribute> getAttributes() {
-        return Collections.unmodifiableSet(attributes);
+    public Stream<Attribute> attributes() {
+        return new LinkedHashSet<>(attributes).stream();
     }
 
     @Override
-    public Optional<String> getAttributeValue(final String attributeName) {
-        final Optional<Attribute> attribute = getAttributeByName(attributeName);
+    public Optional<String> attributeValue(final String attributeName) {
+        final Optional<Attribute> attribute = attribute(attributeName);
         if (attribute.isPresent())
-            return Optional.ofNullable(attribute.get().getValue());
+            return Optional.ofNullable(attribute.get().value());
         return Optional.empty();
     }
 
     @Override
-    public Iterable<Content> getContent() {
-        return content;
+    public Stream<Content> content() {
+        return new ArrayList<>(content).stream();
     }
 
     @Override
-    public Optional<Element> getElementByName(final String elementName) {
-        final List<Element> elementsByName = getElementsByName(elementName);
-        if (elementsByName.isEmpty())
-            return Optional.empty();
-        else if (elementsByName.size() == 1)
-            return Optional.of(elementsByName.get(0));
-        throw new IllegalStateException("There is more than one element with name: " + elementName);
+    public Optional<Element> element(final String elementName) {
+        return elements(elementName).findFirst();
     }
 
     @Override
-    public Iterable<Element> getElements() {
-        final List<Element> result = new ArrayList<Element>();
-        for (final Content c : content)
-            if (c instanceof Element)
-                result.add(c.as(Element.class));
-        return Collections.unmodifiableList(result);
+    public Stream<Element> elements() {
+        return new ArrayList<>(content).stream().filter(c -> c instanceof Element).map(c -> c.as(Element.class));
     }
 
     @Override
-    public List<Element> getElementsByName(final String elementName) {
-        final List<Element> result = new ArrayList<Element>();
-        for (final Element element : this.getElements())
-            if (element.getName().equals(elementName))
-                result.add(element);
-        return Collections.unmodifiableList(result);
+    public Stream<Element> elements(final String elementName) {
+        return elements().filter(e -> e.name().equals(elementName));
     }
 
     @Override
-    public Optional<String> getElementText(final String elementName) {
-        final Optional<Element> element = getElementByName(elementName);
+    public Optional<String> elementText(final String elementName) {
+        final Optional<Element> element = element(elementName);
         if (element.isPresent() && element.get().hasTexts()) {
             final StringBuilder textBuilder = new StringBuilder();
-            for (final Text text : element.get().getTexts())
-                textBuilder.append(text.getValue());
+            element.get().texts().forEach(text -> {
+                textBuilder.append(text.value());
+            });
             return Optional.of(textBuilder.toString());
         }
         return Optional.empty();
     }
 
     @Override
-    public String getName() {
+    public String name() {
         return name;
     }
 
     @Override
-    public Optional<Element> getParent() {
+    public Optional<Element> parent() {
         return parent;
     }
 
     @Override
-    public String getPath() {
+    public String path() {
         final String selfPath = "/" + name;
         if (parent.isPresent())
-            return parent.get().getPath() + selfPath;
+            return parent.get().path() + selfPath;
         return selfPath;
     }
 
     @Override
-    public String getPath(final String childPath) {
+    public String path(final String childPath) {
         if (childPath.startsWith("/"))
-            return getPath() + childPath;
-        return getPath() + "/" + childPath;
+            return path() + childPath;
+        return path() + "/" + childPath;
     }
 
     @Override
-    public String getRelativePath(final String childPath) {
+    public String relativePath(final String childPath) {
         if (childPath.startsWith("/"))
             return name + childPath;
         return name + "/" + childPath;
     }
 
     @Override
-    public Iterable<Text> getTexts() {
-        final List<Text> result = new ArrayList<Text>();
-        for (final Content c : content)
-            if (c instanceof Text)
-                result.add(c.as(Text.class));
-        return Collections.unmodifiableList(result);
+    public Stream<Text> texts() {
+        return new ArrayList<>(content).stream().filter(c -> c instanceof Text).map(c -> c.as(Text.class));
     }
 
     @Override
-    public Optional<String> getUri() {
+    public Optional<String> uri() {
         return uri;
     }
 
     public boolean removeElementByName(final String elementName) {
-        final Optional<Element> element = getElementByName(elementName);
+        final Optional<Element> element = element(elementName);
         if (element.isPresent())
             return remove(element.get());
         return false;
     }
 
     public int removeElementsByName(final String elementName) {
-        return removeAll(getElementsByName(elementName));
+        return removeAll(elements(elementName));
     }
 
     public void setAttributeValueByName(final String attributeName, final String value) {
-        final Optional<MutableAttribute> attributeOpt = getAttributeByName(attributeName).map(a -> a.as(MutableAttribute.class));
+        final Optional<MutableAttribute> attributeOpt = attribute(attributeName).map(a -> a.as(MutableAttribute.class));
         if (attributeOpt.isPresent())
             if (value == null)
                 remove(attributeOpt.get());
@@ -309,8 +297,8 @@ public class MutableElement implements Element, MutableNode {
     }
 
     public void setElementByName(final String elementName, final Element element) {
-        if (element != null && !element.getName().equals(elementName))
-            throw new IllegalStateException(elementName + "!=" + element.getName());
+        if (element != null && !element.name().equals(elementName))
+            throw new IllegalStateException(elementName + "!=" + element.name());
         removeElementByName(elementName);
         if (element != null)
             add(element);
@@ -365,11 +353,11 @@ public class MutableElement implements Element, MutableNode {
     }
 
     @Override
-    public Iterable<PrefixMapping> prefixMappings() {
+    public Stream<PrefixMapping> prefixMappings() {
         final List<PrefixMapping> prefixmappings = new ArrayList<PrefixMapping>();
         for (final Entry<String, String> entry : prefixByUri.entrySet())
             prefixmappings.add(prefixMapping(entry.getValue(), entry.getKey()));
-        return Collections.unmodifiableCollection(prefixmappings);
+        return prefixmappings.stream();
     }
 
     @Override
@@ -378,11 +366,11 @@ public class MutableElement implements Element, MutableNode {
     }
 
     private Optional<String> prefix(final String uri, final Element element) {
-        for (final PrefixMapping prefixmapping : element.prefixMappings())
+        for (final PrefixMapping prefixmapping : element.prefixMappings().collect(toList()))
             if (uri.equals(prefixmapping.uri))
                 return prefixmapping.prefix;
-        if (element.getParent().isPresent())
-            return prefix(uri, element.getParent().get());
+        if (element.parent().isPresent())
+            return prefix(uri, element.parent().get());
         return Optional.empty();
     }
 

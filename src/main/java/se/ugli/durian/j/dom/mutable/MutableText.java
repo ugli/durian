@@ -36,20 +36,20 @@ public class MutableText implements Text, MutableNode {
     }
 
     @Override
-    public Optional<Element> getParent() {
+    public Optional<Element> parent() {
         return parent;
     }
 
     @Override
-    public String getPath() {
+    public String path() {
         final String selfPath = "/text()";
         if (parent.isPresent())
-            return parent.get().getPath() + selfPath;
+            return parent.get().path() + selfPath;
         return selfPath;
     }
 
     @Override
-    public String getValue() {
+    public String value() {
         return value;
     }
 

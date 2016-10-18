@@ -35,8 +35,8 @@ public class ParseSerializeTest {
 
         final Element person = JsonParser.apply().parse(getClass().getResourceAsStream("/person.json"));
         assertNotNull(person);
-        assertEquals("root", person.getName());
-        assertEquals("John Smith", person.getAttributeValue("name").get());
+        assertEquals("root", person.name());
+        assertEquals("John Smith", person.attributeValue("name").get());
 
         final String actual = JsonSerializer.apply().serialize(person);
 
@@ -53,9 +53,9 @@ public class ParseSerializeTest {
         final Element person = JsonParserBuilder.apply().rootElementName("person").createArrayElements(false).build()
                 .parse(getClass().getResourceAsStream("/person.json"));
         assertNotNull(person);
-        assertEquals("person", person.getName());
-        assertEquals("John Smith", person.getAttributeValue("name").get());
-        assertFalse(person.getAttributeValue("xyz").isPresent());
+        assertEquals("person", person.name());
+        assertEquals("John Smith", person.attributeValue("name").get());
+        assertFalse(person.attributeValue("xyz").isPresent());
 
         final String actual = person.toXml();
 

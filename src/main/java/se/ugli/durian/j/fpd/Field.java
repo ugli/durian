@@ -13,8 +13,8 @@ class Field implements Definition {
     private final boolean includeEmptyValues;
 
     Field(final Element element, final String targetNamespace, final boolean includeEmptyValues) {
-        name = element.getAttributeValue("name").get();
-        length = Integer.parseInt(element.getAttributeValue("length").get());
+        name = element.attributeValue("name").get();
+        length = Integer.parseInt(element.attributeValue("length").get());
         this.targetNamespace = targetNamespace;
         this.includeEmptyValues = includeEmptyValues;
     }

@@ -8,26 +8,17 @@ import java.util.Optional;
 
 public class PrefixMapping {
 
+    public static PrefixMapping prefixMapping(final String prefix, final String uri) {
+        requireNonNull(nonEmptyOrNull(uri), "Prefix uri can not null or empty");
+        return new PrefixMapping(ofNullable(nonEmptyOrNull(prefix)), uri);
+    }
+
     public final Optional<String> prefix;
     public final String uri;
 
     private PrefixMapping(final Optional<String> prefix, final String uri) {
         this.prefix = prefix;
         this.uri = uri;
-    }
-
-    public static PrefixMapping prefixMapping(final String prefix, final String uri) {
-        requireNonNull(nonEmptyOrNull(uri), "Prefix uri can not null or empty");
-        return new PrefixMapping(ofNullable(nonEmptyOrNull(prefix)), uri);
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (prefix == null ? 0 : prefix.hashCode());
-        result = prime * result + (uri == null ? 0 : uri.hashCode());
-        return result;
     }
 
     @Override
@@ -52,6 +43,15 @@ public class PrefixMapping {
         else if (!uri.equals(other.uri))
             return false;
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (prefix == null ? 0 : prefix.hashCode());
+        result = prime * result + (uri == null ? 0 : uri.hashCode());
+        return result;
     }
 
     @Override

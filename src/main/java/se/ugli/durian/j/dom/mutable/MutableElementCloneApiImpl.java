@@ -1,6 +1,7 @@
 package se.ugli.durian.j.dom.mutable;
 
-import java.util.ArrayList;
+import static java.util.stream.Collectors.toList;
+
 import java.util.List;
 
 import se.ugli.durian.j.dom.node.Attribute;
@@ -19,7 +20,7 @@ class MutableElementCloneApiImpl implements ElementCloneApi {
     public MutableElementCloneApiImpl(final MutableElement element) {
         this.element = element;
         this.nodeFactory = element.nodeFactory();
-        this.elementName = element.getName();
+        this.elementName = element.name();
     }
 
     @Override
@@ -58,22 +59,17 @@ class MutableElementCloneApiImpl implements ElementCloneApi {
 
     private static Element createElement(final String elementName, final Element elementToClone, final Element parent,
             final NodeFactory nodeFactory) {
-        return nodeFactory.createElement(elementName, elementToClone.getUri().orElse(null), parent, elementToClone.prefixMappings());
+        return nodeFactory.createElement(elementName, elementToClone.uri().orElse(null), parent,
+                elementToClone.prefixMappings().collect(toList()));
     }
 
     private static List<Attribute> cloneAttributes(final Element elementToClone, final Element elementClone,
             final NodeFactory nodeFactory) {
-        final List<Attribute> result = new ArrayList<Attribute>();
-        for (final Attribute attributeToClone : elementToClone.getAttributes())
-            result.add(attributeToClone.clone().attribute(elementClone, nodeFactory));
-        return result;
+        return elementToClone.attributes().map(a -> a.clone().attribute(elementClone, nodeFactory)).collect(toList());
     }
 
     private static List<Content> cloneContentList(final Element elementToClone, final Element elementClone, final NodeFactory nodeFactory) {
-        final List<Content> result = new ArrayList<Content>();
-        for (final Content contentToClone : elementToClone.getContent())
-            result.add(cloneContent(contentToClone, elementClone, nodeFactory));
-        return result;
+        return elementToClone.content().map(c -> cloneContent(c, elementClone, nodeFactory)).collect(toList());
     }
 
     private static Content cloneContent(final Content contentToClone, final Element parent, final NodeFactory nodeFactory) {
@@ -87,7 +83,7 @@ class MutableElementCloneApiImpl implements ElementCloneApi {
     }
 
     private static Content cloneChildElement(final Element elementToClone, final Element parent, final NodeFactory nodeFactory) {
-        final String elementName = elementToClone.getName();
+        final String elementName = elementToClone.name();
         return cloneElement(elementName, elementToClone, parent, nodeFactory);
     }
 

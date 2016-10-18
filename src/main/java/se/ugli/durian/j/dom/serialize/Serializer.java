@@ -1,5 +1,6 @@
 package se.ugli.durian.j.dom.serialize;
 
+import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeXml11;
 import static se.ugli.durian.j.dom.serialize.SerializerBuilder.serializerBuilder;
 
@@ -57,12 +58,12 @@ public class Serializer {
 
     private void appendElement(final Element element, final int indentDepth) {
         final String qName = element.qName();
-        final List<Content> content = (List<Content>) element.getContent();
+        final List<Content> content = element.content().collect(toList());
         xml.append(lineSeparator);
         appendCharWithTab(indentDepth, LT);
         xml.append(qName);
         appendPrefixmappings(element);
-        appendAttributes(element.getAttributes());
+        appendAttributes(element.attributes().collect(toList()));
         if (content.isEmpty())
             xml.append(SPACE).append(SLASH).append(GT);
         else {
@@ -92,11 +93,11 @@ public class Serializer {
     }
 
     private void appendPrefixmappings(final Element element) {
-        for (final PrefixMapping prefixMapping : element.prefixMappings()) {
+        element.prefixMappings().forEach(prefixMapping -> {
             prefixByUri.put(prefixMapping.uri, prefixMapping.prefix.orElse(null));
             appendPrefixMappping(prefixMapping);
-        }
-        final Optional<String> uri = element.getUri();
+        });
+        final Optional<String> uri = element.uri();
         if (uri.isPresent() && !prefixByUri.containsKey(uri.get())) {
             final PrefixMapping prefixMapping = PrefixMapping.prefixMapping(null, uri.get());
             prefixByUri.put(prefixMapping.uri, prefixMapping.prefix.orElse(null));
@@ -113,7 +114,7 @@ public class Serializer {
 
     private void appendAttributes(final Iterable<Attribute> attributes) {
         for (final Attribute attribute : attributes)
-            appendAttribute(xml, attribute.qName(), attribute.getValue());
+            appendAttribute(xml, attribute.qName(), attribute.value());
     }
 
     private void appendAttribute(final StringBuilder xml, final String attributeName, final String attributeValue) {
@@ -126,7 +127,7 @@ public class Serializer {
             if (content instanceof Element)
                 appendElement(content.as(Element.class), indentDepth + 1);
             else if (content instanceof Text) {
-                final String textValue = content.as(Text.class).getValue();
+                final String textValue = content.as(Text.class).value();
                 if (contentList.size() > 1) {
                     xml.append(lineSeparator);
                     appendStringWithTab(indentDepth + 1, escapeXml11(textValue));

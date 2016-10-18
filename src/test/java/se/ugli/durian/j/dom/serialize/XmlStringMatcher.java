@@ -1,7 +1,7 @@
 package se.ugli.durian.j.dom.serialize;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import static java.util.stream.Collectors.toList;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -11,7 +11,6 @@ import org.hamcrest.Matcher;
 
 import se.ugli.durian.j.dom.mutable.MutableElement;
 import se.ugli.durian.j.dom.node.Attribute;
-import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.parser.Parser;
 
 public class XmlStringMatcher implements Matcher<String> {
@@ -29,18 +28,19 @@ public class XmlStringMatcher implements Matcher<String> {
     }
 
     private void sortAttributes(final MutableElement element) {
-        final List<Attribute> list = new ArrayList<Attribute>((Collection<Attribute>) element.getAttributes());
+        final List<Attribute> list = element.attributes().collect(toList());
         Collections.sort(list, new Comparator<Attribute>() {
 
             @Override
             public int compare(final Attribute o1, final Attribute o2) {
-                return o1.getName().compareTo(o2.getName());
+                return o1.name().compareTo(o2.name());
             }
         });
         element.removeAll(Attribute.class);
         element.addAll(list);
-        for (final Element childElement : element.getElements())
+        element.elements().forEach(childElement -> {
             sortAttributes((MutableElement) childElement);
+        });
     }
 
     @Override

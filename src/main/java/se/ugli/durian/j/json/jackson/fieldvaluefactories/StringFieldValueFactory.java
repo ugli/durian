@@ -8,12 +8,12 @@ public class StringFieldValueFactory implements FieldValueFactory {
 
     @Override
     public Object create(final Attribute attribute) {
-        return attribute.getValue();
+        return attribute.value();
     }
 
     @Override
     public Object create(final Text text) {
-        return text.getValue();
+        return text.value();
     }
 
 }

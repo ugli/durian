@@ -4,14 +4,14 @@ import java.util.Optional;
 
 public interface Attribute extends Node {
 
-    String getName();
+    AttributeCloneApi clone();
 
-    Optional<String> getUri();
-
-    String getValue();
+    String name();
 
     String qName();
 
-    AttributeCloneApi clone();
+    Optional<String> uri();
+
+    String value();
 
 }

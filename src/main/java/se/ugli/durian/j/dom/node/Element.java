@@ -1,51 +1,52 @@
 package se.ugli.durian.j.dom.node;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public interface Element extends Content {
 
+    Optional<Attribute> attribute(String attributeName);
+
+    Stream<Attribute> attributes();
+
+    Optional<String> attributeValue(String attributeName);
+
     ElementCloneApi clone();
 
-    QueryApi select();
+    Stream<Content> content();
 
-    Optional<Attribute> getAttributeByName(String attributeName);
+    Optional<Element> element(String elementName);
 
-    Iterable<Attribute> getAttributes();
+    Stream<Element> elements();
+
+    Stream<Element> elements(String elementName);
+
+    Optional<String> elementText(final String elementName);
 
     boolean hasAttributes();
 
-    Optional<String> getAttributeValue(String attributeName);
-
-    Iterable<Content> getContent();
-
-    Optional<Element> getElementByName(String elementName);
-
-    Iterable<Element> getElements();
-
     boolean hasElements();
-
-    Iterable<Element> getElementsByName(String elementName);
-
-    Optional<String> getElementText(final String elementName);
-
-    String getName();
-
-    String getPath(String childPath);
-
-    String getRelativePath(String childPath);
-
-    Iterable<Text> getTexts();
-
-    boolean hasTexts();
 
     boolean hasNodes();
 
-    Optional<String> getUri();
+    boolean hasTexts();
+
+    String name();
+
+    String path(String childPath);
+
+    Stream<PrefixMapping> prefixMappings();
 
     String qName();
 
-    Iterable<PrefixMapping> prefixMappings();
+    String relativePath(String childPath);
+
+    QueryApi select();
+
+    Stream<Text> texts();
 
     String toXml();
+
+    Optional<String> uri();
 
 }

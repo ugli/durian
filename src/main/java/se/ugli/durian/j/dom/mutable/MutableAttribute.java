@@ -1,5 +1,7 @@
 package se.ugli.durian.j.dom.mutable;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.Optional;
 
 import se.ugli.durian.j.dom.node.Attribute;
@@ -59,30 +61,30 @@ public class MutableAttribute implements Attribute, MutableNode {
     }
 
     @Override
-    public String getName() {
+    public String name() {
         return name;
     }
 
     @Override
-    public Optional<Element> getParent() {
+    public Optional<Element> parent() {
         return parent;
     }
 
     @Override
-    public String getPath() {
+    public String path() {
         final String selfPath = "/@" + name;
         if (parent.isPresent())
-            return parent.get().getPath() + selfPath;
+            return parent.get().path() + selfPath;
         return selfPath;
     }
 
     @Override
-    public Optional<String> getUri() {
+    public Optional<String> uri() {
         return uri;
     }
 
     @Override
-    public String getValue() {
+    public String value() {
         return value;
     }
 
@@ -109,11 +111,11 @@ public class MutableAttribute implements Attribute, MutableNode {
     }
 
     private Optional<String> prefix(final String uri, final Element element) {
-        for (final PrefixMapping prefixmapping : element.prefixMappings())
+        for (final PrefixMapping prefixmapping : element.prefixMappings().collect(toList()))
             if (uri.equals(prefixmapping.uri))
                 return prefixmapping.prefix;
-        if (element.getParent().isPresent())
-            return prefix(uri, element.getParent().get());
+        if (element.parent().isPresent())
+            return prefix(uri, element.parent().get());
         return Optional.empty();
     }
 

@@ -6,8 +6,8 @@ public interface TextCloneApi {
 
     Text text(Element parent);
 
-    Text text(NodeFactory nodeFactory);
-
     Text text(Element parent, NodeFactory nodeFactory);
+
+    Text text(NodeFactory nodeFactory);
 
 }

@@ -35,14 +35,14 @@ public class CloneWithCustomNodeFactoryTest {
         @Override
         public MutableElement createElement(final String name, final String uri, final Element parent,
                 final Iterable<PrefixMapping> prefixmappings) {
-            if (parent != null && parent.getName().equals("schema") && name.equals("title"))
+            if (parent != null && parent.name().equals("schema") && name.equals("title"))
                 return new TitleElement(name, uri, this);
             return super.createElement(name, uri, parent, prefixmappings);
         }
 
         @Override
         public MutableAttribute createAttribute(final String name, final String uri, final Element parent, final String value) {
-            if (parent != null && parent.getName().equals("schema") && name.equals("queryBinding"))
+            if (parent != null && parent.name().equals("schema") && name.equals("queryBinding"))
                 return new QueryBindingAttribute(name, uri, value, this);
             return super.createAttribute(name, uri, parent, value);
         }

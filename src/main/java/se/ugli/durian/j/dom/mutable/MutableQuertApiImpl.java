@@ -1,9 +1,7 @@
 package se.ugli.durian.j.dom.mutable;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Element;
@@ -24,13 +22,13 @@ public class MutableQuertApiImpl implements MutableQuertApi {
     }
 
     @Override
-    public List<Attribute> attributes(final String query) {
-        return QueryManager.selectNodes(mutableElement, query).stream().map(n -> n.as(Attribute.class)).collect(toList());
+    public Stream<Attribute> attributes(final String query) {
+        return QueryManager.selectNodes(mutableElement, query).map(n -> n.as(Attribute.class));
     }
 
     @Override
     public Optional<String> attributeValue(final String query) {
-        return QueryManager.selectNode(mutableElement, query).map(n -> n.as(Attribute.class)).map(Attribute::getValue);
+        return QueryManager.selectNode(mutableElement, query).map(n -> n.as(Attribute.class)).map(Attribute::value);
     }
 
     @Override
@@ -39,8 +37,8 @@ public class MutableQuertApiImpl implements MutableQuertApi {
     }
 
     @Override
-    public List<Element> elements(final String query) {
-        return QueryManager.selectNodes(mutableElement, query).stream().map(n -> n.as(Element.class)).collect(toList());
+    public Stream<Element> elements(final String query) {
+        return QueryManager.selectNodes(mutableElement, query).map(n -> n.as(Element.class));
     }
 
     @Override
@@ -49,7 +47,7 @@ public class MutableQuertApiImpl implements MutableQuertApi {
     }
 
     @Override
-    public List<Node> nodes(final String query) {
+    public Stream<Node> nodes(final String query) {
         return QueryManager.selectNodes(mutableElement, query);
     }
 
@@ -59,7 +57,7 @@ public class MutableQuertApiImpl implements MutableQuertApi {
     }
 
     @Override
-    public List<String> texts(final String query) {
+    public Stream<String> texts(final String query) {
         return QueryManager.selectTexts(mutableElement, query);
     }
 
