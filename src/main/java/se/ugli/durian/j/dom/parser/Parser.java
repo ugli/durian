@@ -19,6 +19,11 @@ import se.ugli.durian.j.dom.node.NodeFactory;
 
 public class Parser {
 
+    @FunctionalInterface
+    private interface ParseCommand {
+        void exec() throws IOException, SAXException;
+    }
+
     public static Parser apply() {
         return ParserBuilder.apply().build();
     }
@@ -31,97 +36,63 @@ public class Parser {
         saxHandler = new SaxHandler(nodeFactory, errorHandler);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends Element> T parse(final InputStream stream) {
-        try {
-            saxParser.parse(stream, saxHandler);
-            return (T) saxHandler.root;
-        }
-        catch (final IOException e) {
-            throw new RuntimeException(e);
-        }
-        catch (final SAXException e) {
-            throw new RuntimeException(e);
-        }
+    public Element parse(final InputStream stream) {
+        return parse(() -> saxParser.parse(stream, saxHandler));
     }
 
-    public <T extends Element> T parse(final Reader reader) {
+    public Element parse(final Reader reader) {
         return parse(new InputSource(reader));
     }
 
-    public <T extends Element> T parse(final char[] chars) {
+    public Element parse(final InputSource source) {
+        return parse(() -> saxParser.parse(source, saxHandler));
+    }
+
+    public Element parse(final File file) {
+        return parse(() -> saxParser.parse(file, saxHandler));
+    }
+
+    public Element parseUri(final String uri) {
+        return parse(() -> saxParser.parse(uri, saxHandler));
+    }
+
+    private Element parse(final ParseCommand parseCmd) {
+        try {
+            parseCmd.exec();
+            return saxHandler.root;
+        }
+        catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+        catch (final SAXException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Element parse(final char[] chars) {
         return parse(new CharArrayReader(chars));
     }
 
-    public <T extends Element> T parse(final byte[] bytes) {
+    public Element parse(final byte[] bytes) {
         return parse(new ByteArrayInputStream(bytes));
     }
 
-    public <T extends Element> T parseResource(final String resource) {
-        final InputStream resourceAsStream = getClass().getResourceAsStream(resource);
-        if (resourceAsStream != null)
-            return parse(resourceAsStream);
-        throw new RuntimeException("Resource not found: " + resource);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends Element> T parse(final File file) {
-        try {
-            saxParser.parse(file, saxHandler);
-            return (T) saxHandler.root;
+    public Element parseResource(final String resource) {
+        try (InputStream resourceAsStream = getClass().getResourceAsStream(resource)) {
+            if (resourceAsStream != null)
+                return parse(resourceAsStream);
+            throw new RuntimeException("Resource not found: " + resource);
         }
         catch (final IOException e) {
             throw new RuntimeException(e);
         }
-        catch (final SAXException e) {
-            throw new RuntimeException(e);
-        }
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends Element> T parseUri(final String uri) {
-        try {
-            saxParser.parse(uri, saxHandler);
-            return (T) saxHandler.root;
-        }
-        catch (final IOException e) {
-            throw new RuntimeException(e);
-        }
-        catch (final SAXException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public <T extends Element> T parse(final URL url) {
-        InputStream inputStream = null;
-        try {
-            inputStream = url.openStream();
+    public Element parse(final URL url) {
+        try (InputStream inputStream = url.openStream()) {
             return parse(inputStream);
         }
         catch (final IOException e) {
-            throw new RuntimeException(e);
-        }
-        finally {
-            if (inputStream != null)
-                try {
-                    inputStream.close();
-                }
-                catch (final IOException e) {
-                    e.printStackTrace();
-                }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends Element> T parse(final InputSource source) {
-        try {
-            saxParser.parse(source, saxHandler);
-            return (T) saxHandler.root;
-        }
-        catch (final IOException e) {
-            throw new RuntimeException(e);
-        }
-        catch (final SAXException e) {
             throw new RuntimeException(e);
         }
     }

@@ -18,7 +18,8 @@ public class ParseSerializeTest {
 
     @Test
     public void xml2json() throws IOException {
-        final MutableElement element = se.ugli.durian.j.dom.parser.Parser.apply().parse(getClass().getResourceAsStream("/person.xml"));
+        final MutableElement element = se.ugli.durian.j.dom.parser.Parser.apply().parse(getClass().getResourceAsStream("/person.xml"))
+                .as(MutableElement.class);
         element.addAttribute("xyz", null);
         final String actual = JsonSerializer.apply().serialize(element);
 
@@ -59,7 +60,7 @@ public class ParseSerializeTest {
 
         final String actual = person.toXml();
 
-        final MutableElement element = se.ugli.durian.j.dom.parser.Parser.apply().parse(getClass().getResourceAsStream("/person.xml"));
+        final Element element = se.ugli.durian.j.dom.parser.Parser.apply().parse(getClass().getResourceAsStream("/person.xml"));
 
         final String expected = element.toXml();
         assertEquals(expected, actual);
