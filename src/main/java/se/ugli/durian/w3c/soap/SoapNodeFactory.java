@@ -1,4 +1,4 @@
-package se.ugli.durian.soap;
+package se.ugli.durian.w3c.soap;
 
 import se.ugli.durian.j.dom.mutable.MutableNodeFactory;
 import se.ugli.durian.j.dom.node.Attribute;

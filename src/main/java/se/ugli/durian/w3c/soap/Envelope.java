@@ -1,4 +1,4 @@
-package se.ugli.durian.soap;
+package se.ugli.durian.w3c.soap;
 
 import static java.util.Collections.singletonList;
 import static se.ugli.durian.j.dom.node.PrefixMapping.prefixMapping;

@@ -1,4 +1,4 @@
-package se.ugli.durian.soap;
+package se.ugli.durian.w3c.soap;
 
 import static java.util.Arrays.stream;
 

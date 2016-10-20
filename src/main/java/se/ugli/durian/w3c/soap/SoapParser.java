@@ -1,4 +1,4 @@
-package se.ugli.durian.soap;
+package se.ugli.durian.w3c.soap;
 
 import java.io.StringReader;
 

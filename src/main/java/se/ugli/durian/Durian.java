@@ -4,15 +4,18 @@ import static java.util.Arrays.asList;
 
 import javax.xml.parsers.SAXParser;
 
+import org.w3c.dom.Document;
+
 import se.ugli.durian.j.dom.mutable.MutableNodeFactory;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Node;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.PrefixMapping;
-import se.ugli.durian.soap.Body;
-import se.ugli.durian.soap.Envelope;
-import se.ugli.durian.soap.Fault;
-import se.ugli.durian.soap.SoapParser;
+import se.ugli.durian.w3c.dom.DocumentReader;
+import se.ugli.durian.w3c.soap.Body;
+import se.ugli.durian.w3c.soap.Envelope;
+import se.ugli.durian.w3c.soap.Fault;
+import se.ugli.durian.w3c.soap.SoapParser;
 
 public class Durian {
 
@@ -47,4 +50,9 @@ public class Durian {
     public static Envelope createSoapEnvelopeWithBody(final Node bodyNode) {
         return Body.createEnvelopeWithNode(bodyNode);
     }
+
+    public static Element fromW3CDocument(final Document document) {
+        return new DocumentReader(new MutableNodeFactory()).read(document);
+    }
+
 }
