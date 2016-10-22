@@ -9,6 +9,7 @@ import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Node;
 import se.ugli.durian.j.dom.node.PrefixMapping;
 import se.ugli.durian.j.dom.parser.XmlParserBuilder;
+import se.ugli.durian.j.fpd.FpdParser;
 import se.ugli.durian.jtidy.HtmlParser;
 import se.ugli.durian.w3c.dom.DocumentReader;
 import se.ugli.durian.w3c.soap.Body;
@@ -38,6 +39,10 @@ public class Durian {
         return new DocumentReader(new MutableNodeFactory()).read(document);
     }
 
+    public static Element parseFtp(final Source ftpDef, final String ftpData) {
+        return new FpdParser(ftpDef, XmlParserBuilder.apply()).parse(ftpData);
+    }
+
     public static Element parserHtml(final Source source) {
         return HtmlParser.parser(source);
     }
@@ -46,16 +51,16 @@ public class Durian {
         return parseSoap(source, SoapParserBuilder.apply());
     }
 
-    public static Envelope parseSoap(final Source source, final SoapParserBuilder soapParserBuilder) {
-        return parseXml(source, soapParserBuilder).as(Envelope.class);
+    public static Envelope parseSoap(final Source source, final SoapParserBuilder builder) {
+        return parseXml(source, builder).as(Envelope.class);
     }
 
     public static Element parseXml(final Source source) {
         return parseXml(source, XmlParserBuilder.apply());
     }
 
-    public static Element parseXml(final Source source, final XmlParserBuilder xmlParserBuilder) {
-        return xmlParserBuilder.build().parse(source);
+    public static Element parseXml(final Source source, final XmlParserBuilder builder) {
+        return builder.build().parse(source);
     }
 
 }
