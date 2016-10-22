@@ -14,6 +14,7 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import se.ugli.durian.Source;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 
@@ -34,6 +35,10 @@ public class Parser {
     Parser(final NodeFactory nodeFactory, final ErrorHandler errorHandler, final SAXParser saxParser) {
         this.saxParser = saxParser;
         saxHandler = new SaxHandler(nodeFactory, errorHandler);
+    }
+
+    public Element parse(final Source source) {
+        return parse(source.data());
     }
 
     public Element parse(final InputStream stream) {
