@@ -2,21 +2,19 @@ package se.ugli.durian;
 
 import static java.util.Arrays.asList;
 
-import javax.xml.parsers.SAXParser;
-
 import org.w3c.dom.Document;
 
 import se.ugli.durian.j.dom.mutable.MutableNodeFactory;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Node;
-import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.PrefixMapping;
+import se.ugli.durian.j.dom.parser.XmlParserBuilder;
 import se.ugli.durian.jtidy.HtmlParser;
 import se.ugli.durian.w3c.dom.DocumentReader;
 import se.ugli.durian.w3c.soap.Body;
 import se.ugli.durian.w3c.soap.Envelope;
 import se.ugli.durian.w3c.soap.Fault;
-import se.ugli.durian.w3c.soap.SoapParser;
+import se.ugli.durian.w3c.soap.SoapParserBuilder;
 
 public class Durian {
 
@@ -45,11 +43,19 @@ public class Durian {
     }
 
     public static Envelope parseSoap(final Source source) {
-        return SoapParser.parse(source, null, null);
+        return parseSoap(source, SoapParserBuilder.apply());
     }
 
-    public static Envelope parseSoap(final Source source, final SAXParser saxParser, final NodeFactory bodyNodeFactory) {
-        return SoapParser.parse(source, bodyNodeFactory, saxParser);
+    public static Envelope parseSoap(final Source source, final SoapParserBuilder soapParserBuilder) {
+        return parseXml(source, soapParserBuilder).as(Envelope.class);
+    }
+
+    public static Element parseXml(final Source source) {
+        return parseXml(source, XmlParserBuilder.apply());
+    }
+
+    public static Element parseXml(final Source source, final XmlParserBuilder xmlParserBuilder) {
+        return xmlParserBuilder.build().parse(source);
     }
 
 }

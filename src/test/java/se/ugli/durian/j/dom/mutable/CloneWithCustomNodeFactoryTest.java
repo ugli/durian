@@ -6,11 +6,13 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import se.ugli.commons.Resource;
+import se.ugli.durian.Durian;
+import se.ugli.durian.Source;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.PrefixMapping;
-import se.ugli.durian.j.dom.parser.Parser;
-import se.ugli.durian.j.dom.parser.ParserBuilder;
+import se.ugli.durian.j.dom.parser.XmlParserBuilder;
 
 public class CloneWithCustomNodeFactoryTest {
 
@@ -50,9 +52,8 @@ public class CloneWithCustomNodeFactoryTest {
 
     @Test
     public void test() {
-
-        final Parser parser = ParserBuilder.apply().nodeFactory(new TestNodeFactory()).build();
-        final Element schema = parser.parseResource("/PurchaseOrder.sch");
+        final Element schema = Durian.parseXml(Source.apply(Resource.apply("/PurchaseOrder.sch")),
+                XmlParserBuilder.apply().nodeFactory(new TestNodeFactory()));
         assertTrue(schema.select().element("//title").get() instanceof TitleElement);
         assertTrue(schema.select().attribute("//@queryBinding").get() instanceof QueryBindingAttribute);
         final Element schemaClone = schema.clone().element();

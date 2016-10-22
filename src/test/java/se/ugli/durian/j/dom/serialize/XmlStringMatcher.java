@@ -8,9 +8,10 @@ import java.util.List;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
+import se.ugli.durian.Durian;
+import se.ugli.durian.Source;
 import se.ugli.durian.j.dom.mutable.MutableElement;
 import se.ugli.durian.j.dom.node.Attribute;
-import se.ugli.durian.j.dom.parser.Parser;
 
 public class XmlStringMatcher implements Matcher<String> {
 
@@ -21,7 +22,7 @@ public class XmlStringMatcher implements Matcher<String> {
     }
 
     private String xmlWithSortedAttributes(final String xmlStr) {
-        final MutableElement element = Parser.apply().parse(xmlStr.getBytes()).as(MutableElement.class);
+        final MutableElement element = Durian.parseXml(Source.apply(xmlStr)).as(MutableElement.class);
         sortAttributes(element);
         return element.toXml();
     }

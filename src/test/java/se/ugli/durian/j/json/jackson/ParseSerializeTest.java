@@ -11,6 +11,9 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import se.ugli.commons.Resource;
+import se.ugli.durian.Durian;
+import se.ugli.durian.Source;
 import se.ugli.durian.j.dom.mutable.MutableElement;
 import se.ugli.durian.j.dom.node.Element;
 
@@ -18,8 +21,7 @@ public class ParseSerializeTest {
 
     @Test
     public void xml2json() throws IOException {
-        final MutableElement element = se.ugli.durian.j.dom.parser.Parser.apply().parse(getClass().getResourceAsStream("/person.xml"))
-                .as(MutableElement.class);
+        final MutableElement element = Durian.parseXml(Source.apply(Resource.apply("/person.xml"))).as(MutableElement.class);
         element.addAttribute("xyz", null);
         final String actual = JsonSerializer.apply().serialize(element);
 
@@ -60,7 +62,7 @@ public class ParseSerializeTest {
 
         final String actual = person.toXml();
 
-        final Element element = se.ugli.durian.j.dom.parser.Parser.apply().parse(getClass().getResourceAsStream("/person.xml"));
+        final Element element = Durian.parseXml(Source.apply(Resource.apply("/person.xml")));
 
         final String expected = element.toXml();
         assertEquals(expected, actual);

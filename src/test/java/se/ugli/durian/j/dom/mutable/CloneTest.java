@@ -5,14 +5,16 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
+import se.ugli.commons.Resource;
+import se.ugli.durian.Durian;
+import se.ugli.durian.Source;
 import se.ugli.durian.j.dom.node.Element;
-import se.ugli.durian.j.dom.parser.Parser;
 
 public class CloneTest {
 
     @Test
     public void shouldClone() {
-        final Element element = Parser.apply().parseResource("/se/ugli/durian/j/dom/mutable/ddata.xml");
+        final Element element = Durian.parseXml(Source.apply(Resource.apply("/se/ugli/durian/j/dom/mutable/ddata.xml")));
         final Element elementClone = element.clone().element();
         assertThat(element.toXml(), is(elementClone.toXml()));
     }

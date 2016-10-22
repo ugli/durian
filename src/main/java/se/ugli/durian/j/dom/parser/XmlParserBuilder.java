@@ -10,48 +10,45 @@ import org.xml.sax.SAXException;
 import se.ugli.durian.j.dom.mutable.MutableNodeFactory;
 import se.ugli.durian.j.dom.node.NodeFactory;
 
-public final class ParserBuilder {
+public class XmlParserBuilder {
 
-    public static ParserBuilder apply() {
-        return new ParserBuilder();
+    public static XmlParserBuilder apply() {
+        return new XmlParserBuilder();
     }
 
-    private ErrorHandler errorHandler;
-    private NodeFactory nodeFactory;
-    private SAXParser saxParser;
+    protected ErrorHandler errorHandler;
+    protected NodeFactory nodeFactory;
+    protected SAXParser saxParser;
 
-    private ParserBuilder() {
+    protected XmlParserBuilder() {
     }
 
-    public Parser build() {
-        if (nodeFactory == null) {
+    public XmlParser build() {
+        if (nodeFactory == null)
             nodeFactory = new MutableNodeFactory();
-        }
-        if (errorHandler == null) {
+        if (errorHandler == null)
             errorHandler = new DefaultErrorHandler();
-        }
-        if (saxParser == null) {
+        if (saxParser == null)
             saxParser = getDefaultSaxParser();
-        }
-        return new Parser(nodeFactory, errorHandler, saxParser);
+        return new XmlParser(nodeFactory, errorHandler, saxParser);
     }
 
-    public ParserBuilder errorHandler(final ErrorHandler errorHandler) {
+    public XmlParserBuilder errorHandler(final ErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
         return this;
     }
 
-    public ParserBuilder nodeFactory(final NodeFactory nodeFactory) {
+    public XmlParserBuilder nodeFactory(final NodeFactory nodeFactory) {
         this.nodeFactory = nodeFactory;
         return this;
     }
 
-    public ParserBuilder saxParser(final SAXParser saxParser) {
+    public XmlParserBuilder saxParser(final SAXParser saxParser) {
         this.saxParser = saxParser;
         return this;
     }
 
-    private SAXParser getDefaultSaxParser() {
+    protected SAXParser getDefaultSaxParser() {
         try {
             final SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);

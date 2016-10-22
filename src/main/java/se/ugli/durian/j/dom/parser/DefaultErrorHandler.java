@@ -4,7 +4,7 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-class DefaultErrorHandler implements ErrorHandler {
+public class DefaultErrorHandler implements ErrorHandler {
 
     @Override
     public void warning(final SAXParseException exception) throws SAXException {

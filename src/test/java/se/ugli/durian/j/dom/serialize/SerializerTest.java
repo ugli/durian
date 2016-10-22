@@ -5,7 +5,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import se.ugli.commons.Resource;
-import se.ugli.durian.j.dom.parser.Parser;
+import se.ugli.durian.Durian;
+import se.ugli.durian.Source;
 
 public class SerializerTest {
 
@@ -46,7 +47,7 @@ public class SerializerTest {
     }
 
     private String durianStr(final String resource) {
-        return Parser.apply().parseResource(resource).toXml();
+        return Durian.parseXml(Source.apply(Resource.apply(resource))).toXml();
     }
 
 }
