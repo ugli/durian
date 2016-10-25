@@ -8,11 +8,11 @@ import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.Node;
 import se.ugli.durian.j.dom.query.QueryManager;
 
-public class MutableQuertApiImpl implements MutableQuertApi {
+public class MutableQueryApiImpl implements MutableQueryApi {
 
     private final MutableElement mutableElement;
 
-    public MutableQuertApiImpl(final MutableElement mutableElement) {
+    public MutableQueryApiImpl(final MutableElement mutableElement) {
         this.mutableElement = mutableElement;
     }
 

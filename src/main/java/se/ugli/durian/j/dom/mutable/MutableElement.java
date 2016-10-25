@@ -326,8 +326,8 @@ public class MutableElement implements Element, MutableNode {
     }
 
     @Override
-    public MutableQuertApi select() {
-        return new MutableQuertApiImpl(this);
+    public MutableQueryApi select() {
+        return new MutableQueryApiImpl(this);
     }
 
     public void setAttributeValueByName(final String attributeName, final String value) {
