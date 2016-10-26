@@ -28,10 +28,10 @@ public class XmlParser {
             return saxHandler.root;
         }
         catch (final IOException e) {
-            throw new RuntimeException(e);
+            throw new XmlParserException(e);
         }
         catch (final SAXException e) {
-            throw new RuntimeException(e);
+            throw new XmlParserException(e);
         }
     }
 
