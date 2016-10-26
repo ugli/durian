@@ -55,10 +55,10 @@ public class XmlParserBuilder {
             return factory.newSAXParser();
         }
         catch (final ParserConfigurationException e) {
-            throw new RuntimeException(e);
+            throw new XmlParserException(e);
         }
         catch (final SAXException e) {
-            throw new RuntimeException(e);
+            throw new XmlParserException(e);
         }
     }
 
