@@ -33,12 +33,14 @@ public class PrefixMapping {
         if (prefix == null) {
             if (other.prefix != null)
                 return false;
-        } else if (!prefix.equals(other.prefix))
+        }
+        else if (!prefix.equals(other.prefix))
             return false;
         if (uri == null) {
             if (other.uri != null)
                 return false;
-        } else if (!uri.equals(other.uri))
+        }
+        else if (!uri.equals(other.uri))
             return false;
         return true;
     }

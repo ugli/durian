@@ -159,10 +159,12 @@ class DurianNavigator implements Navigator {
             final List<Content> rootContent = new ArrayList<Content>();
             rootContent.add(document.root);
             return rootContent.iterator();
-        } else if (contextNode instanceof Element) {
+        }
+        else if (contextNode instanceof Element) {
             final Element element = (Element) contextNode;
             return element.content().iterator();
-        } else if (contextNode instanceof Text)
+        }
+        else if (contextNode instanceof Text)
             return new ArrayList<Content>().iterator();
         else
             throw new IllegalStateException(contextNode.getClass().getName());

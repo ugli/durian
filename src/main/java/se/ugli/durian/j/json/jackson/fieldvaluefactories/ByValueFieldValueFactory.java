@@ -19,9 +19,11 @@ public class ByValueFieldValueFactory implements FieldValueFactory {
     private Object create(final String value) {
         if (isValueBoolean(value)) {
             return Boolean.parseBoolean(value);
-        } else if (isValueLong(value)) {
+        }
+        else if (isValueLong(value)) {
             return Long.parseLong(value);
-        } else if (isValueDouble(value)) {
+        }
+        else if (isValueDouble(value)) {
             return Double.parseDouble(value);
         }
         return value;
@@ -36,7 +38,8 @@ public class ByValueFieldValueFactory implements FieldValueFactory {
             try {
                 Long.parseLong(value);
                 return true;
-            } catch (final NumberFormatException e) {
+            }
+            catch (final NumberFormatException e) {
             }
         }
         return false;
@@ -47,7 +50,8 @@ public class ByValueFieldValueFactory implements FieldValueFactory {
             try {
                 Double.parseDouble(value);
                 return true;
-            } catch (final NumberFormatException e) {
+            }
+            catch (final NumberFormatException e) {
             }
         }
         return false;

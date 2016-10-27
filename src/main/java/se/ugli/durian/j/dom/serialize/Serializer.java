@@ -132,9 +132,11 @@ public class Serializer {
                 if (contentList.size() > 1) {
                     xml.append(lineSeparator);
                     appendStringWithTab(indentDepth + 1, escapeXml11(textValue));
-                } else
+                }
+                else
                     xml.append(escapeXml11(textValue));
-            } else
+            }
+            else
                 throw new IllegalStateException(content.getClass().getName());
     }
 

@@ -29,7 +29,8 @@ class MutableElementCloneApiImpl implements ElementCloneApi {
         if (contentToClone instanceof Text) {
             final Text textToClone = contentToClone.as(Text.class);
             return textToClone.clone().text(parent, nodeFactory);
-        } else if (contentToClone instanceof Element)
+        }
+        else if (contentToClone instanceof Element)
             return cloneChildElement(contentToClone.as(Element.class), parent, nodeFactory);
         throw new IllegalStateException();
     }

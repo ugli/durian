@@ -26,9 +26,11 @@ public class XmlParser {
         try {
             saxParser.parse(new ByteArrayInputStream(source.data()), saxHandler);
             return saxHandler.root;
-        } catch (final IOException e) {
+        }
+        catch (final IOException e) {
             throw new XmlParserException(e);
-        } catch (final SAXException e) {
+        }
+        catch (final SAXException e) {
             throw new XmlParserException(e);
         }
     }

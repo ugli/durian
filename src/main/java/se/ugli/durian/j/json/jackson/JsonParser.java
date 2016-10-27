@@ -50,7 +50,8 @@ public final class JsonParser {
     public Element parse(final byte[] bytes) {
         try {
             return parse(objectMapper.readTree(bytes));
-        } catch (final IOException e) {
+        }
+        catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -58,7 +59,8 @@ public final class JsonParser {
     public Element parse(final Reader reader) {
         try {
             return parse(objectMapper.readTree(reader));
-        } catch (final IOException e) {
+        }
+        catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -66,7 +68,8 @@ public final class JsonParser {
     public Element parse(final File file) {
         try {
             return parse(objectMapper.readTree(file));
-        } catch (final IOException e) {
+        }
+        catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -74,7 +77,8 @@ public final class JsonParser {
     public Element parse(final URL url) {
         try {
             return parse(objectMapper.readTree(url));
-        } catch (final IOException e) {
+        }
+        catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -82,7 +86,8 @@ public final class JsonParser {
     public Element parse(final String str) {
         try {
             return parse(objectMapper.readTree(str));
-        } catch (final IOException e) {
+        }
+        catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -90,7 +95,8 @@ public final class JsonParser {
     public Element parse(final InputStream inputStream) {
         try {
             return parse(objectMapper.readTree(inputStream));
-        } catch (final IOException e) {
+        }
+        catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -104,14 +110,16 @@ public final class JsonParser {
                     .as(MutableElement.class);
             appendArrayNode((ArrayNode) rootNode, rootArrayChildElementName, root);
             return root;
-        } else if (rootNode instanceof ValueNode) {
+        }
+        else if (rootNode instanceof ValueNode) {
             final MutableElement root = nodeFactory
                     .createElement(rootElementName, uri, null, new ArrayList<PrefixMapping>(0))
                     .as(MutableElement.class);
             if (!(rootNode instanceof NullNode))
                 root.add(nodeFactory.createText(root, rootNode.asText()));
             return root;
-        } else
+        }
+        else
             throw new IllegalStateException("Node type: " + rootNode.getClass());
     }
 
@@ -154,7 +162,8 @@ public final class JsonParser {
                     throw new IllegalStateException(
                             "Can't parse json with nested arrays with 'createArrayElements' set to false");
                 appendArrayNode((ArrayNode) childNode, elementName, parent);
-            } else
+            }
+            else
                 throw new IllegalStateException("type: " + childNode.getClass().getName());
     }
 

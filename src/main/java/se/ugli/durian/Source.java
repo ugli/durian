@@ -75,7 +75,8 @@ public interface Source {
     static Source apply(final Path path) {
         try {
             return new SourceImpl(Files.readAllBytes(path));
-        } catch (final IOException e) {
+        }
+        catch (final IOException e) {
             throw new IoException(e);
         }
     }
@@ -83,7 +84,8 @@ public interface Source {
     static Source apply(final URL url) {
         try (InputStream in = url.openStream()) {
             return apply(in);
-        } catch (final IOException e) {
+        }
+        catch (final IOException e) {
             throw new IoException(e);
         }
     }
