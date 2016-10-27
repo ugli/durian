@@ -21,7 +21,8 @@ public class ParseSerializeTest {
 
     @Test
     public void xml2json() throws IOException {
-        final MutableElement element = Durian.parseXml(Source.apply(Resource.apply("/person.xml"))).as(MutableElement.class);
+        final MutableElement element = Durian.parseXml(Source.apply(Resource.apply("/person.xml")))
+                .as(MutableElement.class);
         element.addAttribute("xyz", null);
         final String actual = JsonSerializer.apply().serialize(element);
 

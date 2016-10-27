@@ -5,9 +5,6 @@ import static org.hamcrest.CoreMatchers.is;
 import org.junit.Assert;
 import org.junit.Test;
 
-import se.ugli.durian.w3c.soap.Envelope;
-import se.ugli.durian.w3c.soap.Fault;
-
 public class FaultTest {
 
     @Test

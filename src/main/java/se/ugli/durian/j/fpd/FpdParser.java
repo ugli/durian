@@ -10,7 +10,8 @@ import se.ugli.durian.j.validation.Validator;
 
 public class FpdParser {
 
-    private static final Validator validator = validator(W3C_XML_SCHEMA, FpdParser.class.getResource("/durian/xsd/fpd.xsd"));
+    private static final Validator validator = validator(W3C_XML_SCHEMA,
+            FpdParser.class.getResource("/durian/xsd/fpd.xsd"));
 
     private final Struct struct;
     private final String targetNamespace;

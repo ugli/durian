@@ -26,7 +26,8 @@ public class CloneWithCustomNodeFactoryTest {
 
     class QueryBindingAttribute extends MutableAttribute {
 
-        public QueryBindingAttribute(final String name, final String uri, final String value, final NodeFactory nodeFactory) {
+        public QueryBindingAttribute(final String name, final String uri, final String value,
+                final NodeFactory nodeFactory) {
             super(name, uri, value, nodeFactory);
         }
 
@@ -43,7 +44,8 @@ public class CloneWithCustomNodeFactoryTest {
         }
 
         @Override
-        public MutableAttribute createAttribute(final String name, final String uri, final Element parent, final String value) {
+        public MutableAttribute createAttribute(final String name, final String uri, final Element parent,
+                final String value) {
             if (parent != null && parent.name().equals("schema") && name.equals("queryBinding"))
                 return new QueryBindingAttribute(name, uri, value, this);
             return super.createAttribute(name, uri, parent, value);

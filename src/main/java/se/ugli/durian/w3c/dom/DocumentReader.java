@@ -29,7 +29,8 @@ public class DocumentReader {
         final String uri = element.getNamespaceURI();
         final Element parent = null;
         final Iterable<PrefixMapping> prefixMappings = new ArrayList<>();
-        final MutableElement newElement = nodeFactory.createElement(name, uri, parent, prefixMappings).as(MutableElement.class);
+        final MutableElement newElement = nodeFactory.createElement(name, uri, parent, prefixMappings)
+                .as(MutableElement.class);
         append(newElement, element);
         return newElement;
     }

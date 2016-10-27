@@ -53,11 +53,9 @@ public class XmlParserBuilder {
             final SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);
             return factory.newSAXParser();
-        }
-        catch (final ParserConfigurationException e) {
+        } catch (final ParserConfigurationException e) {
             throw new XmlParserException(e);
-        }
-        catch (final SAXException e) {
+        } catch (final SAXException e) {
             throw new XmlParserException(e);
         }
     }

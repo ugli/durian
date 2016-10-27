@@ -49,11 +49,9 @@ public class Validator {
             validator.validate(new StreamSource(new ByteArrayInputStream(xmlBytes)));
             if (!errorHandler.errors.isEmpty())
                 throw errorHandler.build();
-        }
-        catch (final SAXException e) {
+        } catch (final SAXException e) {
             throw new ValidationException(e);
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             throw new ValidationException(e);
         }
     }

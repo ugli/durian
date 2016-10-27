@@ -9,7 +9,8 @@ import se.ugli.durian.j.dom.node.PrefixMapping;
 
 public class Fault extends MutableElement {
 
-    public Fault(final String name, final String uri, final NodeFactory nodeFactory, final Iterable<PrefixMapping> prefixMappings) {
+    public Fault(final String name, final String uri, final NodeFactory nodeFactory,
+            final Iterable<PrefixMapping> prefixMappings) {
         super(name, uri, nodeFactory, prefixMappings);
     }
 

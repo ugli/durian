@@ -88,7 +88,8 @@ public class MutableElement implements Element, MutableNode {
         return addAttribute(name, uri.orElse(null), value, nodeFactory);
     }
 
-    public Attribute addAttribute(final String name, final String uri, final String value, final NodeFactory nodeFactory) {
+    public Attribute addAttribute(final String name, final String uri, final String value,
+            final NodeFactory nodeFactory) {
         final Attribute attribute = nodeFactory.createAttribute(name, uri, this, value);
         add(attribute);
         return attribute;
@@ -98,7 +99,8 @@ public class MutableElement implements Element, MutableNode {
         return addElement(name, uri.orElse(null), nodeFactory);
     }
 
-    public Element addElement(final String name, final String uri, final NodeFactory nodeFactory, final PrefixMapping... prefixmappings) {
+    public Element addElement(final String name, final String uri, final NodeFactory nodeFactory,
+            final PrefixMapping... prefixmappings) {
         final Element element = nodeFactory.createElement(name, uri, this, asList(prefixmappings));
         add(element);
         return element;

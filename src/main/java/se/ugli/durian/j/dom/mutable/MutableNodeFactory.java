@@ -7,7 +7,8 @@ import se.ugli.durian.j.dom.node.PrefixMapping;
 public class MutableNodeFactory implements NodeFactory {
 
     @Override
-    public MutableAttribute createAttribute(final String name, final String uri, final Element parent, final String value) {
+    public MutableAttribute createAttribute(final String name, final String uri, final Element parent,
+            final String value) {
         return new MutableAttribute(name, uri, value, this);
     }
 

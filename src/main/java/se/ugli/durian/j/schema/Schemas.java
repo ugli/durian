@@ -18,8 +18,7 @@ public class Schemas {
     public static Schema schema(final SchemaType type, final InputStream inputStream) {
         try {
             return type.schemaFactory().newSchema(new StreamSource(inputStream));
-        }
-        catch (final SAXException e) {
+        } catch (final SAXException e) {
             throw new SchemaException(e);
         }
     }
@@ -27,8 +26,7 @@ public class Schemas {
     public static Schema schema(final SchemaType type, final URL schema) {
         try {
             return type.schemaFactory().newSchema(schema);
-        }
-        catch (final SAXException e) {
+        } catch (final SAXException e) {
             throw new SchemaException(e);
         }
     }

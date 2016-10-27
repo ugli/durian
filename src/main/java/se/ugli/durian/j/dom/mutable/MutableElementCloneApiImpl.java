@@ -18,28 +18,31 @@ class MutableElementCloneApiImpl implements ElementCloneApi {
         return elementToClone.attributes().map(a -> a.clone().attribute(elementClone, nodeFactory)).collect(toList());
     }
 
-    private static Content cloneChildElement(final Element elementToClone, final Element parent, final NodeFactory nodeFactory) {
+    private static Content cloneChildElement(final Element elementToClone, final Element parent,
+            final NodeFactory nodeFactory) {
         final String elementName = elementToClone.name();
         return cloneElement(elementName, elementToClone, parent, nodeFactory);
     }
 
-    private static Content cloneContent(final Content contentToClone, final Element parent, final NodeFactory nodeFactory) {
+    private static Content cloneContent(final Content contentToClone, final Element parent,
+            final NodeFactory nodeFactory) {
         if (contentToClone instanceof Text) {
             final Text textToClone = contentToClone.as(Text.class);
             return textToClone.clone().text(parent, nodeFactory);
-        }
-        else if (contentToClone instanceof Element)
+        } else if (contentToClone instanceof Element)
             return cloneChildElement(contentToClone.as(Element.class), parent, nodeFactory);
         throw new IllegalStateException();
     }
 
-    private static List<Content> cloneContentList(final Element elementToClone, final Element elementClone, final NodeFactory nodeFactory) {
+    private static List<Content> cloneContentList(final Element elementToClone, final Element elementClone,
+            final NodeFactory nodeFactory) {
         return elementToClone.content().map(c -> cloneContent(c, elementClone, nodeFactory)).collect(toList());
     }
 
     private static Element cloneElement(final String elementName, final Element elementToClone, final Element parent,
             final NodeFactory nodeFactory) {
-        final MutableElement elementClone = createElement(elementName, elementToClone, parent, nodeFactory).as(MutableElement.class);
+        final MutableElement elementClone = createElement(elementName, elementToClone, parent, nodeFactory)
+                .as(MutableElement.class);
         for (final Attribute a : cloneAttributes(elementToClone, elementClone, nodeFactory))
             elementClone.add(a);
         for (final Content c : cloneContentList(elementToClone, elementClone, nodeFactory))
@@ -47,7 +50,8 @@ class MutableElementCloneApiImpl implements ElementCloneApi {
         return elementClone;
     }
 
-    private static Element cloneElement(final String elementName, final Element elementToClone, final NodeFactory nodeFactory) {
+    private static Element cloneElement(final String elementName, final Element elementToClone,
+            final NodeFactory nodeFactory) {
         return cloneElement(elementName, elementToClone, null, nodeFactory);
     }
 

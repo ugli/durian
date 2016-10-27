@@ -17,8 +17,7 @@ public class JaxenQueryEngine implements QueryEngine {
         try {
             final DurianXpath durianXpath = new DurianXpath(element, query);
             return durianXpath.selectNodes(element).stream();
-        }
-        catch (final JaxenException e) {
+        } catch (final JaxenException e) {
             throw new QueryException(e);
         }
     }
@@ -31,12 +30,11 @@ public class JaxenQueryEngine implements QueryEngine {
             if (result == null)
                 throw new QueryException("Query doesn't evalate a Boolean. Result is null. Query: " + query);
             else if (!(result instanceof Boolean))
-                throw new QueryException(
-                        "Query doesn't evalate a Boolean. Result has type: " + result.getClass().getName() + " Query: " + query);
+                throw new QueryException("Query doesn't evalate a Boolean. Result has type: "
+                        + result.getClass().getName() + " Query: " + query);
             return (Boolean) result;
 
-        }
-        catch (final JaxenException e) {
+        } catch (final JaxenException e) {
             throw new QueryException(e);
         }
     }
@@ -58,12 +56,11 @@ public class JaxenQueryEngine implements QueryEngine {
             if (result == null)
                 throw new QueryException("Query doesn't evalate a Double. Result is null. Query: " + query);
             else if (!(result instanceof Double))
-                throw new QueryException(
-                        "Query doesn't evalate a Double. Result has type: " + result.getClass().getName() + " Query: " + query);
+                throw new QueryException("Query doesn't evalate a Double. Result has type: "
+                        + result.getClass().getName() + " Query: " + query);
             return (Double) result;
 
-        }
-        catch (final JaxenException e) {
+        } catch (final JaxenException e) {
             throw new QueryException(e);
         }
     }

@@ -25,7 +25,8 @@ class Struct implements Definition {
     private final List<Definition> definitions = new ArrayList<Definition>();
     private final int numOfChars;
 
-    private Struct(final Element element, final String targetNamespace, final boolean includeEmptyValues, final boolean root) {
+    private Struct(final Element element, final String targetNamespace, final boolean includeEmptyValues,
+            final boolean root) {
         name = element.attributeValue("name").get();
         this.targetNamespace = targetNamespace;
         this.includeEmptyValues = includeEmptyValues;
@@ -44,7 +45,8 @@ class Struct implements Definition {
         final ArrayList<PrefixMapping> prefixmappings = new ArrayList<PrefixMapping>();
         if (root && targetNamespace != null)
             prefixmappings.add(prefixMapping(null, targetNamespace));
-        final MutableElement element = new MutableElement(name, targetNamespace, new MutableNodeFactory(), prefixmappings);
+        final MutableElement element = new MutableElement(name, targetNamespace, new MutableNodeFactory(),
+                prefixmappings);
         int beginIndex = 0;
         for (final Definition definition : definitions) {
             final int endIndex = beginIndex + definition.numOfChars();
@@ -67,8 +69,9 @@ class Struct implements Definition {
 
     @Override
     public String toString() {
-        return "Struct [name=" + name + ", targetNamespace=" + targetNamespace + ", includeEmptyValues=" + includeEmptyValues + ", root="
-                + root + ", definitions=" + definitions + ", numOfChars=" + numOfChars + "]";
+        return "Struct [name=" + name + ", targetNamespace=" + targetNamespace + ", includeEmptyValues="
+                + includeEmptyValues + ", root=" + root + ", definitions=" + definitions + ", numOfChars=" + numOfChars
+                + "]";
     }
 
     private Definition definition(final Element element) {

@@ -71,8 +71,8 @@ public class MutableElementTest {
 
     @Test
     public void shouldNotContainOneMappings() {
-        final MutableElement element = Durian.createElement("test", "b", prefixMapping("a", "b"), prefixMapping("c", "b"))
-                .as(MutableElement.class);
+        final MutableElement element = Durian
+                .createElement("test", "b", prefixMapping("a", "b"), prefixMapping("c", "b")).as(MutableElement.class);
         final List<PrefixMapping> prefixMappings = element.prefixMappings().collect(toList());
         assertThat(prefixMappings.size(), is(1));
         assertThat(prefixMappings.get(0), is(prefixMapping("c", "b")));

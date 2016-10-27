@@ -74,9 +74,10 @@ public class MutableQueryApiImpl implements MutableQueryApi {
 
     @Override
     public int remove(final String query) {
-        return (int) nodes(query).filter(n -> n.parent().isPresent()).filter(n -> n.parent().get() instanceof MutableElement).peek(n -> {
-            n.parent().get().as(MutableElement.class).remove(n);
-        }).count();
+        return (int) nodes(query).filter(n -> n.parent().isPresent())
+                .filter(n -> n.parent().get() instanceof MutableElement).peek(n -> {
+                    n.parent().get().as(MutableElement.class).remove(n);
+                }).count();
     }
 
     @Override

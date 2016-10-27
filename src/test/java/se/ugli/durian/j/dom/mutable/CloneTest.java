@@ -14,7 +14,8 @@ public class CloneTest {
 
     @Test
     public void shouldClone() {
-        final Element element = Durian.parseXml(Source.apply(Resource.apply("/se/ugli/durian/j/dom/mutable/ddata.xml")));
+        final Element element = Durian
+                .parseXml(Source.apply(Resource.apply("/se/ugli/durian/j/dom/mutable/ddata.xml")));
         final Element elementClone = element.clone().element();
         assertThat(element.toXml(), is(elementClone.toXml()));
     }

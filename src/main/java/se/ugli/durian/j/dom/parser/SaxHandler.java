@@ -42,10 +42,12 @@ class SaxHandler extends DefaultHandler {
     }
 
     @Override
-    public void startElement(final String _uri, final String localName, final String qName, final Attributes saxAttributes) {
+    public void startElement(final String _uri, final String localName, final String qName,
+            final Attributes saxAttributes) {
         final MutableElement parent = elementStack.isEmpty() ? null : elementStack.peek();
         final String uri = nonEmptyOrNull(_uri);
-        final MutableElement element = nodeFactory.createElement(localName, uri, parent, new ArrayList<PrefixMapping>(prefixMappings))
+        final MutableElement element = nodeFactory
+                .createElement(localName, uri, parent, new ArrayList<PrefixMapping>(prefixMappings))
                 .as(MutableElement.class);
         prefixMappings.clear();
         for (final Attribute attribute : new AttributesFactory(nodeFactory, element, saxAttributes).create())

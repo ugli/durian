@@ -39,8 +39,7 @@ public final class JsonSerializer {
             final StringWriter stringWriter = new StringWriter();
             objectMapper.writeValue(stringWriter, jsonNode);
             return stringWriter.toString();
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }

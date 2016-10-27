@@ -17,7 +17,8 @@ public class SoapNodeFactory implements NodeFactory {
     }
 
     @Override
-    public Element createElement(final String name, final String uri, final Element parent, final Iterable<PrefixMapping> prefixMappings) {
+    public Element createElement(final String name, final String uri, final Element parent,
+            final Iterable<PrefixMapping> prefixMappings) {
         if (SoapVersion.fromUri(uri).isPresent())
             if ("Envelope".equals(name))
                 return new Envelope(name, uri, this, prefixMappings);

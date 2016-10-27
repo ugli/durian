@@ -12,7 +12,8 @@ import se.ugli.durian.j.dom.node.PrefixMapping;
 public class Envelope extends MutableElement {
 
     public Envelope(final SoapVersion version) {
-        this("Envelope", version.uri, new SoapNodeFactory(new MutableNodeFactory()), singletonList(prefixMapping("env", version.uri)));
+        this("Envelope", version.uri, new SoapNodeFactory(new MutableNodeFactory()),
+                singletonList(prefixMapping("env", version.uri)));
         addElement("Header", version.uri, nodeFactory());
         addElement("Body", version.uri, nodeFactory());
     }
@@ -21,7 +22,8 @@ public class Envelope extends MutableElement {
         this(SoapVersion.V1_2);
     }
 
-    Envelope(final String name, final String uri, final SoapNodeFactory nodeFactory, final Iterable<PrefixMapping> prefixMappings) {
+    Envelope(final String name, final String uri, final SoapNodeFactory nodeFactory,
+            final Iterable<PrefixMapping> prefixMappings) {
         super(name, uri, nodeFactory, prefixMappings);
     }
 

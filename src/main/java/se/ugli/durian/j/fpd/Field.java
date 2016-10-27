@@ -39,8 +39,8 @@ class Field implements Definition {
 
     @Override
     public String toString() {
-        return "Field [name=" + name + ", length=" + length + ", targetNamespace=" + targetNamespace + ", includeEmptyValues="
-                + includeEmptyValues + "]";
+        return "Field [name=" + name + ", length=" + length + ", targetNamespace=" + targetNamespace
+                + ", includeEmptyValues=" + includeEmptyValues + "]";
     }
 
 }
