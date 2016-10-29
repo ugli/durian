@@ -48,31 +48,29 @@ public final class JsonSerializer {
     private JsonNode createJsonNode(final Element element) {
         if (element instanceof JsonArrayElement)
             return createArrayFromArrayElement(element);
-        else {
-            final ObjectNode objectNode = objectMapper.createObjectNode();
-            element.attributes().forEach(attribute -> {
-                putAttribute(objectNode, attribute);
-            });
-            final Map<String, List<Element>> childElementNameMap = createElementNameMap(element);
-            for (final String fieldName : childElementNameMap.keySet()) {
-                final List<Element> childElementByName = childElementNameMap.get(fieldName);
-                if (childElementByName.isEmpty())
-                    throw new IllegalStateException();
-                else if (childElementByName.size() == 1)
-                    objectNode.set(fieldName, createJsonNode(childElementByName.get(0)));
-                else {
-                    final ArrayNode arrayNode = objectNode.arrayNode();
-                    for (final Element arrayElement : childElementByName)
-                        arrayNode.add(createJsonNode(arrayElement));
-                    objectNode.set(fieldName, arrayNode);
-                }
+        final ObjectNode objectNode = objectMapper.createObjectNode();
+        element.attributes().forEach(attribute -> {
+            putAttribute(objectNode, attribute);
+        });
+        final Map<String, List<Element>> childElementNameMap = createElementNameMap(element);
+        for (final String fieldName : childElementNameMap.keySet()) {
+            final List<Element> childElementByName = childElementNameMap.get(fieldName);
+            if (childElementByName.isEmpty())
+                throw new IllegalStateException();
+            else if (childElementByName.size() == 1)
+                objectNode.set(fieldName, createJsonNode(childElementByName.get(0)));
+            else {
+                final ArrayNode arrayNode = objectNode.arrayNode();
+                for (final Element arrayElement : childElementByName)
+                    arrayNode.add(createJsonNode(arrayElement));
+                objectNode.set(fieldName, arrayNode);
             }
-            return objectNode;
         }
+        return objectNode;
     }
 
-    private Map<String, List<Element>> createElementNameMap(final Element element) {
-        final Map<String, List<Element>> map = new LinkedHashMap<String, List<Element>>();
+    private static Map<String, List<Element>> createElementNameMap(final Element element) {
+        final Map<String, List<Element>> map = new LinkedHashMap<>();
         element.elements().forEach(childElement -> {
             final String fieldName;
             if (childElement instanceof JsonArrayElement)
@@ -83,7 +81,7 @@ public final class JsonSerializer {
             if (map.containsKey(fieldName))
                 list = map.get(fieldName);
             else {
-                list = new ArrayList<Element>();
+                list = new ArrayList<>();
                 map.put(fieldName, list);
             }
             list.add(childElement);

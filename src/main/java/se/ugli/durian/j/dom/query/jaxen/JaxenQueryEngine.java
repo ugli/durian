@@ -51,7 +51,7 @@ public class JaxenQueryEngine implements QueryEngine {
         return _evaluteDouble(element, query);
     }
 
-    private Double _evaluteDouble(final Element element, final String query) {
+    private static Double _evaluteDouble(final Element element, final String query) {
         try {
             final DurianXpath durianXpath = new DurianXpath(element, query);
             final Object result = durianXpath.selectSingleNode(element);

@@ -5,9 +5,9 @@ import static se.ugli.durian.j.dom.utils.Strings.nonEmptyOrNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.ErrorHandler;
@@ -23,8 +23,8 @@ import se.ugli.durian.j.dom.node.PrefixMapping;
 
 class SaxHandler extends DefaultHandler {
 
-    private final Stack<MutableElement> elementStack = new Stack<MutableElement>();
-    private final List<PrefixMapping> prefixMappings = new LinkedList<PrefixMapping>();
+    private final Deque<MutableElement> elementStack = new LinkedList<>();
+    private final List<PrefixMapping> prefixMappings = new LinkedList<>();
     private final NodeFactory nodeFactory;
     private final ErrorHandler errorHandler;
     Element root;
@@ -47,8 +47,7 @@ class SaxHandler extends DefaultHandler {
         final MutableElement parent = elementStack.isEmpty() ? null : elementStack.peek();
         final String uri = nonEmptyOrNull(_uri);
         final MutableElement element = nodeFactory
-                .createElement(localName, uri, parent, new ArrayList<PrefixMapping>(prefixMappings))
-                .as(MutableElement.class);
+                .createElement(localName, uri, parent, new ArrayList<>(prefixMappings)).as(MutableElement.class);
         prefixMappings.clear();
         for (final Attribute attribute : new AttributesFactory(nodeFactory, element, saxAttributes).create())
             element.add(attribute);

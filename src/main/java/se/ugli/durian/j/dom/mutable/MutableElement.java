@@ -312,14 +312,14 @@ public class MutableElement implements Element, MutableNode {
         return result.get();
     }
 
-    public boolean removeElementByName(final String elementName) {
+    public boolean removeElement(final String elementName) {
         final Optional<Element> element = element(elementName);
         if (element.isPresent())
             return remove(element.get());
         return false;
     }
 
-    public int removeElementsByName(final String elementName) {
+    public int removeElements(final String elementName) {
         return removeAll(elements(elementName));
     }
 
@@ -332,21 +332,23 @@ public class MutableElement implements Element, MutableNode {
         return new MutableQueryApiImpl(this);
     }
 
-    public void setAttributeValueByName(final String attributeName, final String value) {
+    public void setAttributeValue(final String attributeName, final String value) {
         final Optional<MutableAttribute> attributeOpt = attribute(attributeName).map(a -> a.as(MutableAttribute.class));
-        if (attributeOpt.isPresent())
+        if (attributeOpt.isPresent()) {
+            final MutableAttribute attribute = attributeOpt.get();
             if (value == null)
-                remove(attributeOpt.get());
+                remove(attribute);
             else
-                attributeOpt.get().setValue(value);
+                attribute.setValue(value);
+        }
         else if (value != null)
             add(nodeFactory.createAttribute(attributeName, uri.orElse(null), this, value));
     }
 
-    public void setElementByName(final String elementName, final Element element) {
+    public void setElement(final String elementName, final Element element) {
         if (element != null && !element.name().equals(elementName))
             throw new IllegalStateException(elementName + "!=" + element.name());
-        removeElementByName(elementName);
+        removeElement(elementName);
         if (element != null)
             add(element);
     }

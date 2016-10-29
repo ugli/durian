@@ -29,7 +29,7 @@ public class MutableElementTest {
     public void shouldShouldSetAttributeByNameIfNotExists() {
         final MutableElement element = Durian.createElement("test").as(MutableElement.class);
         assertThat(element.attribute("a").isPresent(), is(false));
-        element.setAttributeValueByName("a", "b");
+        element.setAttributeValue("a", "b");
         assertThat(element.attributeValue("a").get(), is("b"));
     }
 
@@ -38,7 +38,7 @@ public class MutableElementTest {
         final MutableElement element = Durian.createElement("test").as(MutableElement.class);
         element.addAttribute("a", "b");
         assertThat(element.attributeValue("a").get(), is("b"));
-        element.setAttributeValueByName("a", "c");
+        element.setAttributeValue("a", "c");
         assertThat(element.attributeValue("a").get(), is("c"));
     }
 
@@ -47,7 +47,7 @@ public class MutableElementTest {
         final MutableElement element = Durian.createElement("test").as(MutableElement.class);
         element.addAttribute("a", "b");
         assertThat(element.attributeValue("a").get(), is("b"));
-        element.setAttributeValueByName("a", null);
+        element.setAttributeValue("a", null);
         assertThat(element.attribute("a").isPresent(), is(false));
     }
 

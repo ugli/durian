@@ -22,10 +22,9 @@ class AttributesFactory {
     }
 
     List<Attribute> create() {
-        final List<Attribute> result = new ArrayList<Attribute>();
-        for (int index = 0; index < attributes.getLength(); index++) {
+        final List<Attribute> result = new ArrayList<>();
+        for (int index = 0; index < attributes.getLength(); index++)
             result.add(createAttribute(index));
-        }
         return result;
     }
 

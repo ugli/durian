@@ -6,7 +6,7 @@ import static se.ugli.durian.j.dom.utils.Strings.nonEmptyOrNull;
 
 import java.util.Optional;
 
-public class PrefixMapping {
+public final class PrefixMapping {
 
     public static PrefixMapping prefixMapping(final String prefix, final String uri) {
         requireNonNull(nonEmptyOrNull(uri), "Prefix uri can not null or empty");

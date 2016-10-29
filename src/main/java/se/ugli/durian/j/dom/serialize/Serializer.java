@@ -30,7 +30,7 @@ public class Serializer {
     private final String xmlVersion;
     private final String encoding;
     private final StringBuilder xml = new StringBuilder();
-    private final Map<String, String> prefixByUri = new LinkedHashMap<String, String>();
+    private final Map<String, String> prefixByUri = new LinkedHashMap<>();
 
     Serializer(final String xmlVersion, final String encoding, final String tab, final String lineSeparator) {
         this.xmlVersion = xmlVersion;
@@ -117,7 +117,8 @@ public class Serializer {
             appendAttribute(xml, attribute.qName(), attribute.value());
     }
 
-    private void appendAttribute(final StringBuilder xml, final String attributeName, final String attributeValue) {
+    private static void appendAttribute(final StringBuilder xml, final String attributeName,
+            final String attributeValue) {
         if (attributeValue != null)
             xml.append(SPACE).append(attributeName).append(EQ).append(QUOTE).append(escapeXml11(attributeValue))
                     .append(QUOTE);

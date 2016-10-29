@@ -48,7 +48,7 @@ public class XmlParserBuilder {
         return this;
     }
 
-    protected SAXParser getDefaultSaxParser() {
+    protected static SAXParser getDefaultSaxParser() {
         try {
             final SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);

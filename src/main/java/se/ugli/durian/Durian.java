@@ -19,6 +19,9 @@ import se.ugli.durian.w3c.soap.SoapParserBuilder;
 
 public class Durian {
 
+    private Durian() {
+    }
+
     public static Element createElement(final String name, final PrefixMapping... prefixMappings) {
         return new MutableNodeFactory().createElement(name, null, null, asList(prefixMappings));
     }

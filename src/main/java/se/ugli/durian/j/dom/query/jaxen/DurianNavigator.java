@@ -155,8 +155,7 @@ class DurianNavigator implements Navigator {
     @Override
     public Iterator<Content> getChildAxisIterator(final Object contextNode) {
         if (contextNode instanceof Document) {
-            final Document document = (Document) contextNode;
-            final List<Content> rootContent = new ArrayList<Content>();
+            final List<Content> rootContent = new ArrayList<>();
             rootContent.add(document.root);
             return rootContent.iterator();
         }
@@ -221,7 +220,7 @@ class DurianNavigator implements Navigator {
 
     @Override
     public Iterator<?> getNamespaceAxisIterator(final Object contextNode) throws UnsupportedAxisException {
-        return new ArrayList<Object>().iterator();
+        return new ArrayList<>().iterator();
     }
 
     @Override

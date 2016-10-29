@@ -22,7 +22,7 @@ class Struct implements Definition {
     private final String targetNamespace;
     private final boolean includeEmptyValues;
     private final boolean root;
-    private final List<Definition> definitions = new ArrayList<Definition>();
+    private final List<Definition> definitions = new ArrayList<>();
     private final int numOfChars;
 
     private Struct(final Element element, final String targetNamespace, final boolean includeEmptyValues,
@@ -42,7 +42,7 @@ class Struct implements Definition {
 
     @Override
     public Node createNode(final String data) {
-        final ArrayList<PrefixMapping> prefixmappings = new ArrayList<PrefixMapping>();
+        final ArrayList<PrefixMapping> prefixmappings = new ArrayList<>();
         if (root && targetNamespace != null)
             prefixmappings.add(prefixMapping(null, targetNamespace));
         final MutableElement element = new MutableElement(name, targetNamespace, new MutableNodeFactory(),

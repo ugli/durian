@@ -60,7 +60,7 @@ public class Validator {
 
     private static class ValidationExceptionBuilder implements ErrorHandler {
 
-        List<ValidationError> errors = new ArrayList<ValidationError>();
+        List<ValidationError> errors = new ArrayList<>();
 
         @Override
         public void warning(final SAXParseException exception) throws SAXException {

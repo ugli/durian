@@ -16,44 +16,39 @@ public class ByValueFieldValueFactory implements FieldValueFactory {
         return create(text.value());
     }
 
-    private Object create(final String value) {
-        if (isValueBoolean(value)) {
+    private static Object create(final String value) {
+        if (isValueBoolean(value))
             return Boolean.parseBoolean(value);
-        }
-        else if (isValueLong(value)) {
+        else if (isValueLong(value))
             return Long.parseLong(value);
-        }
-        else if (isValueDouble(value)) {
+        else if (isValueDouble(value))
             return Double.parseDouble(value);
-        }
         return value;
     }
 
-    private boolean isValueBoolean(final String value) {
-        return value != null && (value.equals("true") || value.equals("false"));
+    private static boolean isValueBoolean(final String value) {
+        return value != null && ("true".equals(value) || "false".equals(value));
     }
 
-    private boolean isValueLong(final String value) {
-        if (value != null) {
+    private static boolean isValueLong(final String value) {
+        if (value != null)
             try {
                 Long.parseLong(value);
                 return true;
             }
             catch (final NumberFormatException e) {
             }
-        }
         return false;
     }
 
-    private boolean isValueDouble(final String value) {
-        if (value != null) {
+    private static boolean isValueDouble(final String value) {
+        if (value != null)
             try {
                 Double.parseDouble(value);
                 return true;
             }
             catch (final NumberFormatException e) {
             }
-        }
         return false;
     }
 

@@ -52,7 +52,7 @@ public class ParseSerializeTest {
     }
 
     @Test
-    public void json2xml() throws IOException {
+    public void json2xml() {
 
         final Element person = JsonParserBuilder.apply().rootElementName("person").createArrayElements(false).build()
                 .parse(getClass().getResourceAsStream("/person.json"));

@@ -69,10 +69,12 @@ public class DocumentReader {
             if (!value.trim().isEmpty())
                 parent.addText(("X" + value.trim()).substring(1));
             break;
+        default:
+            // Ignore
         }
     }
 
-    private void addPrefixMapping(final MutableElement parent, final String attributeName, final String uri) {
+    private static void addPrefixMapping(final MutableElement parent, final String attributeName, final String uri) {
         if ("xmlns".equals(attributeName))
             parent.addPrefixMapping(null, uri);
         else
