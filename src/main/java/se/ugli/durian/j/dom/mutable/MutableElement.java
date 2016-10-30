@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
+import se.ugli.commons.Id;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.Content;
 import se.ugli.durian.j.dom.node.Element;
@@ -26,7 +27,6 @@ import se.ugli.durian.j.dom.node.NodeListener;
 import se.ugli.durian.j.dom.node.PrefixMapping;
 import se.ugli.durian.j.dom.node.Text;
 import se.ugli.durian.j.dom.serialize.Serializer;
-import se.ugli.durian.j.dom.utils.Id;
 
 public class MutableElement implements Element, MutableNode {
 
@@ -49,7 +49,7 @@ public class MutableElement implements Element, MutableNode {
     private final List<NodeListener> nodeListeners = new ArrayList<>();
     private final Map<String, String> prefixByUri = new LinkedHashMap<>();
 
-    private final String id = Id.create();
+    private final String id = Id.create().value;
     private String name;
     private final NodeFactory nodeFactory;
     private Optional<String> uri;

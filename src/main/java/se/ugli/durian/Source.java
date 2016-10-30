@@ -8,9 +8,11 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 
-import se.ugli.commons.CopyCommand;
+import se.ugli.commons.InputStreams;
 import se.ugli.commons.IoException;
+import se.ugli.commons.Readers;
 import se.ugli.commons.Resource;
 
 public interface Source {
@@ -22,12 +24,12 @@ public interface Source {
         private final byte[] data;
 
         public SourceImpl(final byte[] data) {
-            this.data = data;
+            this.data = Arrays.copyOf(data, data.length);
         }
 
         @Override
         public byte[] data() {
-            return data;
+            return Arrays.copyOf(data, data.length);
         }
 
     }
@@ -41,19 +43,19 @@ public interface Source {
     }
 
     static Source apply(final InputStream in) {
-        return new SourceImpl(CopyCommand.apply().copyToBytes(in));
+        return new SourceImpl(InputStreams.apply().copyToBytes(in));
     }
 
     static Source apply(final Reader in) {
-        return new SourceImpl(CopyCommand.apply().copyToBytes(in));
+        return new SourceImpl(Readers.apply().copyToBytes(in));
     }
 
     static Source apply(final Reader in, final Charset charset) {
-        return new SourceImpl(CopyCommand.apply().copyToBytes(in, charset));
+        return new SourceImpl(InputStreams.apply().copyToBytes(in, charset));
     }
 
     static Source apply(final Resource resource) {
-        return new SourceImpl(resource.getBytes());
+        return new SourceImpl(resource.asBytes());
     }
 
     static Source apply(final byte[] bytes) {

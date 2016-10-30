@@ -24,11 +24,11 @@ public class DocumentReaderTest {
 
         final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        final Document document = documentBuilder.parse(Resource.apply(resource).getInputStream());
+        final Document document = documentBuilder.parse(Resource.apply(resource).asInputStream());
 
         final Element element = Durian.fromW3CDocument(document);
 
-        assertEquals(Resource.apply(resource).getString(), element.toXml());
+        assertEquals(Resource.apply(resource).asString(), element.toXml());
     }
 
 }

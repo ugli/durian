@@ -4,12 +4,12 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.Optional;
 
+import se.ugli.commons.Id;
 import se.ugli.durian.j.dom.node.Attribute;
 import se.ugli.durian.j.dom.node.AttributeCloneApi;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.PrefixMapping;
-import se.ugli.durian.j.dom.utils.Id;
 
 public class MutableAttribute implements Attribute, MutableNode {
 
@@ -17,7 +17,7 @@ public class MutableAttribute implements Attribute, MutableNode {
     private Optional<Element> parent = Optional.empty();
     private final Optional<String> uri;
     private String value;
-    private final String id = Id.create();
+    private final String id = Id.create().value;
     private final NodeFactory nodeFactory;
 
     public MutableAttribute(final String name, final String uri, final String value, final NodeFactory nodeFactory) {

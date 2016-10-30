@@ -6,9 +6,16 @@
 	<artifactId>durian-java-dom</artifactId>
 	<packaging>jar</packaging>
 	<name>Durian DOM for Java</name>
-	<version>1.8.1.6</version>
+	<version>1.8.1.7</version>
 	<description>Durian DOM for Java</description>
 	<url>https://github.com/ugli/durian-java-dom</url>
+	<properties>
+		<sonar.language>java</sonar.language>
+		<sonar.host.url>https://sonarqube.com/</sonar.host.url>
+		<sonar.projectKey>durian</sonar.projectKey>
+		<sonar.sources>src/main/java</sonar.sources>
+		<sonar.tests>src/test/java</sonar.tests>
+	</properties>
 	<licenses>
 		<license>
 			<name>GNU GENERAL PUBLIC LICENSE, Version 2</name>
@@ -20,7 +27,7 @@
 		<connection>scm:git:git@github.com:ugli/durian-java-dom.git</connection>
 		<developerConnection>scm:git:git@github.com:ugli/durian-java-dom.git</developerConnection>
 		<url>git@github.com:ugli/durian.git</url>
-		<tag>${project.version}</tag>
+		<tag>v${project.version}</tag>
 	</scm>
 	<developers>
 		<developer>
@@ -33,7 +40,7 @@
 		<dependency>
 			<groupId>se.ugli.ugli-commons</groupId>
 			<artifactId>ugli-commons</artifactId>
-			<version>1.8.0.0</version>
+			<version>1.8.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -168,6 +175,36 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>coverage-per-test</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.19.1</version>
+						<configuration>
+							<properties>
+								<property>
+									<name>listener</name>
+									<value>org.sonar.java.jacoco.JUnitListener</value>
+								</property>
+							</properties>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>org.sonarsource.java</groupId>
+					<artifactId>sonar-jacoco-listeners</artifactId>
+					<version>4.2.1.6971</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 	<distributionManagement>
 		<snapshotRepository>
 			<id>sonatype-nexus-snapshots</id>

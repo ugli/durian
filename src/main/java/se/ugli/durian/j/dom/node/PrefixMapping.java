@@ -2,7 +2,7 @@ package se.ugli.durian.j.dom.node;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
-import static se.ugli.durian.j.dom.utils.Strings.nonEmptyOrNull;
+import static se.ugli.commons.Strings.nonEmptyOrNull;
 
 import java.util.Optional;
 
