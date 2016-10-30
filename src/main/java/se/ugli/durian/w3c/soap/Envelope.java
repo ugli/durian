@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import se.ugli.durian.j.dom.mutable.MutableElement;
 import se.ugli.durian.j.dom.mutable.MutableNodeFactory;
+import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.PrefixMapping;
 
 public class Envelope extends MutableElement {
@@ -34,4 +35,25 @@ public class Envelope extends MutableElement {
     public Optional<Body> body() {
         return element("Body").map(e -> e.as(Body.class));
     }
+
+    public Optional<Element> bodyContent() {
+        return body().flatMap(e -> e.elements().findFirst());
+    }
+
+    public boolean hasFault() {
+        return body().flatMap(Body::fault).isPresent();
+    }
+
+    public Optional<String> faultstring() {
+        return body().flatMap(b -> b.fault().flatMap(Fault::faultstring));
+    }
+
+    public Optional<String> faultcode() {
+        return body().flatMap(b -> b.fault().flatMap(Fault::faultcode));
+    }
+
+    public Optional<String> faultactor() {
+        return body().flatMap(b -> b.fault().flatMap(Fault::faultactor));
+    }
+
 }

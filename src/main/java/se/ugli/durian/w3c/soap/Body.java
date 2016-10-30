@@ -20,7 +20,10 @@ public class Body extends MutableElement {
 
     public static Envelope createEnvelopeWithNode(final Node node) {
         final Envelope envelope = new Envelope();
-        envelope.body().get().add(node);
+        if (envelope.body().isPresent())
+            envelope.body().get().add(node);
+        else
+            envelope.addElement("Body");
         return envelope;
     }
 

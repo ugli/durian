@@ -10,6 +10,10 @@ import org.w3c.tidy.Tidy;
 
 public class TidyFactory {
 
+    private TidyFactory() {
+
+    }
+
     private static class VoidWriter extends Writer {
 
         @Override

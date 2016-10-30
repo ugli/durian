@@ -47,7 +47,7 @@ public class Durian {
     }
 
     public static Element parserHtml(final Source source) {
-        return HtmlParser.parser(source);
+        return HtmlParser.parse(source);
     }
 
     public static Envelope parseSoap(final Source source) {

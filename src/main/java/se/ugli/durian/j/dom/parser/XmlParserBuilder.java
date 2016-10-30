@@ -12,15 +12,15 @@ import se.ugli.durian.j.dom.node.NodeFactory;
 
 public class XmlParserBuilder {
 
-    public static XmlParserBuilder apply() {
-        return new XmlParserBuilder();
-    }
-
     protected ErrorHandler errorHandler;
     protected NodeFactory nodeFactory;
     protected SAXParser saxParser;
 
     protected XmlParserBuilder() {
+    }
+
+    public static XmlParserBuilder apply() {
+        return new XmlParserBuilder();
     }
 
     public XmlParser build() {
@@ -54,10 +54,7 @@ public class XmlParserBuilder {
             factory.setNamespaceAware(true);
             return factory.newSAXParser();
         }
-        catch (final ParserConfigurationException e) {
-            throw new XmlParserException(e);
-        }
-        catch (final SAXException e) {
+        catch (final ParserConfigurationException | SAXException e) {
             throw new XmlParserException(e);
         }
     }

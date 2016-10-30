@@ -15,6 +15,7 @@ import se.ugli.commons.IoException;
 import se.ugli.commons.Readers;
 import se.ugli.commons.Resource;
 
+@FunctionalInterface
 public interface Source {
 
     byte[] data();
