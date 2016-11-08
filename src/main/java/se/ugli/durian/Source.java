@@ -10,10 +10,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 
-import se.ugli.commons.InputStreams;
-import se.ugli.commons.IoException;
-import se.ugli.commons.Readers;
-import se.ugli.commons.Resource;
+import se.ugli.java.io.InputStreams;
+import se.ugli.java.io.IoException;
+import se.ugli.java.io.Readers;
+import se.ugli.java.io.Resource;
 
 @FunctionalInterface
 public interface Source {

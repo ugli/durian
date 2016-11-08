@@ -1,7 +1,7 @@
 package se.ugli.durian.j.dom.parser;
 
-import static se.ugli.commons.Strings.nonEmptyOrNull;
 import static se.ugli.durian.j.dom.node.PrefixMapping.prefixMapping;
+import static se.ugli.java.lang.Strings.nonEmptyOrNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;

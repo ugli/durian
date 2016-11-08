@@ -12,9 +12,9 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import se.ugli.commons.Resource;
 import se.ugli.durian.Durian;
 import se.ugli.durian.j.dom.node.Element;
+import se.ugli.java.io.Resource;
 
 public class DocumentReaderTest {
 

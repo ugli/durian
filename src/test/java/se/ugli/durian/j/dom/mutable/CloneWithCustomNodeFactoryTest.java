@@ -6,13 +6,13 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import se.ugli.commons.Resource;
 import se.ugli.durian.Durian;
 import se.ugli.durian.Source;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.PrefixMapping;
 import se.ugli.durian.j.dom.parser.XmlParserBuilder;
+import se.ugli.java.io.Resource;
 
 public class CloneWithCustomNodeFactoryTest {
 

@@ -4,9 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import se.ugli.commons.Resource;
 import se.ugli.durian.Durian;
 import se.ugli.durian.Source;
+import se.ugli.java.io.Resource;
 
 public class SerializerTest {
 

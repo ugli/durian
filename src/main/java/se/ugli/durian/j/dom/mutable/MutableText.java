@@ -2,11 +2,11 @@ package se.ugli.durian.j.dom.mutable;
 
 import java.util.Optional;
 
-import se.ugli.commons.Id;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.durian.j.dom.node.NodeFactory;
 import se.ugli.durian.j.dom.node.Text;
 import se.ugli.durian.j.dom.node.TextCloneApi;
+import se.ugli.java.util.Id;
 
 public class MutableText implements Text, MutableNode {
 
