@@ -50,10 +50,7 @@ public class Validator {
             if (!errorHandler.errors.isEmpty())
                 throw errorHandler.build();
         }
-        catch (final SAXException e) {
-            throw new ValidationException(e);
-        }
-        catch (final IOException e) {
+        catch (SAXException | IOException e) {
             throw new ValidationException(e);
         }
     }

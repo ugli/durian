@@ -16,8 +16,11 @@
   <xsd:complexType name="RootStruct">
     <xsd:complexContent>
       <xsd:extension base="Struct">
-        <xsd:attribute name="includeEmptyValues" type="xsd:boolean" use="required" />
+        <xsd:attribute name="includeEmptyValues" type="xsd:boolean" use="optional" />
         <xsd:attribute name="targetNamespace" type="xsd:string" use="optional" />
+        <xsd:attribute name="arrayStartIndex" type="xsd:integer" use="optional"/>
+        <xsd:attribute name="trimValues" type="xsd:boolean" use="optional"/>
+        <xsd:attribute name="validateDefinition" type="xsd:boolean" use="optional"/>
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>

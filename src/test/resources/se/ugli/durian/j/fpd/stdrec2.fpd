@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<def name="standardRecord" includeEmptyValues="false" xmlns="http://durian.io/fpd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<def name="standardRecord" arrayStartIndex="1" xmlns="http://durian.io/fpd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://durian.io/fpd https://raw.githubusercontent.com/ugli/durian-java-dom/java6/src/main/resources/durian/xsd/fpd.xsd">
   <def xsi:type="Struct" name="gemensamArea">
     <def xsi:type="Field" name="systmid" length="3" />

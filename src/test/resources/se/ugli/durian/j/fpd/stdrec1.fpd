@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <def name="standardRecord" includeEmptyValues="true" targetNamespace="http://ugli.se/stdRec" xmlns="http://durian.io/fpd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://durian.io/fpd https://raw.githubusercontent.com/ugli/durian-java-dom/java6/src/main/resources/durian/xsd/fpd.xsd">
+  xsi:schemaLocation="http://durian.io/fpd https://raw.githubusercontent.com/ugli/durian-java-dom/java6/src/main/resources/durian/xsd/fpd.xsd" arrayStartIndex="1">
   <def xsi:type="Struct" name="gemensamArea">
     <def xsi:type="Field" name="systmid" length="3" />
     <def xsi:type="Field" name="doktyp" length="5" />

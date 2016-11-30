@@ -42,8 +42,8 @@ public class Durian {
         return new DocumentReader(new MutableNodeFactory()).read(document);
     }
 
-    public static Element parseFtp(final Source ftpDef, final String ftpData) {
-        return new FpdParser(ftpDef, XmlParserBuilder.apply()).parse(ftpData);
+    public static Element parseFpd(final Source definition, final Source data) {
+        return new FpdParser(parseXml(definition)).parse(data);
     }
 
     public static Element parserHtml(final Source source) {
