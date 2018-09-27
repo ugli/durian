@@ -4,8 +4,8 @@ import se.ugli.durian.j.dom.node.QueryApi;
 
 public interface MutableQueryApi extends QueryApi {
 
-    int remove(final String query);
+	int remove(final String query);
 
-    int setAttributeValues(final String query, final String value);
+	int setAttributeValues(final String query, final String value);
 
 }

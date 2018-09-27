@@ -19,51 +19,51 @@ import se.ugli.durian.w3c.soap.SoapParserBuilder;
 
 public class Durian {
 
-    private Durian() {
-    }
+	private Durian() {
+	}
 
-    public static Element createElement(final String name, final PrefixMapping... prefixMappings) {
-        return new MutableNodeFactory().createElement(name, null, null, asList(prefixMappings));
-    }
+	public static Element createElement(final String name, final PrefixMapping... prefixMappings) {
+		return new MutableNodeFactory().createElement(name, null, null, asList(prefixMappings));
+	}
 
-    public static Element createElement(final String name, final String uri, final PrefixMapping... prefixMappings) {
-        return new MutableNodeFactory().createElement(name, uri, null, asList(prefixMappings));
-    }
+	public static Element createElement(final String name, final String uri, final PrefixMapping... prefixMappings) {
+		return new MutableNodeFactory().createElement(name, uri, null, asList(prefixMappings));
+	}
 
-    public static Envelope createSoapEnvelopeWithBody(final Node bodyNode) {
-        return Body.createEnvelopeWithNode(bodyNode);
-    }
+	public static Envelope createSoapEnvelopeWithBody(final Node bodyNode) {
+		return Body.createEnvelopeWithNode(bodyNode);
+	}
 
-    public static Envelope createSoapEnvelopeWithFault(final String faultstring) {
-        return Fault.createEnvelopeWithFault(faultstring);
-    }
+	public static Envelope createSoapEnvelopeWithFault(final String faultstring) {
+		return Fault.createEnvelopeWithFault(faultstring);
+	}
 
-    public static Element fromW3CDocument(final Document document) {
-        return new DocumentReader(new MutableNodeFactory()).read(document);
-    }
+	public static Element fromW3CDocument(final Document document) {
+		return new DocumentReader(new MutableNodeFactory()).read(document);
+	}
 
-    public static Element parseFpd(final Source definition, final Source data) {
-        return new FpdParser(parseXml(definition)).parse(data);
-    }
+	public static Element parseFpd(final Source definition, final Source data) {
+		return new FpdParser(parseXml(definition)).parse(data);
+	}
 
-    public static Element parserHtml(final Source source) {
-        return HtmlParser.parse(source);
-    }
+	public static Element parserHtml(final Source source) {
+		return HtmlParser.parse(source);
+	}
 
-    public static Envelope parseSoap(final Source source) {
-        return parseSoap(source, SoapParserBuilder.apply());
-    }
+	public static Envelope parseSoap(final Source source) {
+		return parseSoap(source, SoapParserBuilder.apply());
+	}
 
-    public static Envelope parseSoap(final Source source, final SoapParserBuilder builder) {
-        return parseXml(source, builder).as(Envelope.class);
-    }
+	public static Envelope parseSoap(final Source source, final SoapParserBuilder builder) {
+		return parseXml(source, builder).as(Envelope.class);
+	}
 
-    public static Element parseXml(final Source source) {
-        return parseXml(source, XmlParserBuilder.apply());
-    }
+	public static Element parseXml(final Source source) {
+		return parseXml(source, XmlParserBuilder.apply());
+	}
 
-    public static Element parseXml(final Source source, final XmlParserBuilder builder) {
-        return builder.build().parse(source);
-    }
+	public static Element parseXml(final Source source, final XmlParserBuilder builder) {
+		return builder.build().parse(source);
+	}
 
 }

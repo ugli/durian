@@ -6,8 +6,8 @@ import se.ugli.durian.j.dom.node.Node;
 
 interface Definition {
 
-    Optional<Node> createNode(String data);
+	Optional<Node> createNode(String data);
 
-    int numOfChars();
+	int numOfChars();
 
 }

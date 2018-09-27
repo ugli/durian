@@ -2,7 +2,7 @@ package se.ugli.durian.j.dom.node;
 
 public interface Text extends Content {
 
-    TextCloneApi clone();
+	TextCloneApi clone();
 
-    String value();
+	String value();
 }

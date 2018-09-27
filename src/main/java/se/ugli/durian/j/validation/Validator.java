@@ -23,61 +23,60 @@ import se.ugli.durian.j.schema.SchemaType;
 
 public class Validator {
 
-    private final Schema schema;
+	private final Schema schema;
 
-    private Validator(final Schema schema) {
-        this.schema = schema;
-    }
+	private Validator(final Schema schema) {
+		this.schema = schema;
+	}
 
-    public static Validator validator(final SchemaType type, final byte[] schema) {
-        return new Validator(schema(type, schema));
-    }
+	public static Validator validator(final SchemaType type, final byte[] schema) {
+		return new Validator(schema(type, schema));
+	}
 
-    public static Validator validator(final SchemaType type, final URL schema) {
-        return new Validator(schema(type, schema));
-    }
+	public static Validator validator(final SchemaType type, final URL schema) {
+		return new Validator(schema(type, schema));
+	}
 
-    public static Validator validator(final SchemaType type, final InputStream schema) {
-        return new Validator(schema(type, schema));
-    }
+	public static Validator validator(final SchemaType type, final InputStream schema) {
+		return new Validator(schema(type, schema));
+	}
 
-    public void validate(final byte[] xmlBytes) {
-        final javax.xml.validation.Validator validator = schema.newValidator();
-        final ValidationExceptionBuilder errorHandler = new ValidationExceptionBuilder();
-        validator.setErrorHandler(errorHandler);
-        try {
-            validator.validate(new StreamSource(new ByteArrayInputStream(xmlBytes)));
-            if (!errorHandler.errors.isEmpty())
-                throw errorHandler.build();
-        }
-        catch (SAXException | IOException e) {
-            throw new ValidationException(e);
-        }
-    }
+	public void validate(final byte[] xmlBytes) {
+		final javax.xml.validation.Validator validator = schema.newValidator();
+		final ValidationExceptionBuilder errorHandler = new ValidationExceptionBuilder();
+		validator.setErrorHandler(errorHandler);
+		try {
+			validator.validate(new StreamSource(new ByteArrayInputStream(xmlBytes)));
+			if (!errorHandler.errors.isEmpty())
+				throw errorHandler.build();
+		} catch (SAXException | IOException e) {
+			throw new ValidationException(e);
+		}
+	}
 
-    private static class ValidationExceptionBuilder implements ErrorHandler {
+	private static class ValidationExceptionBuilder implements ErrorHandler {
 
-        List<ValidationError> errors = new ArrayList<>();
+		List<ValidationError> errors = new ArrayList<>();
 
-        @Override
-        public void warning(final SAXParseException exception) throws SAXException {
-            errors.add(new ValidationError(WARNING, exception.getMessage()));
-        }
+		@Override
+		public void warning(final SAXParseException exception) throws SAXException {
+			errors.add(new ValidationError(WARNING, exception.getMessage()));
+		}
 
-        @Override
-        public void error(final SAXParseException exception) throws SAXException {
-            errors.add(new ValidationError(ERROR, exception.getMessage()));
-        }
+		@Override
+		public void error(final SAXParseException exception) throws SAXException {
+			errors.add(new ValidationError(ERROR, exception.getMessage()));
+		}
 
-        @Override
-        public void fatalError(final SAXParseException exception) throws SAXException {
-            errors.add(new ValidationError(FATAL_ERROR, exception.getMessage()));
-        }
+		@Override
+		public void fatalError(final SAXParseException exception) throws SAXException {
+			errors.add(new ValidationError(FATAL_ERROR, exception.getMessage()));
+		}
 
-        ValidationException build() {
-            return new ValidationException(errors);
-        }
+		ValidationException build() {
+			return new ValidationException(errors);
+		}
 
-    }
+	}
 
 }

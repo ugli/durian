@@ -9,22 +9,22 @@ import se.ugli.durian.j.dom.node.PrefixMapping;
 
 public class Body extends MutableElement {
 
-    public Body(final String name, final String uri, final NodeFactory nodeFactory,
-            final Iterable<PrefixMapping> prefixMappings) {
-        super(name, uri, nodeFactory, prefixMappings);
-    }
+	public Body(final String name, final String uri, final NodeFactory nodeFactory,
+			final Iterable<PrefixMapping> prefixMappings) {
+		super(name, uri, nodeFactory, prefixMappings);
+	}
 
-    public Optional<Fault> fault() {
-        return element("Fault").map(e -> e.as(Fault.class));
-    }
+	public Optional<Fault> fault() {
+		return element("Fault").map(e -> e.as(Fault.class));
+	}
 
-    public static Envelope createEnvelopeWithNode(final Node node) {
-        final Envelope envelope = new Envelope();
-        if (envelope.body().isPresent())
-            envelope.body().get().add(node);
-        else
-            envelope.addElement("Body");
-        return envelope;
-    }
+	public static Envelope createEnvelopeWithNode(final Node node) {
+		final Envelope envelope = new Envelope();
+		if (envelope.body().isPresent())
+			envelope.body().get().add(node);
+		else
+			envelope.addElement("Body");
+		return envelope;
+	}
 
 }

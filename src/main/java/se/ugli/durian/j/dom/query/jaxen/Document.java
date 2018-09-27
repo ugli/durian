@@ -4,10 +4,10 @@ import se.ugli.durian.j.dom.node.Element;
 
 class Document {
 
-    final Element root;
+	final Element root;
 
-    Document(final Element root) {
-        this.root = root;
-    }
+	Document(final Element root) {
+		this.root = root;
+	}
 
 }

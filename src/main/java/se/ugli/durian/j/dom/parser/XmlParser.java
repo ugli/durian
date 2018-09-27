@@ -14,25 +14,23 @@ import se.ugli.durian.j.dom.node.NodeFactory;
 
 public class XmlParser {
 
-    private final SAXParser saxParser;
-    private final SaxHandler saxHandler;
+	private final SAXParser saxParser;
+	private final SaxHandler saxHandler;
 
-    public XmlParser(final NodeFactory nodeFactory, final ErrorHandler errorHandler, final SAXParser saxParser) {
-        this.saxParser = saxParser;
-        saxHandler = new SaxHandler(nodeFactory, errorHandler);
-    }
+	public XmlParser(final NodeFactory nodeFactory, final ErrorHandler errorHandler, final SAXParser saxParser) {
+		this.saxParser = saxParser;
+		saxHandler = new SaxHandler(nodeFactory, errorHandler);
+	}
 
-    public Element parse(final Source source) {
-        try {
-            saxParser.parse(new ByteArrayInputStream(source.data()), saxHandler);
-            return saxHandler.root;
-        }
-        catch (final IOException e) {
-            throw new XmlParserException(e);
-        }
-        catch (final SAXException e) {
-            throw new XmlParserException(e);
-        }
-    }
+	public Element parse(final Source source) {
+		try {
+			saxParser.parse(new ByteArrayInputStream(source.data()), saxHandler);
+			return saxHandler.root;
+		} catch (final IOException e) {
+			throw new XmlParserException(e);
+		} catch (final SAXException e) {
+			throw new XmlParserException(e);
+		}
+	}
 
 }

@@ -6,9 +6,9 @@ import se.ugli.durian.j.dom.node.PrefixMapping;
 
 public class Header extends MutableElement {
 
-    public Header(final String name, final String uri, final NodeFactory nodeFactory,
-            final Iterable<PrefixMapping> prefixMappings) {
-        super(name, uri, nodeFactory, prefixMappings);
-    }
+	public Header(final String name, final String uri, final NodeFactory nodeFactory,
+			final Iterable<PrefixMapping> prefixMappings) {
+		super(name, uri, nodeFactory, prefixMappings);
+	}
 
 }

@@ -9,41 +9,41 @@ import se.ugli.durian.j.dom.node.PrefixMapping;
 
 public class Fault extends MutableElement {
 
-    public Fault(final String name, final String uri, final NodeFactory nodeFactory,
-            final Iterable<PrefixMapping> prefixMappings) {
-        super(name, uri, nodeFactory, prefixMappings);
-    }
+	public Fault(final String name, final String uri, final NodeFactory nodeFactory,
+			final Iterable<PrefixMapping> prefixMappings) {
+		super(name, uri, nodeFactory, prefixMappings);
+	}
 
-    public Optional<String> faultcode() {
-        return elementText("faultcode");
-    }
+	public Optional<String> faultcode() {
+		return elementText("faultcode");
+	}
 
-    public Optional<String> faultstring() {
-        return elementText("faultstring");
-    }
+	public Optional<String> faultstring() {
+		return elementText("faultstring");
+	}
 
-    public void faultstring(final String faultstring) {
-        if (!element("faultstring").isPresent())
-            addElement("faultstring");
-        element("faultstring").get().as(MutableElement.class).setText(faultstring);
-    }
+	public void faultstring(final String faultstring) {
+		if (!element("faultstring").isPresent())
+			addElement("faultstring");
+		element("faultstring").get().as(MutableElement.class).setText(faultstring);
+	}
 
-    public Optional<String> faultactor() {
-        return elementText("faultactor");
-    }
+	public Optional<String> faultactor() {
+		return elementText("faultactor");
+	}
 
-    public Optional<Element> detail() {
-        return element("detail");
-    }
+	public Optional<Element> detail() {
+		return element("detail");
+	}
 
-    public Optional<Element> reason() {
-        return element("Reason");
-    }
+	public Optional<Element> reason() {
+		return element("Reason");
+	}
 
-    public static Envelope createEnvelopeWithFault(final String faultstring) {
-        final Envelope envelope = new Envelope();
-        envelope.body().get().addElement("Fault");
-        envelope.body().get().fault().get().faultstring(faultstring);
-        return envelope;
-    }
+	public static Envelope createEnvelopeWithFault(final String faultstring) {
+		final Envelope envelope = new Envelope();
+		envelope.body().get().addElement("Fault");
+		envelope.body().get().fault().get().faultstring(faultstring);
+		return envelope;
+	}
 }

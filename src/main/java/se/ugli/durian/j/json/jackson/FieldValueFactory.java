@@ -5,7 +5,7 @@ import se.ugli.durian.j.dom.node.Text;
 
 public interface FieldValueFactory {
 
-    Object create(Attribute attribute);
+	Object create(Attribute attribute);
 
-    Object create(Text text);
+	Object create(Text text);
 }

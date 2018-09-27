@@ -5,6 +5,6 @@ import se.ugli.durian.j.dom.node.Node;
 
 public interface MutableNode extends Node {
 
-    void setParent(Element parent);
+	void setParent(Element parent);
 
 }

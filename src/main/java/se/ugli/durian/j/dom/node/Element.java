@@ -5,48 +5,48 @@ import java.util.stream.Stream;
 
 public interface Element extends Content {
 
-    Optional<Attribute> attribute(String attributeName);
+	Optional<Attribute> attribute(String attributeName);
 
-    Stream<Attribute> attributes();
+	Stream<Attribute> attributes();
 
-    Optional<String> attributeValue(String attributeName);
+	Optional<String> attributeValue(String attributeName);
 
-    ElementCloneApi clone();
+	ElementCloneApi clone();
 
-    Stream<Content> content();
+	Stream<Content> content();
 
-    Optional<Element> element(String elementName);
+	Optional<Element> element(String elementName);
 
-    Stream<Element> elements();
+	Stream<Element> elements();
 
-    Stream<Element> elements(String elementName);
+	Stream<Element> elements(String elementName);
 
-    Optional<String> elementText(final String elementName);
+	Optional<String> elementText(final String elementName);
 
-    boolean hasAttributes();
+	boolean hasAttributes();
 
-    boolean hasElements();
+	boolean hasElements();
 
-    boolean hasNodes();
+	boolean hasNodes();
 
-    boolean hasTexts();
+	boolean hasTexts();
 
-    String name();
+	String name();
 
-    String path(String childPath);
+	String path(String childPath);
 
-    Stream<PrefixMapping> prefixMappings();
+	Stream<PrefixMapping> prefixMappings();
 
-    String qName();
+	String qName();
 
-    String relativePath(String childPath);
+	String relativePath(String childPath);
 
-    QueryApi select();
+	QueryApi select();
 
-    Stream<Text> texts();
+	Stream<Text> texts();
 
-    String toXml();
+	String toXml();
 
-    Optional<String> uri();
+	Optional<String> uri();
 
 }

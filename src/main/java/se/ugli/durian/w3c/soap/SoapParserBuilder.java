@@ -7,19 +7,19 @@ import se.ugli.durian.j.dom.parser.XmlParserBuilder;
 
 public class SoapParserBuilder extends XmlParserBuilder {
 
-    public static SoapParserBuilder apply() {
-        return new SoapParserBuilder();
-    }
+	public static SoapParserBuilder apply() {
+		return new SoapParserBuilder();
+	}
 
-    @Override
-    public XmlParser build() {
-        if (nodeFactory == null)
-            nodeFactory = new MutableNodeFactory();
-        if (errorHandler == null)
-            errorHandler = new DefaultErrorHandler();
-        if (saxParser == null)
-            saxParser = getDefaultSaxParser();
-        return new XmlParser(new SoapNodeFactory(nodeFactory), errorHandler, saxParser);
-    }
+	@Override
+	public XmlParser build() {
+		if (nodeFactory == null)
+			nodeFactory = new MutableNodeFactory();
+		if (errorHandler == null)
+			errorHandler = new DefaultErrorHandler();
+		if (saxParser == null)
+			saxParser = getDefaultSaxParser();
+		return new XmlParser(new SoapNodeFactory(nodeFactory), errorHandler, saxParser);
+	}
 
 }

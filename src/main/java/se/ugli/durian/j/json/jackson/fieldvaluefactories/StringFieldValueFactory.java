@@ -6,14 +6,14 @@ import se.ugli.durian.j.json.jackson.FieldValueFactory;
 
 public class StringFieldValueFactory implements FieldValueFactory {
 
-    @Override
-    public Object create(final Attribute attribute) {
-        return attribute.value();
-    }
+	@Override
+	public Object create(final Attribute attribute) {
+		return attribute.value();
+	}
 
-    @Override
-    public Object create(final Text text) {
-        return text.value();
-    }
+	@Override
+	public Object create(final Text text) {
+		return text.value();
+	}
 
 }

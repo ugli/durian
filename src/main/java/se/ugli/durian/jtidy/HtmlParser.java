@@ -12,14 +12,14 @@ import se.ugli.durian.w3c.dom.DocumentReader;
 
 public class HtmlParser {
 
-    private HtmlParser() {
-    }
+	private HtmlParser() {
+	}
 
-    public static Element parse(final Source source) {
-        final Tidy tidy = TidyFactory.create();
-        final Document document = tidy.parseDOM(new ByteArrayInputStream(source.data()), null);
-        final DocumentReader documentReader = new DocumentReader(new MutableNodeFactory());
-        return documentReader.read(document);
-    }
+	public static Element parse(final Source source) {
+		final Tidy tidy = TidyFactory.create();
+		final Document document = tidy.parseDOM(new ByteArrayInputStream(source.data()), null);
+		final DocumentReader documentReader = new DocumentReader(new MutableNodeFactory());
+		return documentReader.read(document);
+	}
 
 }

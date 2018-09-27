@@ -12,51 +12,50 @@ import se.ugli.durian.j.dom.node.NodeFactory;
 
 public class XmlParserBuilder {
 
-    protected ErrorHandler errorHandler;
-    protected NodeFactory nodeFactory;
-    protected SAXParser saxParser;
+	protected ErrorHandler errorHandler;
+	protected NodeFactory nodeFactory;
+	protected SAXParser saxParser;
 
-    protected XmlParserBuilder() {
-    }
+	protected XmlParserBuilder() {
+	}
 
-    public static XmlParserBuilder apply() {
-        return new XmlParserBuilder();
-    }
+	public static XmlParserBuilder apply() {
+		return new XmlParserBuilder();
+	}
 
-    public XmlParser build() {
-        if (nodeFactory == null)
-            nodeFactory = new MutableNodeFactory();
-        if (errorHandler == null)
-            errorHandler = new DefaultErrorHandler();
-        if (saxParser == null)
-            saxParser = getDefaultSaxParser();
-        return new XmlParser(nodeFactory, errorHandler, saxParser);
-    }
+	public XmlParser build() {
+		if (nodeFactory == null)
+			nodeFactory = new MutableNodeFactory();
+		if (errorHandler == null)
+			errorHandler = new DefaultErrorHandler();
+		if (saxParser == null)
+			saxParser = getDefaultSaxParser();
+		return new XmlParser(nodeFactory, errorHandler, saxParser);
+	}
 
-    public XmlParserBuilder errorHandler(final ErrorHandler errorHandler) {
-        this.errorHandler = errorHandler;
-        return this;
-    }
+	public XmlParserBuilder errorHandler(final ErrorHandler errorHandler) {
+		this.errorHandler = errorHandler;
+		return this;
+	}
 
-    public XmlParserBuilder nodeFactory(final NodeFactory nodeFactory) {
-        this.nodeFactory = nodeFactory;
-        return this;
-    }
+	public XmlParserBuilder nodeFactory(final NodeFactory nodeFactory) {
+		this.nodeFactory = nodeFactory;
+		return this;
+	}
 
-    public XmlParserBuilder saxParser(final SAXParser saxParser) {
-        this.saxParser = saxParser;
-        return this;
-    }
+	public XmlParserBuilder saxParser(final SAXParser saxParser) {
+		this.saxParser = saxParser;
+		return this;
+	}
 
-    protected static SAXParser getDefaultSaxParser() {
-        try {
-            final SAXParserFactory factory = SAXParserFactory.newInstance();
-            factory.setNamespaceAware(true);
-            return factory.newSAXParser();
-        }
-        catch (final ParserConfigurationException | SAXException e) {
-            throw new XmlParserException(e);
-        }
-    }
+	protected static SAXParser getDefaultSaxParser() {
+		try {
+			final SAXParserFactory factory = SAXParserFactory.newInstance();
+			factory.setNamespaceAware(true);
+			return factory.newSAXParser();
+		} catch (final ParserConfigurationException | SAXException e) {
+			throw new XmlParserException(e);
+		}
+	}
 
 }
