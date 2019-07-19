@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toList;
 import java.util.Collections;
 import java.util.List;
 
+import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
@@ -13,7 +14,7 @@ import se.ugli.durian.Source;
 import se.ugli.durian.j.dom.mutable.MutableElement;
 import se.ugli.durian.j.dom.node.Attribute;
 
-public class XmlStringMatcher implements Matcher<String> {
+public class XmlStringMatcher extends BaseMatcher<String> {
 
     private final String expectedValue;
 
@@ -51,10 +52,6 @@ public class XmlStringMatcher implements Matcher<String> {
     @Override
     public void describeMismatch(final Object item, final Description mismatchDescription) {
         mismatchDescription.appendText("was ").appendValue(item);
-    }
-
-    @Override
-    public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {
     }
 
 }

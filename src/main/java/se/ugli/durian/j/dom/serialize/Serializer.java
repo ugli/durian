@@ -1,7 +1,7 @@
 package se.ugli.durian.j.dom.serialize;
 
 import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.StringEscapeUtils.escapeXml11;
+import static org.apache.commons.text.StringEscapeUtils.escapeXml11;
 import static se.ugli.durian.j.dom.serialize.SerializerBuilder.serializerBuilder;
 
 import java.util.Collection;
