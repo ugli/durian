@@ -1,16 +1,15 @@
 package se.ugli.durian.j.dom.mutable;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
-import java.util.Optional;
-
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import se.ugli.durian.Durian;
 import se.ugli.durian.Source;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.java.io.Resource;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class ElementImplTest {
 

@@ -1,20 +1,20 @@
 package se.ugli.durian.w3c.dom;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import se.ugli.durian.Durian;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.java.io.Resource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DocumentReaderTest {
 

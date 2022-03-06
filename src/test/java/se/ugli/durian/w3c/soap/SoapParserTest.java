@@ -1,10 +1,9 @@
 package se.ugli.durian.w3c.soap;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import se.ugli.durian.Durian;
 import se.ugli.durian.Source;
 import se.ugli.java.io.Resource;

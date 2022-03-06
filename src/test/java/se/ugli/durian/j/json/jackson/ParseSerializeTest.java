@@ -1,21 +1,18 @@
 package se.ugli.durian.j.json.jackson;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-
 import java.io.IOException;
-
-import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.junit.jupiter.api.Test;
 import se.ugli.durian.Durian;
 import se.ugli.durian.Source;
 import se.ugli.durian.j.dom.mutable.MutableElement;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.java.io.Resource;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ParseSerializeTest {
 

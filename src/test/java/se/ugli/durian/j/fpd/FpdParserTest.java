@@ -1,13 +1,12 @@
 package se.ugli.durian.j.fpd;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import se.ugli.durian.Durian;
 import se.ugli.durian.Source;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.java.io.Resource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FpdParserTest {
 
