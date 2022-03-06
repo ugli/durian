@@ -23,7 +23,8 @@ public record Element(String id,
             Element parent,
             Namespace namespace) {
         this(randomUUID().toString(),
-                name, contentSupplier,
+                name,
+                contentSupplier,
                 attributesSupplier,
                 ofNullable(parent),
                 ofNullable(namespace));
