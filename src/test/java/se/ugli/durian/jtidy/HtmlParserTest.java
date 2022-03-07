@@ -1,13 +1,13 @@
 package se.ugli.durian.jtidy;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.junit.jupiter.api.Test;
 import se.ugli.durian.Durian;
 import se.ugli.durian.Source;
 import se.ugli.durian.j.dom.node.Element;
 import se.ugli.java.io.Resource;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class HtmlParserTest {
 
