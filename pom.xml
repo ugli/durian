@@ -79,7 +79,6 @@
 					<target>17</target>
 					<showWarnings>true</showWarnings>
 					<showDeprecation>true</showDeprecation>
-					<compilerArgs>--enable-preview</compilerArgs>
 				</configuration>
 			</plugin>
 			<plugin>

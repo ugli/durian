@@ -12,6 +12,11 @@ public interface Element extends Content, NamedNode {
 
     List<? extends Attribute> attributes();
 
+    default String path() {
+        return parent().map(Element::path).map(p -> p + "/").orElse("") + name();
+    }
+
+    @SuppressWarnings("unchecked")
     default <T extends Node> List<T> select(String xpathExpr) {
 		try {
             Navigator navigator = new DurianNavigator(this);
