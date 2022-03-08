@@ -10,7 +10,6 @@ import se.ugli.durian.j.dom.node.Node;
 import se.ugli.durian.j.dom.node.PrefixMapping;
 import se.ugli.durian.j.dom.parser.XmlParserBuilder;
 import se.ugli.durian.j.fpd.FpdParser;
-import se.ugli.durian.jtidy.HtmlParser;
 import se.ugli.durian.w3c.dom.DocumentReader;
 import se.ugli.durian.w3c.soap.Body;
 import se.ugli.durian.w3c.soap.Envelope;
@@ -44,10 +43,6 @@ public class Durian {
 
 	public static Element parseFpd(final Source definition, final Source data) {
 		return new FpdParser(parseXml(definition)).parse(data);
-	}
-
-	public static Element parserHtml(final Source source) {
-		return HtmlParser.parse(source);
 	}
 
 	public static Envelope parseSoap(final Source source) {
