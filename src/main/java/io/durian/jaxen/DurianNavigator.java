@@ -1,9 +1,9 @@
 package io.durian.jaxen;
 
-import io.durian.model.*;
-import io.durian.model.Content;
-import io.durian.model.Node;
-import io.durian.model.Text;
+import io.durian.dom.*;
+import io.durian.dom.Content;
+import io.durian.dom.Node;
+import io.durian.dom.Text;
 import org.jaxen.FunctionCallException;
 import org.jaxen.Navigator;
 import org.jaxen.UnsupportedAxisException;

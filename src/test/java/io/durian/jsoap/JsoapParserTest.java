@@ -1,6 +1,6 @@
 package io.durian.jsoap;
 
-import io.durian.model.Element;
+import io.durian.dom.Element;
 import org.junit.jupiter.api.Test;
 
 import java.net.URL;

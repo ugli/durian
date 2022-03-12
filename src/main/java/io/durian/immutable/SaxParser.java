@@ -1,7 +1,7 @@
 package io.durian.immutable;
 
-import io.durian.model.Content;
-import io.durian.model.DurianException;
+import io.durian.dom.Content;
+import io.durian.dom.DurianException;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
