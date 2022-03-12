@@ -1,4 +1,4 @@
-package se.ugli.durian.j.dom.serialize;
+package io.durian.util;
 
 public final class SerializerBuilder {
 

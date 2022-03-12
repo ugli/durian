@@ -1,7 +1,5 @@
-package io.durian.dom;
+package io.durian.w3c;
 
-import io.durian.immutable.Attribute;
-import io.durian.immutable.SaxParser;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -11,7 +9,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 

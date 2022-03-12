@@ -2,10 +2,10 @@ package io.durian.jsoap;
 
 import io.durian.immutable.Attribute;
 import io.durian.immutable.Text;
-import io.durian.model.Content;
-import io.durian.model.DurianException;
-import io.durian.model.Element;
-import io.durian.model.Namespace;
+import io.durian.dom.Content;
+import io.durian.dom.DurianException;
+import io.durian.dom.Element;
+import io.durian.dom.Namespace;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
 
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static io.durian.serialize.Serializer.serialize;
+import static io.durian.util.Serializer.serialize;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;

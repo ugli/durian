@@ -1,7 +1,7 @@
 package io.durian.immutable;
 
-import io.durian.model.Content;
-import io.durian.serialize.Serializer;
+import io.durian.dom.Content;
+import io.durian.util.Serializer;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +15,7 @@ public record Element(String id,
                       Supplier<List<Content>> contentSupplier,
                       Supplier<List<Attribute>> attributesSupplier,
                       Optional<Element> parent,
-                      Optional<Namespace> namespace) implements io.durian.model.Element {
+                      Optional<Namespace> namespace) implements io.durian.dom.Element {
 
     Element(String name,
             Supplier<List<Content>> contentSupplier,

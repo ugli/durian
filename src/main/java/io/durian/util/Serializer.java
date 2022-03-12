@@ -1,16 +1,15 @@
-package io.durian.serialize;
+package io.durian.util;
 
-
-import io.durian.model.*;
-import io.durian.model.Content;
-import io.durian.model.Text;
+import io.durian.dom.*;
+import io.durian.dom.Content;
+import io.durian.dom.Text;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.durian.serialize.SerializerBuilder.serializerBuilder;
+import static io.durian.util.SerializerBuilder.serializerBuilder;
 import static java.lang.Math.max;
 import static java.lang.String.valueOf;
 import static org.apache.commons.text.StringEscapeUtils.escapeXml11;
@@ -134,9 +133,9 @@ public class Serializer {
 	private void appendContent(final Collection<Content> contentList, final int indentDepth) {
 		for (final Content content : contentList)
 			if (content instanceof Element)
-				appendElement(content.as(Element.class), indentDepth + 1);
+				appendElement(content.asElement(), indentDepth + 1);
 			else if (content instanceof Text) {
-				final String textValue = content.as(Text.class).value();
+				final String textValue = content.asText().value();
 				if (contentList.size() > 1) {
 					xml.append(lineSeparator);
 					appendStringWithTab(indentDepth + 1, escapeXml11(textValue));
