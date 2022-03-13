@@ -1,6 +1,7 @@
 package io.durian.dom;
 
 import io.durian.jaxen.DurianNavigator;
+import io.durian.util.Serializer;
 import org.jaxen.BaseXPath;
 import org.jaxen.JaxenException;
 import org.jaxen.Navigator;
@@ -37,6 +38,10 @@ public interface Element extends Content, NamedNode {
             else
                 visitor.accept(c);
         });
+    }
+
+    default String toXml() {
+        return Serializer.serialize(this);
     }
 
 }

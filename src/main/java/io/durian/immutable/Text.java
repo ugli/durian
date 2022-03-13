@@ -12,8 +12,4 @@ public record Text(String id, String value, Optional<Element> parent) implements
         this(randomUUID().toString(), value, of(parent));
     }
 
-    @Override
-    public String toString() {
-        return value;
-    }
 }

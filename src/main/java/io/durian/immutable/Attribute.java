@@ -18,8 +18,4 @@ public record Attribute(String id,
         this(randomUUID().toString(), name, value, of(parent), ofNullable(namespace));
     }
 
-    @Override
-    public String toString() {
-        return value;
-    }
 }

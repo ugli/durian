@@ -1,9 +1,9 @@
 package io.durian.w3c;
 
-import io.durian.immutable.Attribute;
-import io.durian.immutable.Text;
 import io.durian.dom.Content;
 import io.durian.dom.Namespace;
+import io.durian.immutable.Attribute;
+import io.durian.immutable.Text;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static io.durian.util.Serializer.serialize;
 import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
 import static java.util.UUID.randomUUID;
@@ -96,8 +95,4 @@ public class Element implements io.durian.dom.Element {
         return ofNullable(parent);
     }
 
-    @Override
-    public String toString() {
-        return serialize(this);
-    }
 }

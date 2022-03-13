@@ -28,7 +28,7 @@ class ElementTest {
                 """;
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(xml)));
         Element element = new Element(document);
-        assertEquals(xml.trim(), element.toString());
+        assertEquals(xml.trim(), element.toXml());
     }
 
 }

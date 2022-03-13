@@ -21,7 +21,7 @@ class SaxParserTest {
                 </rot>
                 """;
         Element element = SaxParser.parse(new StringReader(xml));
-        assertEquals(xml.trim(), element.toString());
+        assertEquals(xml.trim(), element.toXml());
     }
 
 }

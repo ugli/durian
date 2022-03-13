@@ -1,7 +1,6 @@
 package io.durian.immutable;
 
 import io.durian.dom.Content;
-import io.durian.util.Serializer;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,8 +39,4 @@ public record Element(String id,
         return attributesSupplier.get().stream().toList();
     }
 
-    @Override
-    public String toString() {
-        return Serializer.serialize(this);
-    }
 }
