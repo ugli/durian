@@ -35,15 +35,15 @@ public record SaxonElement(SaxonDocument document, XdmNode xdmNode) implements E
     @Override
     public List<? extends Attribute> attributes() {
         return xdmNode.axisIterator(ATTRIBUTE).stream()
-                .map(n -> new SaxonAttribute(of(this), n))
+                .map(n -> document.attribute(this, n))
                 .toList();
     }
 
     Optional<Content> createElementContent(XdmNode xdmNode) {
         if (xdmNode.getNodeKind() == ELEMENT)
-            return of(document.createElement(xdmNode));
+            return of(document.element(xdmNode));
         if (xdmNode.getNodeKind() == TEXT && !xdmNode.getStringValue().isBlank())
-            return of(new SaxonText(of(this), xdmNode));
+            return of(document.text(this, xdmNode));
         return empty();
     }
 
@@ -73,9 +73,9 @@ public record SaxonElement(SaxonDocument document, XdmNode xdmNode) implements E
 
     Node createNode(XdmNode xdmNode) {
         return switch (xdmNode.getNodeKind()) {
-            case TEXT -> new SaxonText(of(this), xdmNode);
-            case ELEMENT -> document.createElement(xdmNode);
-            case ATTRIBUTE -> new SaxonAttribute(of(this), xdmNode);
+            case TEXT -> document.text(this, xdmNode);
+            case ELEMENT -> document.element(xdmNode);
+            case ATTRIBUTE -> document.attribute(this, xdmNode);
             default -> throw new IllegalStateException();
         };
     }
@@ -89,7 +89,7 @@ public record SaxonElement(SaxonDocument document, XdmNode xdmNode) implements E
     public Optional<Element> parent() {
         XdmNode parent = xdmNode.getParent();
         if (parent != null && parent.getNodeKind() != DOCUMENT)
-            return of(document.createElement(parent));
+            return of(document.element(parent));
         return empty();
     }
 }
