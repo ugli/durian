@@ -19,7 +19,7 @@ public interface Element extends Content, NamedNode {
     }
 
     @SuppressWarnings("unchecked")
-    default <T extends Node> List<T> select(String xpathExpr) {
+    default List<Node> select(String xpathExpr) {
         try {
             Navigator navigator = new DurianNavigator(this);
             BaseXPath xPath = new BaseXPath(xpathExpr, navigator);

@@ -1,8 +1,8 @@
-package io.durian.immutable;
+package io.durian.saxon;
 
-import io.durian.dom.Node;
-import io.durian.dom.Element;
 import io.durian.dom.Attribute;
+import io.durian.dom.Element;
+import io.durian.dom.Node;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringReader;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ElementTest {
 
     @Test
-    void jaxenSelectElements() {
+    void saxonSelectElements() {
         String xml = """
                 <rot>
                   <barn>
@@ -24,7 +24,7 @@ class ElementTest {
                   </barn>
                 </rot>
                 """;
-        Element element = SaxParser.parse(new StringReader(xml));
+        Element element = SaxonParser.parse(new StringReader(xml));
         List<Node> elements = element.select("//barn");
         assertEquals(2, elements.size());
 

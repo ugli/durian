@@ -1,6 +1,7 @@
 package io.durian.jsoap;
 
 import io.durian.dom.Element;
+import io.durian.dom.Node;
 import org.junit.jupiter.api.Test;
 
 import java.net.URL;
@@ -13,9 +14,9 @@ class JsoapParserTest {
     @Test
     void parse() throws Exception {
         Element element = JsoapParser.parse(new URL("https://www.saob.se/artikel/?unik=R_3543-0295.04DG"));
-        List<Element> select = element.select("//div[@class='rawcontent']/div[1]");
+        List<Node> select = element.select("//div[@class='rawcontent']/div[1]");
         assertEquals(1, select.size());
-        Element div = select.get(0);
+        Element div = select.get(0).asElement();
         String divHtml = """
                 <div class="jamn">
                   <span class="StorRubrik indent">RÄGN </span>
