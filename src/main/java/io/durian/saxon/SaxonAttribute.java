@@ -7,10 +7,9 @@ import net.sf.saxon.s9api.XdmNode;
 
 import java.util.Optional;
 
-import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
 
-public record SaxonAttribute(XdmNode xdmNode) implements Attribute {
+public record SaxonAttribute(Optional<Element> parent, XdmNode xdmNode) implements Attribute {
     @Override
     public String name() {
         return xdmNode.getNodeName().getLocalName();
@@ -31,8 +30,4 @@ public record SaxonAttribute(XdmNode xdmNode) implements Attribute {
         return randomUUID().toString();
     }
 
-    @Override
-    public Optional<? extends Element> parent() {
-        return of(new SaxonElement(xdmNode.getParent()));
-    }
 }

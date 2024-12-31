@@ -6,10 +6,9 @@ import net.sf.saxon.s9api.XdmNode;
 
 import java.util.Optional;
 
-import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
 
-public record SaxonText(XdmNode xdmNode) implements Text {
+public record SaxonText(Optional<Element> parent, XdmNode xdmNode) implements Text {
 
     @Override
     public String value() {
@@ -21,8 +20,4 @@ public record SaxonText(XdmNode xdmNode) implements Text {
         return randomUUID().toString();
     }
 
-    @Override
-    public Optional<? extends Element> parent() {
-        return of(new SaxonElement(xdmNode.getParent()));
-    }
 }

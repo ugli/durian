@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public interface Node {
     String id();
-    Optional<? extends Element> parent();
+    Optional<Element> parent();
     String path();
 
     default Element asElement() {

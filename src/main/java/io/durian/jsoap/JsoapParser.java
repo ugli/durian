@@ -140,7 +140,7 @@ public class JsoapParser {
         }
 
         @Override
-        public Optional<JsoapElement> parent() {
+        public Optional<Element> parent() {
             return ofNullable(parent);
         }
 

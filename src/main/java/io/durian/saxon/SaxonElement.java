@@ -21,7 +21,7 @@ import static net.sf.saxon.s9api.XdmNodeKind.DOCUMENT;
 import static net.sf.saxon.s9api.XdmNodeKind.ELEMENT;
 import static net.sf.saxon.s9api.XdmNodeKind.TEXT;
 
-public record SaxonElement(XdmNode xdmNode) implements Element {
+public record SaxonElement(SaxonDocument document, XdmNode xdmNode) implements Element {
 
     @Override
     public List<Content> content() {
@@ -35,15 +35,15 @@ public record SaxonElement(XdmNode xdmNode) implements Element {
     @Override
     public List<? extends Attribute> attributes() {
         return xdmNode.axisIterator(ATTRIBUTE).stream()
-                .map(SaxonAttribute::new)
+                .map(n -> new SaxonAttribute(of(this), n))
                 .toList();
     }
 
     Optional<Content> createElementContent(XdmNode xdmNode) {
         if (xdmNode.getNodeKind() == ELEMENT)
-            return of(new SaxonElement(xdmNode));
+            return of(document.createElement(xdmNode));
         if (xdmNode.getNodeKind() == TEXT && !xdmNode.getStringValue().isBlank())
-            return of(new SaxonText(xdmNode));
+            return of(new SaxonText(of(this), xdmNode));
         return empty();
     }
 
@@ -73,9 +73,9 @@ public record SaxonElement(XdmNode xdmNode) implements Element {
 
     Node createNode(XdmNode xdmNode) {
         return switch (xdmNode.getNodeKind()) {
-            case TEXT -> new SaxonText(xdmNode);
-            case ELEMENT -> new SaxonElement(xdmNode);
-            case ATTRIBUTE -> new SaxonAttribute(xdmNode);
+            case TEXT -> new SaxonText(of(this), xdmNode);
+            case ELEMENT -> document.createElement(xdmNode);
+            case ATTRIBUTE -> new SaxonAttribute(of(this), xdmNode);
             default -> throw new IllegalStateException();
         };
     }
@@ -86,10 +86,10 @@ public record SaxonElement(XdmNode xdmNode) implements Element {
     }
 
     @Override
-    public Optional<? extends Element> parent() {
+    public Optional<Element> parent() {
         XdmNode parent = xdmNode.getParent();
         if (parent != null && parent.getNodeKind() != DOCUMENT)
-            return of(new SaxonElement(parent));
+            return of(document.createElement(parent));
         return empty();
     }
 }

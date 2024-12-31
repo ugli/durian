@@ -13,7 +13,7 @@ public record Element(String id,
                       String name,
                       Supplier<List<Content>> contentSupplier,
                       Supplier<List<Attribute>> attributesSupplier,
-                      Optional<Element> parent,
+                      Optional<io.durian.dom.Element> parent,
                       Optional<Namespace> namespace) implements io.durian.dom.Element {
 
     Element(String name,

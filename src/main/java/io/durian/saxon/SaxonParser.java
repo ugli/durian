@@ -15,8 +15,8 @@ public class SaxonParser {
     static Element parse(Reader reader) {
         Processor processor = new Processor(false);
         DocumentBuilder builder = processor.newDocumentBuilder();
-        XdmNode xmlDocument = builder.build(new StreamSource(reader));
-        return new SaxonElement(xmlDocument.children().iterator().next());
+        XdmNode xdmDocument = builder.build(new StreamSource(reader));
+        return new SaxonDocument(xdmDocument).root();
     }
 
 }

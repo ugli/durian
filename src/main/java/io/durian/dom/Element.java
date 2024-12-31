@@ -15,7 +15,7 @@ public interface Element extends Content, NamedNode {
     List<? extends Attribute> attributes();
 
     default String path() {
-        return parent().map(Element::path).map(p -> p + "/").orElse("") + name();
+        return parent().map(Node::path).map(p -> p + "/").orElse("") + name();
     }
 
     @SuppressWarnings("unchecked")

@@ -9,6 +9,8 @@ import java.io.StringReader;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ElementTest {
 
@@ -24,18 +26,21 @@ class ElementTest {
                   </barn>
                 </rot>
                 """;
-        Element element = SaxonParser.parse(new StringReader(xml));
-        List<Node> elements = element.select("//barn");
+        Element rot = SaxonParser.parse(new StringReader(xml));
+        List<Node> elements = rot.select("//barn");
         assertEquals(2, elements.size());
 
-        Element element1 = elements.get(0).asElement();
-        assertEquals("barn", element1.name());
-        assertEquals(0, element1.attributes().size());
+        Element barn1 = elements.get(0).asElement();
+        assertEquals("barn", barn1.name());
+        assertEquals(0, barn1.attributes().size());
 
-        Element element2 = elements.get(1).asElement();
-        assertEquals("barn", element2.name());
-        assertEquals("1", element2.attributes().stream().filter(a -> a.name().equals("x")).map(Attribute::value).findFirst().orElse(null));
-        assertEquals("3", element2.attributes().stream().filter(a -> a.name().equals("y")).map(Attribute::value).findFirst().orElse(null));
+        Element barn2 = elements.get(1).asElement();
+        assertEquals("barn", barn2.name());
+        assertEquals("1", barn2.attributes().stream().filter(a -> a.name().equals("x")).map(Attribute::value).findFirst().orElse(null));
+        assertEquals("3", barn2.attributes().stream().filter(a -> a.name().equals("y")).map(Attribute::value).findFirst().orElse(null));
+
+        assertSame(rot.content().get(0), barn1);
+        assertSame(rot.content().get(1), barn2);
     }
 
 }

@@ -91,7 +91,7 @@ public class Element implements io.durian.dom.Element {
     }
 
     @Override
-    public Optional<Element> parent() {
+    public Optional<io.durian.dom.Element> parent() {
         return ofNullable(parent);
     }
 
