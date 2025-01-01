@@ -1,7 +1,7 @@
 package io.durian.jsoap;
 
-import io.durian.DurianException;
 import io.durian.Element;
+import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
 
@@ -52,13 +52,10 @@ public class JsoapParser {
         Document exec() throws IOException;
     }
 
+    @SneakyThrows
     static Element parse(ParseCmd parseCmd) {
-        try {
-            Document document = parseCmd.exec();
-            return new JsoapElement(document.child(0), null);
-        } catch (IOException e) {
-            throw new DurianException(e);
-        }
+        Document document = parseCmd.exec();
+        return new JsoapElement(document.child(0), null);
     }
 
 }

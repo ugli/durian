@@ -12,18 +12,18 @@ import static java.util.Collections.unmodifiableList;
 
 public record ImmutableElement(String id,
                                String name,
-                               List<Content> content,
-                               List<Attribute> attributes,
+                               List<Content> _content,
+                               List<Attribute> _attributes,
                                Optional<Element> parent,
                                Optional<Namespace> namespace) implements Element {
     @Override
     public List<Content> content() {
-        return unmodifiableList(content);
+        return unmodifiableList(_content);
     }
 
     @Override
     public List<Attribute> attributes() {
-        return unmodifiableList(attributes);
+        return unmodifiableList(_attributes);
     }
 
 }

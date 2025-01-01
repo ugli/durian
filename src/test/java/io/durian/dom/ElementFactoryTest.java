@@ -1,5 +1,6 @@
 package io.durian.dom;
 
+import io.durian.Element;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -12,7 +13,7 @@ import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DomElementTest {
+class ElementFactoryTest {
 
     @Test
     void parseTest() throws ParserConfigurationException, IOException, SAXException {
@@ -26,8 +27,11 @@ class DomElementTest {
                   </barn>
                 </rot>
                 """;
-        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(xml)));
-        DomElement element = new DomElement(document);
+        Document document = DocumentBuilderFactory
+                .newInstance()
+                .newDocumentBuilder()
+                .parse(new InputSource(new StringReader(xml)));
+        Element element = ElementFactory.create(document);
         assertEquals(xml.trim(), element.toXml());
     }
 

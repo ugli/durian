@@ -3,8 +3,8 @@ package io.durian.dom;
 import io.durian.Attribute;
 import io.durian.Content;
 import io.durian.Element;
-import io.durian.Namespace;
 import io.durian.immutable.ImmutableAttribute;
+import io.durian.immutable.ImmutableElement;
 import io.durian.immutable.ImmutableText;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -13,7 +13,6 @@ import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -22,32 +21,31 @@ import static java.util.UUID.randomUUID;
 import static org.w3c.dom.Node.ELEMENT_NODE;
 import static org.w3c.dom.Node.TEXT_NODE;
 
-public class DomElement implements Element {
-    private final String id = randomUUID().toString();
-    private final String name;
-    private final List<Content> content;
-    private final List<Attribute> attributes;
-    private final Element parent;
+public class ElementFactory {
 
-    public DomElement(Document document) {
-        this(document.getDocumentElement(), null);
+    public static Element create(Document document) {
+        return createElement(document.getDocumentElement(), null);
     }
 
-    DomElement(org.w3c.dom.Element element, DomElement parent) {
-        this.name = element.getNodeName();
-        this.parent = parent;
-        this.content = mapContent(element.getChildNodes());
-        this.attributes = mapAttributes(element.getAttributes());
+    static Element createElement(org.w3c.dom.Element domElement, Element parent) {
+        return new ImmutableElement(
+                randomUUID().toString(),
+                domElement.getNodeName(),
+                createContent(domElement.getChildNodes(), parent),
+                createAttributes(domElement.getAttributes(), parent),
+                ofNullable(parent),
+                empty()
+        );
     }
 
-    List<Content> mapContent(NodeList childNodes) {
+    static List<Content> createContent(NodeList childNodes, Element parent) {
         List<Content> result = new ArrayList<>();
         for (int index = 0; index < childNodes.getLength(); index++) {
             Node node = childNodes.item(index);
             switch (node.getNodeType()) {
-                case ELEMENT_NODE -> result.add(new DomElement(
+                case ELEMENT_NODE -> result.add(createElement(
                                 (org.w3c.dom.Element) node,
-                                this
+                                parent
                         )
                 );
                 case TEXT_NODE -> {
@@ -56,16 +54,16 @@ public class DomElement implements Element {
                         result.add(new ImmutableText(
                                         randomUUID().toString(),
                                         text,
-                                        of(this)
+                                        of(parent)
                                 )
                         );
                 }
             }
         }
-        return result.stream().toList();
+        return result;
     }
 
-    List<Attribute> mapAttributes(NamedNodeMap namedNodeMap) {
+    static List<Attribute> createAttributes(NamedNodeMap namedNodeMap, Element parent) {
         List<Attribute> result = new ArrayList<>();
         for (int index = 0; index < namedNodeMap.getLength(); index++) {
             Node node = namedNodeMap.item(index);
@@ -73,42 +71,12 @@ public class DomElement implements Element {
                             randomUUID().toString(),
                             node.getNodeName(),
                             node.getNodeValue(),
-                            of(this),
+                            ofNullable(parent),
                             empty()
                     )
             );
         }
         return result;
-    }
-
-    @Override
-    public List<Content> content() {
-        return content;
-    }
-
-    @Override
-    public List<Attribute> attributes() {
-        return attributes;
-    }
-
-    @Override
-    public String name() {
-        return name;
-    }
-
-    @Override
-    public Optional<Namespace> namespace() {
-        return empty();
-    }
-
-    @Override
-    public String id() {
-        return id;
-    }
-
-    @Override
-    public Optional<Element> parent() {
-        return ofNullable(parent);
     }
 
 }

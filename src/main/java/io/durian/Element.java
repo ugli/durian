@@ -2,6 +2,7 @@ package io.durian;
 
 import io.durian.jaxen.DurianNavigator;
 import io.durian.util.Serializer;
+import lombok.SneakyThrows;
 import org.jaxen.BaseXPath;
 import org.jaxen.JaxenException;
 import org.jaxen.Navigator;
@@ -18,15 +19,12 @@ public interface Element extends Content, NamedNode {
         return parent().map(Node::path).map(p -> p + "/").orElse("") + name();
     }
 
+    @SneakyThrows
     @SuppressWarnings("unchecked")
     default List<Node> select(String xpathExpr) {
-        try {
-            Navigator navigator = new DurianNavigator(this);
-            BaseXPath xPath = new BaseXPath(xpathExpr, navigator);
-            return xPath.selectNodes(this).stream().toList();
-        } catch (JaxenException e) {
-            throw new DurianException(e);
-        }
+        Navigator navigator = new DurianNavigator(this);
+        BaseXPath xPath = new BaseXPath(xpathExpr, navigator);
+        return xPath.selectNodes(this).stream().toList();
     }
 
     default void accept(Consumer<Node> visitor) {
