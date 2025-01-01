@@ -1,7 +1,7 @@
 package io.durian.jsoap;
 
-import io.durian.dom.Element;
-import io.durian.dom.Node;
+import io.durian.Element;
+import io.durian.Node;
 import org.junit.jupiter.api.Test;
 
 import java.net.URL;

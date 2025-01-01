@@ -1,7 +1,7 @@
 package io.durian.saxon;
 
-import io.durian.dom.Element;
-import io.durian.dom.Text;
+import io.durian.Element;
+import io.durian.Text;
 import net.sf.saxon.s9api.XdmNode;
 
 import java.util.Optional;

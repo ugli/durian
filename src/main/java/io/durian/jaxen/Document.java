@@ -1,5 +1,5 @@
 package io.durian.jaxen;
 
-import io.durian.dom.Element;
+import io.durian.Element;
 
 record Document(Element root) {}

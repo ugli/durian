@@ -1,10 +1,10 @@
 package io.durian.saxon;
 
-import io.durian.dom.Attribute;
-import io.durian.dom.Content;
-import io.durian.dom.Element;
-import io.durian.dom.Namespace;
-import io.durian.dom.Node;
+import io.durian.Attribute;
+import io.durian.Content;
+import io.durian.Element;
+import io.durian.Namespace;
+import io.durian.Node;
 import lombok.SneakyThrows;
 import net.sf.saxon.s9api.XPathSelector;
 import net.sf.saxon.s9api.XdmNode;

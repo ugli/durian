@@ -1,8 +1,8 @@
 package io.durian.saxon;
 
-import io.durian.dom.Attribute;
-import io.durian.dom.Element;
-import io.durian.dom.Namespace;
+import io.durian.Attribute;
+import io.durian.Element;
+import io.durian.Namespace;
 import net.sf.saxon.s9api.XdmNode;
 
 import java.util.Optional;

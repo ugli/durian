@@ -1,4 +1,4 @@
-package io.durian.w3c;
+package io.durian.dom;
 
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
@@ -27,7 +27,7 @@ class ElementTest {
                 </rot>
                 """;
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(xml)));
-        Element element = new Element(document);
+        DomElement element = new DomElement(document);
         assertEquals(xml.trim(), element.toXml());
     }
 

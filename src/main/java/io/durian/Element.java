@@ -1,4 +1,4 @@
-package io.durian.dom;
+package io.durian;
 
 import io.durian.jaxen.DurianNavigator;
 import io.durian.util.Serializer;

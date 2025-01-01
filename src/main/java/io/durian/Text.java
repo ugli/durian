@@ -1,4 +1,4 @@
-package io.durian.dom;
+package io.durian;
 
 public interface Text extends Content, ValueNode {
     default String path() {

@@ -1,6 +1,6 @@
 package io.durian.saxon;
 
-import io.durian.dom.Element;
+import io.durian.Element;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringReader;

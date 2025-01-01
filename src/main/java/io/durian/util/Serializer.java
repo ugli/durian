@@ -1,8 +1,9 @@
 package io.durian.util;
 
-import io.durian.dom.*;
-import io.durian.dom.Content;
-import io.durian.dom.Text;
+import io.durian.Attribute;
+import io.durian.Element;
+import io.durian.Content;
+import io.durian.Text;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;

@@ -1,5 +1,7 @@
 package io.durian.immutable;
 
+import io.durian.Element;
+import io.durian.sax.SaxParser;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringReader;

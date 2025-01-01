@@ -1,6 +1,6 @@
 package io.durian.saxon;
 
-import io.durian.dom.Element;
+import io.durian.Element;
 import lombok.SneakyThrows;
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;

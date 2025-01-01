@@ -1,4 +1,4 @@
-package io.durian.dom;
+package io.durian;
 
 public class DurianException extends RuntimeException {
 
