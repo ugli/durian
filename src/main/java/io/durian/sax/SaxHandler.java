@@ -43,8 +43,8 @@ class SaxHandler extends DefaultHandler {
         Element element = new ImmutableElement(
                 randomUUID().toString(),
                 localName,
-                () -> content,
-                () -> attributeList,
+                content,
+                attributeList,
                 ofNullable(parent),
                 ofNullable(namespace(uri))
         );

@@ -11,8 +11,6 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.Reader;
 
-import static java.util.Arrays.copyOfRange;
-
 public class SaxParser {
 
     public static Element parse(Reader reader) {

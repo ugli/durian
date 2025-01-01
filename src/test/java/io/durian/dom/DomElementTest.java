@@ -12,7 +12,7 @@ import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ElementTest {
+class DomElementTest {
 
     @Test
     void parseTest() throws ParserConfigurationException, IOException, SAXException {
