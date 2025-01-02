@@ -22,11 +22,11 @@ import static java.util.Optional.ofNullable;
 import static java.util.UUID.randomUUID;
 
 class JsoapElement implements Element {
-    private final String id = randomUUID().toString();
-    private final String name;
-    private final List<Content> content;
-    private final List<Attribute> attributes;
-    private final Element parent;
+    final String id = randomUUID().toString();
+    final String name;
+    final List<Content> content;
+    final List<Attribute> attributes;
+    final Element parent;
 
     JsoapElement(org.jsoup.nodes.Element jsoapElement, Element parent) {
         this.name = jsoapElement.nodeName();
@@ -35,14 +35,14 @@ class JsoapElement implements Element {
         this.attributes = createAttributes(jsoapElement.attributes());
     }
 
-    private List<Content> createContent(List<Node> childNodes) {
+    List<Content> createContent(List<Node> childNodes) {
         return childNodes.stream()
                 .map(this::createContent)
                 .filter(Objects::nonNull)
                 .toList();
     }
 
-    private Content createContent(Node node) {
+    Content createContent(Node node) {
         if (node instanceof org.jsoup.nodes.Element element)
             return new JsoapElement(element, this);
         else if (node instanceof TextNode textNode) {
@@ -53,17 +53,16 @@ class JsoapElement implements Element {
                         wholeText,
                         of(this)
                 );
-        } else if (node instanceof DataNode dataNode) {
+        } else if (node instanceof DataNode dataNode)
             return new ImmutableText(
                     randomUUID().toString(),
                     dataNode.getWholeData(),
                     of(this)
             );
-        }
         return null;
     }
 
-    private List<Attribute> createAttributes(Attributes attributes) {
+    List<Attribute> createAttributes(Attributes attributes) {
         return attributes.asList()
                 .stream()
                 .map(this::createAttribute
@@ -71,7 +70,7 @@ class JsoapElement implements Element {
                 .toList();
     }
 
-    private Attribute createAttribute(org.jsoup.nodes.Attribute attribute) {
+    Attribute createAttribute(org.jsoup.nodes.Attribute attribute) {
         return new ImmutableAttribute(
                 randomUUID().toString(),
                 attribute.getKey(),
