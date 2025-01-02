@@ -1,5 +1,6 @@
 package io.durian.jsoap;
 
+import io.durian.Attribute;
 import io.durian.Content;
 import io.durian.Element;
 import io.durian.Namespace;
@@ -24,24 +25,24 @@ class JsoapElement implements Element {
     private final String id = randomUUID().toString();
     private final String name;
     private final List<Content> content;
-    private final List<ImmutableAttribute> attributes;
-    private final JsoapElement parent;
+    private final List<Attribute> attributes;
+    private final Element parent;
 
-    JsoapElement(org.jsoup.nodes.Element element, JsoapElement parent) {
-        this.name = element.nodeName();
+    JsoapElement(org.jsoup.nodes.Element jsoapElement, Element parent) {
+        this.name = jsoapElement.nodeName();
         this.parent = parent;
-        this.content = mapContent(element.childNodes());
-        this.attributes = mapAttributes(element.attributes());
+        this.content = createContent(jsoapElement.childNodes());
+        this.attributes = createAttributes(jsoapElement.attributes());
     }
 
-    private List<Content> mapContent(List<Node> childNodes) {
+    private List<Content> createContent(List<Node> childNodes) {
         return childNodes.stream()
-                .map(this::mapContent)
+                .map(this::createContent)
                 .filter(Objects::nonNull)
                 .toList();
     }
 
-    private Content mapContent(Node node) {
+    private Content createContent(Node node) {
         if (node instanceof org.jsoup.nodes.Element element)
             return new JsoapElement(element, this);
         else if (node instanceof TextNode textNode) {
@@ -62,18 +63,22 @@ class JsoapElement implements Element {
         return null;
     }
 
-    private List<ImmutableAttribute> mapAttributes(Attributes attributes) {
+    private List<Attribute> createAttributes(Attributes attributes) {
         return attributes.asList()
                 .stream()
-                .map(a -> new ImmutableAttribute(
-                                randomUUID().toString(),
-                                a.getKey(),
-                                a.getValue(),
-                                of(this),
-                                empty()
-                        )
+                .map(this::createAttribute
                 )
                 .toList();
+    }
+
+    private Attribute createAttribute(org.jsoup.nodes.Attribute attribute) {
+        return new ImmutableAttribute(
+                randomUUID().toString(),
+                attribute.getKey(),
+                attribute.getValue(),
+                of(this),
+                empty()
+        );
     }
 
     @Override
@@ -82,7 +87,7 @@ class JsoapElement implements Element {
     }
 
     @Override
-    public List<ImmutableAttribute> attributes() {
+    public List<Attribute> attributes() {
         return attributes;
     }
 
