@@ -57,7 +57,7 @@ class SaxHandler extends DefaultHandler {
         addAttributes(attributes, attributeList);
     }
 
-    private void addAttributes(Attributes attributes, List<Attribute> attributeList) {
+    void addAttributes(Attributes attributes, List<Attribute> attributeList) {
         for (int index = 0; index < attributes.getLength(); index++)
             attributeList.add(
                     new ImmutableAttribute(
@@ -70,7 +70,7 @@ class SaxHandler extends DefaultHandler {
             );
     }
 
-    private ImmutableNamespace namespace(String uri) {
+    ImmutableNamespace namespace(String uri) {
         return ofNullable(uri)
                 .map(prefixByUri::get)
                 .map(prefix -> new ImmutableNamespace(uri, prefix))
