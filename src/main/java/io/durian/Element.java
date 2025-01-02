@@ -4,7 +4,6 @@ import io.durian.jaxen.DurianNavigator;
 import io.durian.util.Serializer;
 import lombok.SneakyThrows;
 import org.jaxen.BaseXPath;
-import org.jaxen.JaxenException;
 import org.jaxen.Navigator;
 
 import java.util.List;

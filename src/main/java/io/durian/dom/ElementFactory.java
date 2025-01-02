@@ -28,14 +28,19 @@ public class ElementFactory {
     }
 
     static Element createElement(org.w3c.dom.Element domElement, Element parent) {
-        return new ImmutableElement(
+        List<Attribute> attributes = new ArrayList<>();
+        List<Content> content = new ArrayList<>();
+        Element element = new ImmutableElement(
                 randomUUID().toString(),
                 domElement.getNodeName(),
-                createContent(domElement.getChildNodes(), parent),
-                createAttributes(domElement.getAttributes(), parent),
+                content,
+                attributes,
                 ofNullable(parent),
                 empty()
         );
+        attributes.addAll(createAttributes(domElement.getAttributes(), element));
+        content.addAll(createContent(domElement.getChildNodes(), element));
+        return element;
     }
 
     static List<Content> createContent(NodeList childNodes, Element parent) {
@@ -71,7 +76,7 @@ public class ElementFactory {
                             randomUUID().toString(),
                             node.getNodeName(),
                             node.getNodeValue(),
-                            ofNullable(parent),
+                            of(parent),
                             empty()
                     )
             );
