@@ -1,4 +1,4 @@
-package io.durian.util;
+package io.durian.cache;
 
 import static java.lang.System.getProperty;
 
@@ -8,7 +8,7 @@ public class CacheFactory {
         int size = Integer.parseInt(getProperty("durian.cache.size", "100"));
         return switch (getProperty("durian.cache.type", "undef")) {
             case "no-cache" -> new NoCache<>();
-            case "lru-cache" -> new LRUCache<>(size);
+            case "simple-cache" -> new SimpleCache<>(size);
             case "no-limit-cache" -> new NoLimitCache<>();
             case "guava-cache" -> new GuavaCache<>(size);
             default -> classCanBeLoaded("com.google.common.cache.CacheBuilder") ?

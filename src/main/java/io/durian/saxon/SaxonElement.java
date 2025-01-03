@@ -5,13 +5,16 @@ import io.durian.Content;
 import io.durian.Element;
 import io.durian.Namespace;
 import io.durian.Node;
-import io.durian.util.Cache;
-import io.durian.util.CacheFactory;
+import io.durian.cache.Cache;
+import io.durian.cache.CacheFactory;
 import lombok.SneakyThrows;
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XPathExecutable;
 import net.sf.saxon.s9api.XPathSelector;
 import net.sf.saxon.s9api.XdmNode;
 
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +23,9 @@ import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.StreamSupport.stream;
 import static net.sf.saxon.s9api.Axis.ATTRIBUTE;
+import static net.sf.saxon.s9api.Serializer.Property.INDENT;
+import static net.sf.saxon.s9api.Serializer.Property.METHOD;
+import static net.sf.saxon.s9api.Serializer.Property.OMIT_XML_DECLARATION;
 import static net.sf.saxon.s9api.XdmNodeKind.DOCUMENT;
 import static net.sf.saxon.s9api.XdmNodeKind.ELEMENT;
 import static net.sf.saxon.s9api.XdmNodeKind.TEXT;
@@ -85,9 +91,9 @@ public class SaxonElement implements Element {
 
     @SneakyThrows
     private XPathExecutable createXPathExecutable(String expr) {
-            return xdmNode.getProcessor()
-                    .newXPathCompiler()
-                    .compile(expr);
+        return xdmNode.getProcessor()
+                .newXPathCompiler()
+                .compile(expr);
     }
 
     Node createNode(XdmNode xdmNode) {
@@ -110,6 +116,18 @@ public class SaxonElement implements Element {
         if (parent != null && parent.getNodeKind() != DOCUMENT)
             return of(document.element(parent));
         return empty();
+    }
+
+    @SneakyThrows
+    @Override
+    public String toXml() {
+        StringWriter stringWriter = new StringWriter();
+        Serializer serializer = new Processor().newSerializer(stringWriter);
+        serializer.setOutputProperty(METHOD, "xml");
+        serializer.setOutputProperty(INDENT, "yes");
+        serializer.setOutputProperty(OMIT_XML_DECLARATION, "yes");
+        serializer.serializeNode(xdmNode);
+        return stringWriter.toString();
     }
 
     @Override

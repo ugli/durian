@@ -1,4 +1,4 @@
-package io.durian.util;
+package io.durian.cache;
 
 @FunctionalInterface
 public interface CacheFunction<V> {

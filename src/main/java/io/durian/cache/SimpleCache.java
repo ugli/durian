@@ -1,4 +1,4 @@
-package io.durian.util;
+package io.durian.cache;
 
 import lombok.SneakyThrows;
 
@@ -8,13 +8,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static java.lang.Boolean.TRUE;
 
-public class LRUCache<V> implements Cache<V> {
+public class SimpleCache<V> implements Cache<V> {
     final int capacity;
     final ConcurrentHashMap<String, V> cacheMap;
     final LinkedHashMap<String, Boolean> accessOrder;
     final ReentrantLock lock;
 
-    public LRUCache(int capacity) {
+    public SimpleCache(int capacity) {
         this.capacity = capacity;
         this.cacheMap = new ConcurrentHashMap<>(capacity);
         this.accessOrder = new LinkedHashMap<>(capacity, 0.75f, true);

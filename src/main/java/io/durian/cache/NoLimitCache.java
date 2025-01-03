@@ -1,4 +1,4 @@
-package io.durian.util;
+package io.durian.cache;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

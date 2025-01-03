@@ -1,7 +1,5 @@
 package io.durian;
 
-import io.durian.util.Serializer;
-
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -31,8 +29,6 @@ public interface Element extends Content, NamedNode {
         });
     }
 
-    default String toXml() {
-        return Serializer.serialize(this);
-    }
+    String toXml();
 
 }
