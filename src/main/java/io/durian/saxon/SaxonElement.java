@@ -5,7 +5,10 @@ import io.durian.Content;
 import io.durian.Element;
 import io.durian.Namespace;
 import io.durian.Node;
+import io.durian.util.Cache;
+import io.durian.util.CacheFactory;
 import lombok.SneakyThrows;
+import net.sf.saxon.s9api.XPathExecutable;
 import net.sf.saxon.s9api.XPathSelector;
 import net.sf.saxon.s9api.XdmNode;
 
@@ -21,7 +24,17 @@ import static net.sf.saxon.s9api.XdmNodeKind.DOCUMENT;
 import static net.sf.saxon.s9api.XdmNodeKind.ELEMENT;
 import static net.sf.saxon.s9api.XdmNodeKind.TEXT;
 
-public record SaxonElement(SaxonDocument document, XdmNode xdmNode) implements Element {
+public class SaxonElement implements Element {
+
+    static final Cache<XPathExecutable> XPATH_CACHE = CacheFactory.create();
+
+    final SaxonDocument document;
+    final XdmNode xdmNode;
+
+    SaxonElement(SaxonDocument document, XdmNode xdmNode) {
+        this.document = document;
+        this.xdmNode = xdmNode;
+    }
 
     @Override
     public List<Content> content() {
@@ -61,14 +74,20 @@ public record SaxonElement(SaxonDocument document, XdmNode xdmNode) implements E
     @SneakyThrows
     @Override
     public List<Node> select(String xpathExpr) {
-        XPathSelector selector = xdmNode.getProcessor()
-                .newXPathCompiler()
-                .compile(xpathExpr)
-                .load();
+        XPathExecutable executable = XPATH_CACHE.get(xpathExpr, this::createXPathExecutable);
+        XPathSelector selector = executable.load();
         selector.setContextItem(xdmNode);
-        return selector.stream().map(n -> (XdmNode) n)
+        return selector.stream()
+                .map(n -> (XdmNode) n)
                 .map(this::createNode)
                 .toList();
+    }
+
+    @SneakyThrows
+    private XPathExecutable createXPathExecutable(String expr) {
+            return xdmNode.getProcessor()
+                    .newXPathCompiler()
+                    .compile(expr);
     }
 
     Node createNode(XdmNode xdmNode) {
