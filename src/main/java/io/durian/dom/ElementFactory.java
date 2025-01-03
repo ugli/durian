@@ -13,7 +13,7 @@ public class ElementFactory {
 
     public static Element create(Document document) {
         DocumentBuilder saxonBuilder = PROCESSOR.newDocumentBuilder();
-        XdmNode saxonDocument = saxonBuilder.wrap(document); // DOM till Saxon-konvertering
+        XdmNode saxonDocument = saxonBuilder.wrap(document);
         return new SaxonDocument(saxonDocument).root();
     }
 
