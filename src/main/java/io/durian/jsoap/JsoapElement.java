@@ -6,6 +6,10 @@ import io.durian.Element;
 import io.durian.Namespace;
 import io.durian.immutable.ImmutableAttribute;
 import io.durian.immutable.ImmutableText;
+import io.durian.jaxen.DurianNavigator;
+import lombok.SneakyThrows;
+import org.jaxen.BaseXPath;
+import org.jaxen.Navigator;
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Node;
@@ -112,5 +116,13 @@ class JsoapElement implements Element {
     @Override
     public String toString() {
         return serialize(this);
+    }
+
+    @SneakyThrows
+    @Override
+    public List<io.durian.Node> select(String xpathExpr) {
+        Navigator navigator = new DurianNavigator(this);
+        BaseXPath xPath = new BaseXPath(xpathExpr, navigator);
+        return xPath.selectNodes(this);
     }
 }

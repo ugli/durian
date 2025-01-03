@@ -1,10 +1,6 @@
 package io.durian;
 
-import io.durian.jaxen.DurianNavigator;
 import io.durian.util.Serializer;
-import lombok.SneakyThrows;
-import org.jaxen.BaseXPath;
-import org.jaxen.Navigator;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -22,12 +18,7 @@ public interface Element extends Content, NamedNode {
                 + name();
     }
 
-    @SneakyThrows
-    default List<Node> select(String xpathExpr) {
-        Navigator navigator = new DurianNavigator(this);
-        BaseXPath xPath = new BaseXPath(xpathExpr, navigator);
-        return xPath.selectNodes(this);
-    }
+    List<Node> select(String xpathExpr);
 
     default void accept(Consumer<Node> visitor) {
         visitor.accept(this);
