@@ -15,7 +15,7 @@ public class SaxonParser {
     static final BlockingQueue<DocumentBuilder> DOCUMENT_BUILDER_POOL = new LinkedBlockingQueue<>();
 
     static {
-        Processor processor = new Processor(false);
+        Processor processor = new Processor();
         for (int i = 0; i < Runtime.getRuntime().availableProcessors(); i++) {
             DOCUMENT_BUILDER_POOL.add(processor.newDocumentBuilder());
         }

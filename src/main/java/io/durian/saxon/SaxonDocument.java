@@ -10,18 +10,18 @@ import java.util.Map;
 
 import static java.util.Optional.of;
 
-class SaxonDocument {
+public class SaxonDocument {
 
     final XdmNode xdmDocument;
     final Map<Integer, Element> elementByXdmNodeHashCode = new HashMap<>();
     final Map<Integer, Text> textByXdmNodeHashCode = new HashMap<>();
     final Map<Integer, Attribute> attributeByXdmNodeHashCode = new HashMap<>();
 
-    SaxonDocument(XdmNode xdmDocument) {
+    public SaxonDocument(XdmNode xdmDocument) {
         this.xdmDocument = xdmDocument;
     }
 
-    Element root() {
+    public Element root() {
         return new SaxonElement(this, xdmDocument.children().iterator().next());
     }
 
