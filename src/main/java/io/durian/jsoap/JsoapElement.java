@@ -12,7 +12,6 @@ import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static io.durian.util.Serializer.serialize;
@@ -38,46 +37,46 @@ class JsoapElement implements Element {
     List<Content> createContent(List<Node> childNodes) {
         return childNodes.stream()
                 .map(this::createContent)
-                .filter(Objects::nonNull)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .toList();
     }
 
-    Content createContent(Node node) {
+    Optional<Content> createContent(Node node) {
         if (node instanceof org.jsoup.nodes.Element element)
-            return new JsoapElement(element, this);
+            return of(new JsoapElement(element, this));
         else if (node instanceof TextNode textNode) {
             String wholeText = textNode.getWholeText();
             if (!wholeText.trim().isBlank())
-                return new ImmutableText(
-                        randomUUID().toString(),
-                        wholeText,
-                        of(this)
-                );
+                return of(ImmutableText.builder()
+                        .id(randomUUID().toString())
+                        .value(wholeText)
+                        .parent(of(this))
+                        .build());
         } else if (node instanceof DataNode dataNode)
-            return new ImmutableText(
-                    randomUUID().toString(),
-                    dataNode.getWholeData(),
-                    of(this)
-            );
-        return null;
+            return of(ImmutableText.builder()
+                    .id(randomUUID().toString())
+                    .value(dataNode.getWholeData())
+                    .parent(of(this))
+                    .build());
+        return empty();
     }
 
     List<Attribute> createAttributes(Attributes attributes) {
         return attributes.asList()
                 .stream()
-                .map(this::createAttribute
-                )
+                .map(this::createAttribute)
                 .toList();
     }
 
     Attribute createAttribute(org.jsoup.nodes.Attribute attribute) {
-        return new ImmutableAttribute(
-                randomUUID().toString(),
-                attribute.getKey(),
-                attribute.getValue(),
-                of(this),
-                empty()
-        );
+        return ImmutableAttribute.builder()
+                .id(randomUUID().toString())
+                .name(attribute.getKey())
+                .value(attribute.getValue())
+                .parent(of(this))
+                .namespace(empty())
+                .build();
     }
 
     @Override

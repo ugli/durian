@@ -4,12 +4,14 @@ import io.durian.Attribute;
 import io.durian.Content;
 import io.durian.Element;
 import io.durian.Namespace;
+import lombok.Builder;
 
 import java.util.List;
 import java.util.Optional;
 
 import static java.util.Collections.unmodifiableList;
 
+@Builder
 public record ImmutableElement(String id,
                                String name,
                                List<Content> _content,

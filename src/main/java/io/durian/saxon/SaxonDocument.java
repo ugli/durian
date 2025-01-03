@@ -32,17 +32,17 @@ class SaxonDocument {
         );
     }
 
-    Attribute attribute(Element element, XdmNode xdmNode) {
+    Attribute attribute(Element parent, XdmNode xdmNode) {
         return attributeByXdmNodeHashCode.computeIfAbsent(
                 xdmNode.hashCode(),
-                k -> new SaxonAttribute(of(element), xdmNode)
+                k -> new SaxonAttribute(of(parent), xdmNode)
         );
     }
 
-    Text text(Element element, XdmNode xdmNode) {
+    Text text(Element parent, XdmNode xdmNode) {
         return textByXdmNodeHashCode.computeIfAbsent(
                 xdmNode.hashCode(),
-                k -> new SaxonText(of(element), xdmNode)
+                k -> new SaxonText(of(parent), xdmNode)
         );
     }
 }

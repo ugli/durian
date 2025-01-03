@@ -30,14 +30,14 @@ public class ElementFactory {
     static Element createElement(org.w3c.dom.Element domElement, Element parent) {
         List<Attribute> attributes = new ArrayList<>();
         List<Content> content = new ArrayList<>();
-        Element element = new ImmutableElement(
-                randomUUID().toString(),
-                domElement.getNodeName(),
-                content,
-                attributes,
-                ofNullable(parent),
-                empty()
-        );
+        Element element = ImmutableElement.builder()
+                .id(randomUUID().toString())
+                .name(domElement.getNodeName())
+                ._content(content)
+                ._attributes(attributes)
+                .parent(ofNullable(parent))
+                .namespace(empty())
+                .build();
         attributes.addAll(createAttributes(domElement.getAttributes(), element));
         content.addAll(createContent(domElement.getChildNodes(), element));
         return element;
@@ -56,11 +56,11 @@ public class ElementFactory {
                 case TEXT_NODE -> {
                     String text = node.getNodeValue();
                     if (!text.trim().isBlank())
-                        result.add(new ImmutableText(
-                                        randomUUID().toString(),
-                                        text,
-                                        of(parent)
-                                )
+                        result.add(ImmutableText.builder()
+                                .id(randomUUID().toString())
+                                .value(text)
+                                .parent(of(parent))
+                                .build()
                         );
                 }
             }
@@ -72,13 +72,13 @@ public class ElementFactory {
         List<Attribute> result = new ArrayList<>();
         for (int index = 0; index < namedNodeMap.getLength(); index++) {
             Node node = namedNodeMap.item(index);
-            result.add(new ImmutableAttribute(
-                            randomUUID().toString(),
-                            node.getNodeName(),
-                            node.getNodeValue(),
-                            of(parent),
-                            empty()
-                    )
+            result.add(ImmutableAttribute.builder()
+                    .id(randomUUID().toString())
+                    .name(node.getNodeName())
+                    .value(node.getNodeValue())
+                    .parent(of(parent))
+                    .namespace(empty())
+                    .build()
             );
         }
         return result;

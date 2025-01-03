@@ -3,6 +3,7 @@ package io.durian.sax;
 import io.durian.Attribute;
 import io.durian.Content;
 import io.durian.Element;
+import io.durian.Namespace;
 import io.durian.immutable.ImmutableAttribute;
 import io.durian.immutable.ImmutableElement;
 import io.durian.immutable.ImmutableNamespace;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static java.util.Arrays.copyOfRange;
 import static java.util.Optional.of;
@@ -40,14 +42,14 @@ class SaxHandler extends DefaultHandler {
         List<Content> content = new ArrayList<>();
         List<Attribute> attributeList = new ArrayList<>();
         Element parent = elementStack.peek();
-        Element element = new ImmutableElement(
-                randomUUID().toString(),
-                localName,
-                content,
-                attributeList,
-                ofNullable(parent),
-                ofNullable(namespace(uri))
-        );
+        Element element = ImmutableElement.builder()
+                .id(randomUUID().toString())
+                .name(localName)
+                ._content(content)
+                ._attributes(attributeList)
+                .parent(ofNullable(parent))
+                .namespace(namespace(uri))
+                .build();
         if (root == null)
             root = element;
         if (parent != null)
@@ -60,21 +62,24 @@ class SaxHandler extends DefaultHandler {
     void addAttributes(Attributes attributes, List<Attribute> attributeList) {
         for (int index = 0; index < attributes.getLength(); index++)
             attributeList.add(
-                    new ImmutableAttribute(
-                            randomUUID().toString(),
-                            attributes.getLocalName(index),
-                            attributes.getValue(index),
-                            ofNullable(elementStack.peek()),
-                            ofNullable(namespace(attributes.getURI(index)))
-                    )
+                    ImmutableAttribute.builder()
+                            .id(randomUUID().toString())
+                            .name(attributes.getLocalName(index))
+                            .value(attributes.getValue(index))
+                            .parent(of(elementStack.peek()))
+                            .namespace(namespace(attributes.getURI(index)))
+                            .build()
             );
     }
 
-    ImmutableNamespace namespace(String uri) {
+    Optional<Namespace> namespace(String uri) {
         return ofNullable(uri)
                 .map(prefixByUri::get)
-                .map(prefix -> new ImmutableNamespace(uri, prefix))
-                .orElse(null);
+                .map(prefix -> ImmutableNamespace.builder()
+                        .prefix(prefix)
+                        .uri(uri)
+                        .build()
+                );
     }
 
     @Override
@@ -82,15 +87,13 @@ class SaxHandler extends DefaultHandler {
         final String textValue = new String(copyOfRange(textArray, start, start + length));
         if (!textValue.isBlank()) {
             Element element = elementStack.peek();
-            if (element != null)
-                contentByElementId.get(element.id()).add(new ImmutableText(
-                                randomUUID().toString(),
-                                textValue,
-                                of(element)
-                        )
-                );
-            else
-                throw new IllegalStateException();
+            List<Content> contents = contentByElementId.get(element.id());
+            contents.add(ImmutableText.builder()
+                    .id(randomUUID().toString())
+                    .value(textValue)
+                    .parent(of(element))
+                    .build()
+            );
         }
     }
 

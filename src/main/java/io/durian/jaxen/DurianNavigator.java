@@ -1,21 +1,28 @@
 package io.durian.jaxen;
 
 import io.durian.Attribute;
-import io.durian.Element;
 import io.durian.Content;
+import io.durian.Element;
 import io.durian.Node;
 import io.durian.Text;
-import org.jaxen.FunctionCallException;
 import org.jaxen.Navigator;
 import org.jaxen.UnsupportedAxisException;
 import org.jaxen.XPath;
-import org.jaxen.pattern.Pattern;
-import org.jaxen.util.*;
+import org.jaxen.util.AncestorAxisIterator;
+import org.jaxen.util.AncestorOrSelfAxisIterator;
+import org.jaxen.util.DescendantAxisIterator;
+import org.jaxen.util.DescendantOrSelfAxisIterator;
+import org.jaxen.util.FollowingAxisIterator;
+import org.jaxen.util.FollowingSiblingAxisIterator;
+import org.jaxen.util.PrecedingAxisIterator;
+import org.jaxen.util.PrecedingSiblingAxisIterator;
+import org.jaxen.util.SelfAxisIterator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static java.util.Collections.emptyIterator;
 import static java.util.Collections.singletonList;
 
 public class DurianNavigator implements Navigator {
@@ -152,7 +159,7 @@ public class DurianNavigator implements Navigator {
         } else if (contextNode instanceof Element element) {
             return element.content().iterator();
         } else if (contextNode instanceof Text)
-            return new ArrayList<Content>().iterator();
+            return emptyIterator();
         else
             throw new IllegalStateException(contextNode.getClass().getName());
     }
@@ -168,11 +175,11 @@ public class DurianNavigator implements Navigator {
             if (element.parent().isPresent())
                 return singletonList(element.parent().get()).iterator();
         }
-        return new ArrayList<Element>().iterator();
+        return emptyIterator();
     }
 
     @Override
-    public Iterator<?> getAncestorAxisIterator(Object contextNode) throws UnsupportedAxisException {
+    public Iterator<?> getAncestorAxisIterator(Object contextNode) {
         return new AncestorAxisIterator(contextNode, this);
     }
 
@@ -200,31 +207,31 @@ public class DurianNavigator implements Navigator {
     public Iterator<? extends Attribute> getAttributeAxisIterator(Object contextNode) {
         if (contextNode instanceof Element element)
             return element.attributes().iterator();
-        return new ArrayList<Attribute>().iterator();
+        return emptyIterator();
     }
 
     @Override
-    public Iterator<?> getNamespaceAxisIterator(Object contextNode) throws UnsupportedAxisException {
-        return new ArrayList<>().iterator();
+    public Iterator<?> getNamespaceAxisIterator(Object contextNode) {
+        return emptyIterator();
     }
 
     @Override
-    public Iterator<?> getSelfAxisIterator(Object contextNode) throws UnsupportedAxisException {
+    public Iterator<?> getSelfAxisIterator(Object contextNode) {
         return new SelfAxisIterator(contextNode);
     }
 
     @Override
-    public Iterator<?> getDescendantOrSelfAxisIterator(Object contextNode) throws UnsupportedAxisException {
+    public Iterator<?> getDescendantOrSelfAxisIterator(Object contextNode) {
         return new DescendantOrSelfAxisIterator(contextNode, this);
     }
 
     @Override
-    public Iterator<?> getAncestorOrSelfAxisIterator(Object contextNode) throws UnsupportedAxisException {
+    public Iterator<?> getAncestorOrSelfAxisIterator(Object contextNode) {
         return new AncestorOrSelfAxisIterator(contextNode, this);
     }
 
     @Override
-    public Object getDocument(String uri) throws FunctionCallException {
+    public Object getDocument(String uri) {
         throw new UnsupportedOperationException();
     }
 
@@ -262,21 +269,20 @@ public class DurianNavigator implements Navigator {
     @Override
     public short getNodeType(Object node) {
         if (isElement(node))
-            return Pattern.ELEMENT_NODE;
-        else if (isAttribute(node))
-            return Pattern.ATTRIBUTE_NODE;
-        else if (isText(node))
-            return Pattern.TEXT_NODE;
-        else if (isComment(node))
-            return Pattern.COMMENT_NODE;
-        else if (isDocument(node))
-            return Pattern.DOCUMENT_NODE;
-        else if (isProcessingInstruction(node))
-            return Pattern.PROCESSING_INSTRUCTION_NODE;
-        else if (isNamespace(node))
-            return Pattern.NAMESPACE_NODE;
-        else
-            return Pattern.UNKNOWN_NODE;
+            return org.w3c.dom.Node.ELEMENT_NODE;
+        if (isAttribute(node))
+            return org.w3c.dom.Node.ATTRIBUTE_NODE;
+        if (isText(node))
+            return org.w3c.dom.Node.TEXT_NODE;
+        if (isComment(node))
+            return org.w3c.dom.Node.COMMENT_NODE;
+        if (isDocument(node))
+            return org.w3c.dom.Node.DOCUMENT_NODE;
+        if (isProcessingInstruction(node))
+            return org.w3c.dom.Node.PROCESSING_INSTRUCTION_NODE;
+        if (isNamespace(node))
+            return 13;
+        return 14;
     }
 
 }

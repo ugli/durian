@@ -15,15 +15,18 @@ public interface Element extends Content, NamedNode {
     List<? extends Attribute> attributes();
 
     default String path() {
-        return parent().map(Node::path).map(p -> p + "/").orElse("") + name();
+        return parent()
+                .map(Node::path)
+                .map(p -> p + "/")
+                .orElse("")
+                + name();
     }
 
     @SneakyThrows
-    @SuppressWarnings("unchecked")
     default List<Node> select(String xpathExpr) {
         Navigator navigator = new DurianNavigator(this);
         BaseXPath xPath = new BaseXPath(xpathExpr, navigator);
-        return xPath.selectNodes(this).stream().toList();
+        return xPath.selectNodes(this);
     }
 
     default void accept(Consumer<Node> visitor) {

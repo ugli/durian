@@ -4,7 +4,6 @@ import io.durian.Element;
 import io.durian.Node;
 import org.junit.jupiter.api.Test;
 
-import java.net.URL;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class JsoapParserTest {
 
     @Test
-    void parse() throws Exception {
-        Element element = JsoapParser.parse(new URL("https://www.saob.se/artikel/?unik=R_3543-0295.04DG"));
+    void parse() {
+        Element element = JsoapParser.parse(getClass().getResourceAsStream("/R_3543-0295.04DG.html"));
         List<Node> select = element.select("//div[@class='rawcontent']/div[1]");
         assertEquals(1, select.size());
         Element div = select.get(0).asElement();
