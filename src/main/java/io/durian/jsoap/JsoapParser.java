@@ -1,11 +1,12 @@
 package io.durian.jsoap;
 
 import io.durian.Element;
+import io.durian.dom.ElementFactory;
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.*;
+import org.jsoup.helper.W3CDom;
+import org.jsoup.nodes.Document;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -23,14 +24,6 @@ public class JsoapParser {
         return parse(url, 5000);
     }
 
-    public static Element parse(File file, Charset charset) {
-        return parse(() -> Jsoup.parse(file, charset.name()));
-    }
-
-    public static Element parse(File file) {
-        return parse(file, UTF_8);
-    }
-
     public static Element parse(InputStream inputStream, Charset charset) {
         return parse(() -> Jsoup.parse(inputStream, charset.name(), ""));
     }
@@ -43,10 +36,6 @@ public class JsoapParser {
         return parse(() -> Jsoup.parse(html));
     }
 
-    public static Element parseBodyFragment(String html) {
-        return parse(() -> Jsoup.parseBodyFragment(html));
-    }
-
     @FunctionalInterface
     interface ParseCmd {
         Document exec() throws IOException;
@@ -54,8 +43,9 @@ public class JsoapParser {
 
     @SneakyThrows
     static Element parse(ParseCmd parseCmd) {
-        Document document = parseCmd.exec();
-        return new JsoapElement(document.child(0), null);
+        Document jsoapDocument = parseCmd.exec();
+        org.w3c.dom.Document domDoc = W3CDom.convert(jsoapDocument);
+        return ElementFactory.create(domDoc);
     }
 
 }

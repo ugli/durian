@@ -111,4 +111,9 @@ public class SaxonElement implements Element {
             return of(document.element(parent));
         return empty();
     }
+
+    @Override
+    public String toString() {
+        return toXml();
+    }
 }

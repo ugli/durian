@@ -13,7 +13,7 @@ class JsoapParserTest {
     @Test
     void parse() {
         Element element = JsoapParser.parse(getClass().getResourceAsStream("/R_3543-0295.04DG.html"));
-        List<Node> select = element.select("//div[@class='rawcontent']/div[1]");
+        List<Node> select = element.select("//*:div[@class='rawcontent']/*:div[1]");
         assertEquals(1, select.size());
         Element div = select.get(0).asElement();
         String divHtml = """
